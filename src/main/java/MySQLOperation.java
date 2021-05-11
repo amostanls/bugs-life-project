@@ -66,6 +66,8 @@ username VARCHAR(25),
 password VARCHAR(25)
 );
 
+ALTER TABLE users ADD UNIQUE(userid);
+
 */
 
 public class MySQLOperation {
@@ -152,13 +154,13 @@ public class MySQLOperation {
         }
         
         //add user information
-        for (int i = 0; i < db.getUsers().size(); i++) {
-            updateUser.setInt(1, db.getUsers().get(i).getUserid());
-            updateUser.setString(2, db.getUsers().get(i).getUsername());
-            updateUser.setString(3, db.getUsers().get(i).getPassword());
+        for (int i = 0; i < db.getUser().size(); i++) {
+            updateUser.setInt(1, db.getUser().get(i).getUserid());
+            updateUser.setString(2, db.getUser().get(i).getUsername());
+            updateUser.setString(3, db.getUser().get(i).getPassword());
             updateUser.addBatch();
             
-            if (i == db.getUsers().size() - 1) {
+            if (i == db.getUser().size() - 1) {
                 updateUser.executeBatch();
             }
         }
@@ -176,7 +178,28 @@ public class MySQLOperation {
         }
     }
     
+    public static void reactHappy(int project_id, int issue_id, int comment_id) throws Exception {
+        Connection myConn = getConnection();
+        String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'happy'";
+        PreparedStatement updateCount = myConn.prepareStatement(incHappyCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.execute();
+    }
+    
+    public static void reactAngry(int project_id, int issue_id, int comment_id) throws Exception {
+        Connection myConn = getConnection();
+        String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'angry'";
+        PreparedStatement updateCount = myConn.prepareStatement(incHappyCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.execute();
+    }
+    
     public static void main(String[] args) {
-        initializedDatabase();
+                    initializedDatabase();
+
     }
 }

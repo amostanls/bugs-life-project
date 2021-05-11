@@ -12,11 +12,11 @@ import java.util.List;
  *
  * @author tanweilok
  */
-public class Projects implements Serializable {
+public class Project implements Serializable {
 
     private int id;
     private String name;
-    private List<Issues> issues;
+    private List<Issue> issues;
 
     public int getId() {
         return id;
@@ -34,11 +34,11 @@ public class Projects implements Serializable {
         this.name = input;
     }
 
-    public List<Issues> getIssues() {
+    public List<Issue> getIssues() {
         return issues;
     }
 
-    public void setIssues(List<Issues> input) {
+    public void setIssues(List<Issue> input) {
         this.issues = input;
     }
 
