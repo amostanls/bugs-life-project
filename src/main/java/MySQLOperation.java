@@ -13,6 +13,52 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*  OPERATION FOR MYSQL
+SHOW DATABASES;
+USE sql6411496;
+SHOW TABLES;
+SELECT * FROM projects;
+SELECT * FROM issues;
+SELECT * FROM comments;
+SELECT * FROM react;
+
+DROP TABLE projects;
+DROP TABLE issues;
+DROP TABLE comments;
+DROP TABLE react;
+
+CREATE TABLE projects (
+project_id INT, 
+name VARCHAR(20));
+
+CREATE TABLE issues (
+project_id INT, 
+issue_id INT, 
+title VARCHAR(50), 
+priority INT, 
+status VARCHAR(20), 
+tag VARCHAR(20), 
+descriptionText VARCHAR(500), 
+createdBy VARCHAR(20), 
+assignee VARCHAR(20), 
+issue_timestamp TIMESTAMP);
+
+CREATE TABLE comments (
+project_id INT, 
+issue_id INT, 
+comment_id INT, 
+text VARCHAR(250), 
+comment_timestamp TIMESTAMP, 
+user VARCHAR(25));
+
+CREATE TABLE react (
+project_id INT, 
+issue_id INT, 
+comment_id INT, 
+reaction VARCHAR(10), 
+count INT);
+*/
+
 public class MySQLOperation {
 
     public static Connection getConnection() throws Exception {
