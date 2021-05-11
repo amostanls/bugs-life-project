@@ -66,6 +66,8 @@ username VARCHAR(25),
 password VARCHAR(25)
 );
 
+ALTER TABLE users ADD UNIQUE(userid);
+
 */
 
 public class MySQLOperation {
