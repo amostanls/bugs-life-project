@@ -21,11 +21,13 @@ SELECT * FROM projects;
 SELECT * FROM issues;
 SELECT * FROM comments;
 SELECT * FROM react;
+SELECT * FROM users;
 
 DROP TABLE projects;
 DROP TABLE issues;
 DROP TABLE comments;
 DROP TABLE react;
+DROP TABLE users;
 
 CREATE TABLE projects (
 project_id INT, 
@@ -57,6 +59,13 @@ issue_id INT,
 comment_id INT, 
 reaction VARCHAR(10), 
 count INT);
+
+CREATE TABLE users (
+userid INT,
+username VARCHAR(25),
+password VARCHAR(25)
+);
+
 */
 
 public class MySQLOperation {
@@ -84,11 +93,13 @@ public class MySQLOperation {
         String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
         String INSERT_COMMENT = "INSERT INTO comments (project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";  //6
         String INSERT_REACT = "INSERT INTO react (project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)"; //2
+        String INSERT_USER = "INSERT INTO users (userid, username, password) VALUES (?, ?, ?)";
 
         PreparedStatement updateProject = myConn.prepareStatement(INSERT_PROJECT, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement updateIssue = myConn.prepareStatement(INSERT_ISSUE, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement updateComment = myConn.prepareStatement(INSERT_COMMENT, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement updateReact = myConn.prepareStatement(INSERT_REACT, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateUser = myConn.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
 
         //add projects
         for (int i = 0; i < db.getProjects().size(); i++) {
@@ -139,9 +150,21 @@ public class MySQLOperation {
                 }
             }
         }
+        
+        //add user information
+        for (int i = 0; i < db.getUsers().size(); i++) {
+            updateUser.setInt(1, db.getUsers().get(i).getUserid());
+            updateUser.setString(2, db.getUsers().get(i).getUsername());
+            updateUser.setString(3, db.getUsers().get(i).getPassword());
+            updateUser.addBatch();
+            
+            if (i == db.getUsers().size() - 1) {
+                updateUser.executeBatch();
+            }
+        }
     }
-
-    public static void main(String[] args) {
+    
+    public static void initializedDatabase() {
         Connection myConn = null;
         try {
             myConn = getConnection();
@@ -151,5 +174,9 @@ public class MySQLOperation {
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static void main(String[] args) {
+        initializedDatabase();
     }
 }
