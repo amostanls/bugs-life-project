@@ -1,4 +1,3 @@
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
@@ -68,11 +67,10 @@ password VARCHAR(25)
 
 ALTER TABLE users ADD UNIQUE(userid);
 
-*/
-
+ */
 public class MySQLOperation {
 
-    public static Connection getConnection() throws Exception {
+    private static Connection getConnection() throws Exception {
         final String user = "sql6411496";
         final String pass = "eIXUjnTvTP";
         final String path = "jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6411496?zeroDateTimeBehavior=CONVERT_TO_NULL";
@@ -82,13 +80,13 @@ public class MySQLOperation {
         return myConn;
     }
 
-    public static <E> E readJsonUrlToPOJO(String url, Class<E> clazz) throws MalformedURLException, JsonProcessingException, IOException {
+    private static <E> E readJsonUrlToPOJO(String url, Class<E> clazz) throws MalformedURLException, JsonProcessingException, IOException {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parse(jsonUrl);
         return Json.fromJson(node, clazz);
     }
 
-    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException {
+    private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException {
         Database db = readJsonUrlToPOJO(url, Database.class);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name) VALUE (?,?)";
@@ -152,21 +150,21 @@ public class MySQLOperation {
                 }
             }
         }
-        
+
         //add user information
         for (int i = 0; i < db.getUser().size(); i++) {
             updateUser.setInt(1, db.getUser().get(i).getUserid());
             updateUser.setString(2, db.getUser().get(i).getUsername());
             updateUser.setString(3, db.getUser().get(i).getPassword());
             updateUser.addBatch();
-            
+
             if (i == db.getUser().size() - 1) {
                 updateUser.executeBatch();
             }
         }
     }
-    
-    public static void initializedDatabase() {
+
+    private static void initializedDatabase() {
         Connection myConn = null;
         try {
             myConn = getConnection();
@@ -177,7 +175,7 @@ public class MySQLOperation {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void reactHappy(int project_id, int issue_id, int comment_id) throws Exception {
         Connection myConn = getConnection();
         String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'happy'";
@@ -187,7 +185,7 @@ public class MySQLOperation {
         updateCount.setInt(3, comment_id);
         updateCount.execute();
     }
-    
+
     public static void reactAngry(int project_id, int issue_id, int comment_id) throws Exception {
         Connection myConn = getConnection();
         String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'angry'";
@@ -197,9 +195,8 @@ public class MySQLOperation {
         updateCount.setInt(3, comment_id);
         updateCount.execute();
     }
-    
-    public static void main(String[] args) {
-                    initializedDatabase();
 
+    public static void main(String[] args) {
+        initializedDatabase();
     }
 }
