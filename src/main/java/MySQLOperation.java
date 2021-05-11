@@ -114,7 +114,7 @@ public class MySQLOperation {
                 updateIssue.setString(3, db.getProjects().get(i).getIssues().get(j).getTitle());
                 updateIssue.setInt(4, db.getProjects().get(i).getIssues().get(j).getPriority());
                 updateIssue.setString(5, db.getProjects().get(i).getIssues().get(j).getStatus());
-                updateIssue.setString(6, Arrays.toString(db.getProjects().get(i).getIssues().get(j).getTag()));
+                updateIssue.setString(6, db.getProjects().get(i).getIssues().get(j).getTag()[0]);
                 updateIssue.setString(7, db.getProjects().get(i).getIssues().get(j).getDescriptionText());
                 updateIssue.setString(8, db.getProjects().get(i).getIssues().get(j).getCreatedBy());
                 updateIssue.setString(9, db.getProjects().get(i).getIssues().get(j).getAssignee());
@@ -152,13 +152,13 @@ public class MySQLOperation {
         }
 
         //add user information
-        for (int i = 0; i < db.getUser().size(); i++) {
-            updateUser.setInt(1, db.getUser().get(i).getUserid());
-            updateUser.setString(2, db.getUser().get(i).getUsername());
-            updateUser.setString(3, db.getUser().get(i).getPassword());
+        for (int i = 0; i < db.getUsers().size(); i++) {
+            updateUser.setInt(1, db.getUsers().get(i).getUserid());
+            updateUser.setString(2, db.getUsers().get(i).getUsername());
+            updateUser.setString(3, db.getUsers().get(i).getPassword());
             updateUser.addBatch();
 
-            if (i == db.getUser().size() - 1) {
+            if (i == db.getUsers().size() - 1) {
                 updateUser.executeBatch();
             }
         }

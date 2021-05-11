@@ -28,8 +28,6 @@ public class Comment implements Serializable {
         this.timestamp = timestamp;
     }
 
-    
-
     public String getUser() {
         return user;
     }

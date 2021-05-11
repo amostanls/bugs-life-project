@@ -64,9 +64,7 @@ public class Issue implements Serializable {
     public void setTag(String[] tags) {
         this.tag = tags;
     }
-
     
-
     public String getDescriptionText() {
         return descriptionText;
     }
@@ -107,6 +105,4 @@ public class Issue implements Serializable {
         this.comments = comments;
     }
 
-    
-    
 }
