@@ -178,7 +178,28 @@ public class MySQLOperation {
         }
     }
     
+    public static void reactHappy(int project_id, int issue_id, int comment_id) throws Exception {
+        Connection myConn = getConnection();
+        String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'happy'";
+        PreparedStatement updateCount = myConn.prepareStatement(incHappyCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.execute();
+    }
+    
+    public static void reactAngry(int project_id, int issue_id, int comment_id) throws Exception {
+        Connection myConn = getConnection();
+        String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'angry'";
+        PreparedStatement updateCount = myConn.prepareStatement(incHappyCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.execute();
+    }
+    
     public static void main(String[] args) {
-        initializedDatabase();
+                    initializedDatabase();
+
     }
 }
