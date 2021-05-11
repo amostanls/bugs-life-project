@@ -152,13 +152,13 @@ public class MySQLOperation {
         }
         
         //add user information
-        for (int i = 0; i < db.getUsers().size(); i++) {
-            updateUser.setInt(1, db.getUsers().get(i).getUserid());
-            updateUser.setString(2, db.getUsers().get(i).getUsername());
-            updateUser.setString(3, db.getUsers().get(i).getPassword());
+        for (int i = 0; i < db.getUser().size(); i++) {
+            updateUser.setInt(1, db.getUser().get(i).getUserid());
+            updateUser.setString(2, db.getUser().get(i).getUsername());
+            updateUser.setString(3, db.getUser().get(i).getPassword());
             updateUser.addBatch();
             
-            if (i == db.getUsers().size() - 1) {
+            if (i == db.getUser().size() - 1) {
                 updateUser.executeBatch();
             }
         }

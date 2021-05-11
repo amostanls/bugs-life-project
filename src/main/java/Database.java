@@ -14,25 +14,25 @@ import java.util.List;
  */
 public class Database implements Serializable{
 
-    private List<Projects> projects;
-    private List<Users> users;
+    private List<Project> projects;
+    private List<User> users;
 
     public Database() {
     }
     
-    public List<Users> getUsers() {
+    public List<User> getUser() {
         return users;
     }
 
-    public void setUsers(List<Users> users) {
-        this.users = users;
+    public void setUser(List<User> user) {
+        this.users = user;
     }
 
-    public List<Projects> getProjects() {
+    public List<Project> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Projects> input) {
+    public void setProjects(List<Project> input) {
         this.projects = input;
     }
 

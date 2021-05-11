@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author tanweilok
  */
-public class Issues implements Serializable {
+public class Issue implements Serializable {
 
     private int id;
     private String title;
@@ -23,7 +23,7 @@ public class Issues implements Serializable {
     private String descriptionText;
     private String createdBy, assignee;
     private Timestamp timestamp;
-    private List<Comments> comments;
+    private List<Comment> comments;
 
     public int getId() {
         return id;
@@ -99,11 +99,11 @@ public class Issues implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public List<Comments> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(List<Comments> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 

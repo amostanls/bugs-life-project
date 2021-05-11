@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author tanweilok
  */
-public class Comments implements Serializable {
+public class Comment implements Serializable {
     private int comment_id;
     private String text;
     private List<React> react;
