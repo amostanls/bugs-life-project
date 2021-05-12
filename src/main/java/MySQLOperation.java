@@ -365,7 +365,7 @@ public class MySQLOperation {
                 int comment_id = myRs.getInt("comment_id");
                 String text = myRs.getString("text");
                 List<React> react = getReactList(project_id, issue_id, comment_id);
-                Timestamp timestamp = myRs.getTimestamp("timestamp");
+                Timestamp timestamp = myRs.getTimestamp("comment_timestamp");
                 String user = myRs.getString("user");
                 Comment newComment = new Comment(comment_id, text, null, timestamp, user);
                 commentList.add(newComment);
@@ -432,9 +432,9 @@ public class MySQLOperation {
                 "or 'c' to create issue");
     }
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        initializedDatabase();
 //        showProjectDashboard();
-//        showIssueDashboard(1);
-//    }
+        showIssueDashboard(1);
+    }
 }
