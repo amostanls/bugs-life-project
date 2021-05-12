@@ -18,7 +18,7 @@ public class User implements Serializable {
     private String password;
     private String name;
     private boolean admin;
-
+    
     public User(int userid, String username, String password, String name, boolean admin) {
         this.userid = userid;
         this.username = username;
@@ -50,7 +50,7 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    
     public String getName() { return name; }
 
     public void setName(String name) { this.name = name; }

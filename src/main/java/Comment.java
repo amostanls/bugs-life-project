@@ -28,8 +28,6 @@ public class Comment implements Serializable {
         this.timestamp = timestamp;
     }
 
-    
-
     public String getUser() {
         return user;
     }
@@ -37,8 +35,6 @@ public class Comment implements Serializable {
     public void setUser(String user) {
         this.user = user;
     }
-    
-    
 
     public int getComment_id() {
         return comment_id;

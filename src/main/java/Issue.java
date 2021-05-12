@@ -25,6 +25,19 @@ public class Issue implements Serializable {
     private Timestamp timestamp;
     private List<Comment> comments;
 
+    public Issue(int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, List<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.priority = priority;
+        this.status = status;
+        this.tag = tag;
+        this.descriptionText = descriptionText;
+        this.createdBy = createdBy;
+        this.assignee = assignee;
+        this.timestamp = timestamp;
+        this.comments = comments;
+    }
+    
     public int getId() {
         return id;
     }
@@ -64,9 +77,7 @@ public class Issue implements Serializable {
     public void setTag(String[] tags) {
         this.tag = tags;
     }
-
     
-
     public String getDescriptionText() {
         return descriptionText;
     }
@@ -107,6 +118,4 @@ public class Issue implements Serializable {
         this.comments = comments;
     }
 
-    
-    
 }

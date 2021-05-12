@@ -7,9 +7,14 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,11 +73,10 @@ password VARCHAR(25)
 
 ALTER TABLE users ADD UNIQUE(userid);
 
-*/
-
+ */
 public class MySQLOperation {
 
-    public static Connection getConnection() throws Exception {
+    private static Connection getConnection() throws Exception {
         final String user = "sql6411496";
         final String pass = "eIXUjnTvTP";
         final String path = "jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6411496?zeroDateTimeBehavior=CONVERT_TO_NULL";
@@ -82,14 +86,9 @@ public class MySQLOperation {
         return myConn;
     }
 
-    public static <E> E readJsonUrlToPOJO(String url, Class<E> clazz) throws MalformedURLException, JsonProcessingException, IOException {
+    private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parse(jsonUrl);
-        return Json.fromJson(node, clazz);
-    }
-
-    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException {
-        Database db = readJsonUrlToPOJO(url, Database.class);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name) VALUE (?,?)";
         String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
@@ -104,45 +103,49 @@ public class MySQLOperation {
         PreparedStatement updateUser = myConn.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
 
         //add projects
-        for (int i = 0; i < db.getProjects().size(); i++) {
-            updateProject.setInt(1, db.getProjects().get(i).getId());
-            updateProject.setString(2, db.getProjects().get(i).getName());
+        for (int i = 0; i < node.get("projects").size(); i++) {
+            updateProject.setInt(1, node.get("projects").get(i).get("id").asInt());
+            updateProject.setString(2, node.get("projects").get(i).get("name").asText());
             updateProject.addBatch();
 
             //add issues
-            for (int j = 0; j < db.getProjects().get(i).getIssues().size(); j++) {
-                updateIssue.setInt(1, db.getProjects().get(i).getId());
-                updateIssue.setInt(2, db.getProjects().get(i).getIssues().get(j).getId());
-                updateIssue.setString(3, db.getProjects().get(i).getIssues().get(j).getTitle());
-                updateIssue.setInt(4, db.getProjects().get(i).getIssues().get(j).getPriority());
-                updateIssue.setString(5, db.getProjects().get(i).getIssues().get(j).getStatus());
-                updateIssue.setString(6, Arrays.toString(db.getProjects().get(i).getIssues().get(j).getTag()));
-                updateIssue.setString(7, db.getProjects().get(i).getIssues().get(j).getDescriptionText());
-                updateIssue.setString(8, db.getProjects().get(i).getIssues().get(j).getCreatedBy());
-                updateIssue.setString(9, db.getProjects().get(i).getIssues().get(j).getAssignee());
-                updateIssue.setTimestamp(10, db.getProjects().get(i).getIssues().get(j).getTimestamp());
+            for (int j = 0; j < node.get("projects").get(i).get("issues").size(); j++) {
+                updateIssue.setInt(1, node.get("projects").get(i).get("id").asInt());
+                updateIssue.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
+                updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
+                updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
+                updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).withArray("tag").get(0).asText());
+                updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
+                updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
+                updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
+
+                Timestamp temp = new Timestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asInt());
+                updateIssue.setTimestamp(10, temp);
                 updateIssue.addBatch();
 
                 //add comments
-                for (int k = 0; k < db.getProjects().get(i).getIssues().get(j).getComments().size(); k++) {
-                    updateComment.setInt(1, db.getProjects().get(i).getId());
-                    updateComment.setInt(2, db.getProjects().get(i).getIssues().get(j).getId());
-                    updateComment.setInt(3, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getComment_id());
-                    updateComment.setString(4, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getText());
-                    updateComment.setTimestamp(5, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getTimestamp());
-                    updateComment.setString(6, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getUser());
+                for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).get("comments").size(); k++) {
+                    updateComment.setInt(1, node.get("projects").get(i).get("id").asInt());
+                    updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                    updateComment.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                    updateComment.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("text").asText());
+
+                    temp = new Timestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asInt());
+                    updateComment.setTimestamp(5, temp);
+                    updateComment.setString(6, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("user").asText());
                     updateComment.addBatch();
 
                     //add react
-                    for (int l = 0; l < db.getProjects().get(i).getIssues().get(j).getComments().get(k).getReact().size(); l++) {
-                        updateReact.setInt(1, db.getProjects().get(i).getId());
-                        updateReact.setInt(2, db.getProjects().get(i).getIssues().get(j).getId());
-                        updateReact.setInt(3, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getComment_id());
-                        updateReact.setString(4, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getReact().get(l).getReaction());
-                        updateReact.setInt(5, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getReact().get(l).getCount());
+                    for (int l = 0; l < node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").size(); l++) {
+                        updateReact.setInt(1, node.get("projects").get(i).get("id").asInt());
+                        updateReact.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                        updateReact.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                        updateReact.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("reaction").asText());
+                        updateReact.setInt(5, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("count").asInt());
                         updateReact.addBatch();
 
-                        if (i == db.getProjects().size() - 1) {
+                        if (i == node.get("projects").size() - 1) {
                             updateProject.executeBatch();
                             updateComment.executeBatch();
                             updateIssue.executeBatch();
@@ -152,21 +155,21 @@ public class MySQLOperation {
                 }
             }
         }
-        
+
         //add user information
-        for (int i = 0; i < db.getUser().size(); i++) {
-            updateUser.setInt(1, db.getUser().get(i).getUserid());
-            updateUser.setString(2, db.getUser().get(i).getUsername());
-            updateUser.setString(3, db.getUser().get(i).getPassword());
+        for (int i = 0; i < node.get("users").size(); i++) {
+            updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
+            updateUser.setString(2, node.get("users").get(i).get("username").asText());
+            updateUser.setString(3, node.get("users").get(i).get("password").asText());
             updateUser.addBatch();
-            
-            if (i == db.getUser().size() - 1) {
+
+            if (i == node.get("users").size() - 1) {
                 updateUser.executeBatch();
             }
         }
     }
-    
-    public static void initializedDatabase() {
+
+    private static void initializedDatabase() {
         Connection myConn = null;
         try {
             myConn = getConnection();
@@ -177,7 +180,7 @@ public class MySQLOperation {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void reactHappy(int project_id, int issue_id, int comment_id) throws Exception {
         Connection myConn = getConnection();
         String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'happy'";
@@ -187,7 +190,7 @@ public class MySQLOperation {
         updateCount.setInt(3, comment_id);
         updateCount.execute();
     }
-    
+
     public static void reactAngry(int project_id, int issue_id, int comment_id) throws Exception {
         Connection myConn = getConnection();
         String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'angry'";
@@ -197,9 +200,161 @@ public class MySQLOperation {
         updateCount.setInt(3, comment_id);
         updateCount.execute();
     }
-    
-    public static void main(String[] args) {
-                    initializedDatabase();
 
+    //search using id
+    public static Issue searchIssue(int project_id, int issue_id) {
+        Connection myConn = null;
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            myConn = getConnection();
+            String SQL_SEARCH = "SELECT * FROM issues WHERE project_id = ? AND issue_id = ?";
+            pstmt = myConn.prepareStatement(SQL_SEARCH);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            myRs = pstmt.executeQuery();
+
+            //get parameter for creating issue object
+            myRs.next();
+            String title = myRs.getString("title");
+            int priority = myRs.getInt("priority");
+            String status = myRs.getString("status");
+            String[] tag = {myRs.getString("tag")};
+            String descriptionText = myRs.getString("descriptionText");
+            String createdBy = myRs.getString("createdBy");
+            String asignee = myRs.getString("assignee");
+            Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+            List<Comment> comments = null;
+
+            return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    public static List<Project> getProjectList() {
+        Connection myConn = null;
+        Statement stmt = null;
+        ResultSet myRs = null;
+        List<Project> projectList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects;";
+            stmt = myConn.createStatement();
+
+            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
+
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int id = myRs.getInt("project_id");
+                String name = myRs.getString("name");
+                List<Issue> issueList = getIssueList(id);
+                Project newProject = new Project(id, name, issueList);
+                projectList.add(newProject);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return projectList;
+    }
+
+    public static List<Issue> getIssueList(int project_id) {
+        Connection myConn = null;
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        List<Issue> issueList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_SEARCH = "SELECT * FROM issues WHERE project_id = ?";
+            pstmt = myConn.prepareStatement(SQL_SEARCH);
+            pstmt.setInt(1, project_id);
+            myRs = pstmt.executeQuery();
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int issue_id = myRs.getInt("issue_id");
+                String title = myRs.getString("title");
+                int priority = myRs.getInt("priority");
+                String status = myRs.getString("status");
+                String[] tag = {myRs.getString("tag")};
+                String descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String asignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                List<Comment> comments = null;
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                issueList.add(newIssue);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return issueList;
+    }
+
+    public static List<Issue> getAllIssueList() {
+        Connection myConn = null;
+        Statement stmt = null;
+        ResultSet myRs = null;
+        List<Issue> issueList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_ALL_ISSUE_LIST = "SELECT * FROM issues";
+            stmt = myConn.createStatement();
+
+            myRs = stmt.executeQuery(SQL_GET_ALL_ISSUE_LIST);
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int issue_id = myRs.getInt("issue_id");
+                String title = myRs.getString("title");
+                int priority = myRs.getInt("priority");
+                String status = myRs.getString("status");
+                String[] tag = {myRs.getString("tag")};
+                String descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String asignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                List<Comment> comments = null;
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                issueList.add(newIssue);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return issueList;
+    }
+
+    public static void showProjectDashboard() {
+        List<Project> projectList = getProjectList();
+        System.out.printf("\n%s\n%-3s %-20s %-20s\n", "Project board", "ID", "Project Name", "Issue");
+
+        for (int i = 0; i < projectList.size(); i++) {
+            System.out.printf("%-3d %-20s %-20d\n", projectList.get(i).getId(), projectList.get(i).getName(), projectList.get(i).getIssues().size());
+        }
+    }
+
+    public static void showIssueDashboard(int project_id) {
+        List<Issue> issueList = getIssueList(project_id);
+        System.out.printf("\n%s\n%-3s %-50s %-20s %-20s %-10s %-30s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
+
+        for (int i = 0; i < issueList.size(); i++) {
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
+            System.out.printf("%-3d %-50s %-20s %-20s %-10d %-30s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
+        }
+    }
+
+    public static void main(String[] args) {
+        initializedDatabase();
     }
 }

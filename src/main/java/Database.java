@@ -16,11 +16,8 @@ public class Database implements Serializable{
 
     private List<Project> projects;
     private List<User> users;
-
-    public Database() {
-    }
     
-    public List<User> getUser() {
+    public List<User> getUsers() {
         return users;
     }
 

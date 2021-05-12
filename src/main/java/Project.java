@@ -18,6 +18,12 @@ public class Project implements Serializable {
     private String name;
     private List<Issue> issues;
 
+    public Project(int id, String name, List<Issue> issues) {
+        this.id = id;
+        this.name = name;
+        this.issues = issues;
+    }
+
     public int getId() {
         return id;
     }
