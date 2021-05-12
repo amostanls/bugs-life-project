@@ -1,5 +1,4 @@
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -11,9 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,7 +86,7 @@ public class MySQLOperation {
         return myConn;
     }
 
-    private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException {
+    private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parse(jsonUrl);
 
@@ -120,8 +120,9 @@ public class MySQLOperation {
                 updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
                 updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
 
-                Timestamp temp = new Timestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asInt());
-                updateIssue.setTimestamp(10, temp);
+                //convert string timestamp to timestamp
+                Timestamp newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                updateIssue.setTimestamp(10, newTs);
                 updateIssue.addBatch();
 
                 //add comments
@@ -130,9 +131,9 @@ public class MySQLOperation {
                     updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
                     updateComment.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
                     updateComment.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("text").asText());
-
-                    temp = new Timestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asInt());
-                    updateComment.setTimestamp(5, temp);
+                    
+                    newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                    updateComment.setTimestamp(5, newTs);
                     updateComment.setString(6, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("user").asText());
                     updateComment.addBatch();
 
@@ -167,6 +168,15 @@ public class MySQLOperation {
                 updateUser.executeBatch();
             }
         }
+    }
+
+    private static Timestamp convertStringTimestamp(String str) {
+        String time = str + "000";
+        SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
+        Date date = new Date(Long.parseLong(time));
+        long longtime = date.getTime();
+        Timestamp newTs = new Timestamp(longtime);
+        return newTs;
     }
 
     private static void initializedDatabase() {
@@ -346,15 +356,17 @@ public class MySQLOperation {
 
     public static void showIssueDashboard(int project_id) {
         List<Issue> issueList = getIssueList(project_id);
-        System.out.printf("\n%s\n%-3s %-50s %-20s %-20s %-10s %-30s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
+        System.out.printf("\n%s\n%-3s %-50s %-20s %-10s %-10s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
 
         for (int i = 0; i < issueList.size(); i++) {
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
-            System.out.printf("%-3d %-50s %-20s %-20s %-10d %-30s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
+            System.out.printf("%-3d %-50s %-20s %-10s %-10d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
         }
     }
 
-    public static void main(String[] args) {
-        initializedDatabase();
-    }
+//    public static void main(String[] args) {
+//        initializedDatabase();
+//        showProjectDashboard();
+//        showIssueDashboard(1);
+//    }
 }
