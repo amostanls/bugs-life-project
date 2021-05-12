@@ -15,6 +15,11 @@ public class React implements Serializable {
     private String reaction;
     private int count;
 
+    public React(String reaction, int count) {
+        this.reaction = reaction;
+        this.count = count;
+    }
+
     public String getReaction() {
         return reaction;
     }

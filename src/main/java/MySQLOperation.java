@@ -211,8 +211,8 @@ public class MySQLOperation {
         updateCount.execute();
     }
 
-    //search using id
-    public static Issue searchIssue(int project_id, int issue_id) {
+    //get particular issue using id
+    public static Issue getIssue(int project_id, int issue_id) {
         Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -275,6 +275,7 @@ public class MySQLOperation {
         return projectList;
     }
 
+    //get particular issue list for  project
     public static List<Issue> getIssueList(int project_id) {
         Connection myConn = null;
         PreparedStatement pstmt = null;
@@ -283,8 +284,8 @@ public class MySQLOperation {
 
         try {
             myConn = getConnection();
-            String SQL_SEARCH = "SELECT * FROM issues WHERE project_id = ?";
-            pstmt = myConn.prepareStatement(SQL_SEARCH);
+            String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ?";
+            pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
             pstmt.setInt(1, project_id);
             myRs = pstmt.executeQuery();
             //get parameter for creating issue object
@@ -298,7 +299,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = null;
+                List<Comment> comments = getCommentList(project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -324,6 +325,7 @@ public class MySQLOperation {
             myRs = stmt.executeQuery(SQL_GET_ALL_ISSUE_LIST);
             //get parameter for creating issue object
             while (myRs.next()) {
+                int project_id = myRs.getInt("project_id");
                 int issue_id = myRs.getInt("issue_id");
                 String title = myRs.getString("title");
                 int priority = myRs.getInt("priority");
@@ -333,7 +335,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = null;
+                List<Comment> comments = getCommentList(project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -345,6 +347,66 @@ public class MySQLOperation {
         return issueList;
     }
 
+    public static List<Comment> getCommentList(int project_id, int issue_id) {
+        Connection myConn = null;
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        List<Comment> commentList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_COMMENT_LIST = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ?";
+            pstmt = myConn.prepareStatement(SQL_GET_COMMENT_LIST);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            myRs = pstmt.executeQuery();
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int comment_id = myRs.getInt("comment_id");
+                String text = myRs.getString("text");
+                List<React> react = getReactList(project_id, issue_id, comment_id);
+                Timestamp timestamp = myRs.getTimestamp("timestamp");
+                String user = myRs.getString("user");
+                Comment newComment = new Comment(comment_id, text, null, timestamp, user);
+                commentList.add(newComment);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return commentList;
+    }
+
+    public static List<React> getReactList(int project_id, int issue_id, int comment_id) {
+        Connection myConn = null;
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        List<React> reactList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_REACT_LIST = "SELECT * FROM react WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
+            pstmt = myConn.prepareStatement(SQL_GET_REACT_LIST);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.setInt(3, comment_id);
+            myRs = pstmt.executeQuery();
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                String reaction = myRs.getString("reaction");
+                int count = myRs.getInt("count");
+                React newReact = new React(reaction, count);
+                reactList.add(newReact);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return reactList;
+    }
+
     public static void showProjectDashboard() {
         List<Project> projectList = getProjectList();
         System.out.printf("\n%s\n%-3s %-20s %-20s\n", "Project board", "ID", "Project Name", "Issue");
@@ -352,6 +414,8 @@ public class MySQLOperation {
         for (int i = 0; i < projectList.size(); i++) {
             System.out.printf("%-3d %-20s %-20d\n", projectList.get(i).getId(), projectList.get(i).getName(), projectList.get(i).getIssues().size());
         }
+
+        System.out.println("Enter selected issue ID to check project: ");
     }
 
     public static void showIssueDashboard(int project_id) {
@@ -362,11 +426,15 @@ public class MySQLOperation {
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
             System.out.printf("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
         }
+
+        System.out.println("\nEnter selected issue ID to check issue\n" +
+                "or 's' to search\n" +
+                "or 'c' to create issue");
     }
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        initializedDatabase();
-        showProjectDashboard();
-        showIssueDashboard(1);
-    }
+//        showProjectDashboard();
+//        showIssueDashboard(1);
+//    }
 }

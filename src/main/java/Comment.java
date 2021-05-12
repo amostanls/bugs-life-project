@@ -20,6 +20,14 @@ public class Comment implements Serializable {
     private Timestamp timestamp;
     private String user;
 
+    public Comment(int comment_id, String text, List<React> react, Timestamp timestamp, String user) {
+        this.comment_id = comment_id;
+        this.text = text;
+        this.react = react;
+        this.timestamp = timestamp;
+        this.user = user;
+    }
+
     public Timestamp getTimestamp() {
         return timestamp;
     }
