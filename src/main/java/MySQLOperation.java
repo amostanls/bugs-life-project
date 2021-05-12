@@ -1,7 +1,5 @@
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import javax.print.attribute.standard.MediaSize;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -214,7 +212,7 @@ public class MySQLOperation {
     }
 
     //get particular issue using id
-    public static Issue getIssue(int project_id, int issue_id) {
+    public static Issue selectIssue(int project_id, int issue_id) {
         Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -463,12 +461,8 @@ public class MySQLOperation {
         } else if (sortedBy.equalsIgnoreCase("Priority")){
             issueList = getIssueListByPriority(project_id);
         }
-        System.out.printf("\n%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
 
-        for (int i = 0; i < issueList.size(); i++) {
-            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
-            System.out.printf("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
-        }
+        displayIssue(issueList);
 
         System.out.println("\nEnter selected issue ID to check issue\n" +
                 "or 's' to search\n" +
@@ -477,17 +471,22 @@ public class MySQLOperation {
 
     private static String getKeyWord(String str) {
         String[] strArr = str.split(" ");
+        if (strArr.length == 1) {
+            return str;
+        }
         StringBuilder builder = new StringBuilder();
 
-        for (String strElement : strArr) {
-            builder.append(strElement);
+        for (int i = 0; i < strArr.length; i++) {
+            builder.append(strArr[i]);
+            if (i != strArr.length - 1) {
+                builder.append("|");
+            }
         }
-
-        return null;
+        return builder.toString();
     }
 
-    public static List<Issue> searchIssue() {
-        String searchStr = "^("+"the"+")";
+    private static List<Issue> searchIssueFromTextAndDescription(int project_id, String str) {
+        String searchStr = getKeyWord(str);
         Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -495,13 +494,15 @@ public class MySQLOperation {
 
         try {
             myConn = getConnection();
-            String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id REGEXP ? ORDER BY priority DESC";
+            String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? AND (title REGEXP ? OR descriptionText REGEXP ?)";
             pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
-            pstmt.setString(1, searchStr);
+            pstmt.setInt(1, project_id);
+            pstmt.setString(2, searchStr);
+            pstmt.setString(3, searchStr);
+
             myRs = pstmt.executeQuery();
             //get parameter for creating issue object
             while (myRs.next()) {
-                int project_id = myRs.getInt("project_id");
                 int issue_id = myRs.getInt("issue_id");
                 String title = myRs.getString("title");
                 int priority = myRs.getInt("priority");
@@ -522,11 +523,57 @@ public class MySQLOperation {
 
         return issueList;
     }
-    public static void main(String[] args) {
-//        initializedDatabase();
-//        showProjectDashboard();
-//        showIssueDashboard(1,"priority");
-        List<Issue> issueList = searchIssue();
+
+    private static List<Issue> searchIssueFromComment(int project_id, String str) {
+        List<Issue> issueList = getIssueListByPriority(project_id);
+        List<Issue> newIssueList = new ArrayList<>();
+
+        for (int i = 0; i < issueList.size(); i++) {
+
+            String searchStr = getKeyWord(str);
+            Connection myConn = null;
+            PreparedStatement pstmt = null;
+            ResultSet myRs = null;
+
+            try {
+                myConn = getConnection();
+                String SQL_GET_COMMENT_LIST = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ? AND text REGEXP ?";
+                pstmt = myConn.prepareStatement(SQL_GET_COMMENT_LIST);
+                pstmt.setInt(1, project_id);
+                pstmt.setInt(2, issueList.get(i).getId());
+                pstmt.setString(3, searchStr);
+                myRs = pstmt.executeQuery();
+
+                //get parameter for creating issue object
+                while (myRs.next()) {
+                    int issue_id = myRs.getInt("issue_id");
+                    Issue newIssue = selectIssue(project_id, issue_id);
+                    newIssueList.add(newIssue);
+                }
+
+            } catch (Exception ex) {
+                Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return newIssueList;
+    }
+
+    public static List<Issue> searchIssue(int project_id, String str) {
+        List<Issue> issueListFromTextAndDescription = searchIssueFromTextAndDescription(project_id, str);
+        List<Issue> issueListFromComment = searchIssueFromComment(project_id, str);
+        List<Issue> newIssueList = issueListFromTextAndDescription;
+
+        for (int i = 0; i < issueListFromComment.size(); i++) {
+            if (!newIssueList.contains(issueListFromComment.get(i))) {
+                newIssueList.add(issueListFromComment.get(i));
+            }
+        }
+
+        return newIssueList;
+    }
+
+    public static void displayIssue(List<Issue> issueList) {
         System.out.printf("\n%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
 
         for (int i = 0; i < issueList.size(); i++) {
@@ -534,4 +581,11 @@ public class MySQLOperation {
             System.out.printf("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
         }
     }
+
+//    public static void main(String[] args) {
+////        initializedDatabase();
+////        showProjectDashboard();
+//        List<Issue> issueList = searchIssue(1,"Try");
+//        displayIssue(issueList);
+//    }
 }
