@@ -1,3 +1,4 @@
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,14 +82,9 @@ public class MySQLOperation {
         return myConn;
     }
 
-    private static <E> E readJsonUrlToPOJO(String url, Class<E> clazz) throws MalformedURLException, JsonProcessingException, IOException {
+    private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parse(jsonUrl);
-        return Json.fromJson(node, clazz);
-    }
-
-    private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException {
-        Database db = readJsonUrlToPOJO(url, Database.class);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name) VALUE (?,?)";
         String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
@@ -102,45 +99,49 @@ public class MySQLOperation {
         PreparedStatement updateUser = myConn.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
 
         //add projects
-        for (int i = 0; i < db.getProjects().size(); i++) {
-            updateProject.setInt(1, db.getProjects().get(i).getId());
-            updateProject.setString(2, db.getProjects().get(i).getName());
+        for (int i = 0; i < node.get("projects").size(); i++) {
+            updateProject.setInt(1, node.get("projects").get(i).get("id").asInt());
+            updateProject.setString(2, node.get("projects").get(i).get("name").asText());
             updateProject.addBatch();
 
             //add issues
-            for (int j = 0; j < db.getProjects().get(i).getIssues().size(); j++) {
-                updateIssue.setInt(1, db.getProjects().get(i).getId());
-                updateIssue.setInt(2, db.getProjects().get(i).getIssues().get(j).getId());
-                updateIssue.setString(3, db.getProjects().get(i).getIssues().get(j).getTitle());
-                updateIssue.setInt(4, db.getProjects().get(i).getIssues().get(j).getPriority());
-                updateIssue.setString(5, db.getProjects().get(i).getIssues().get(j).getStatus());
-                updateIssue.setString(6, db.getProjects().get(i).getIssues().get(j).getTag()[0]);
-                updateIssue.setString(7, db.getProjects().get(i).getIssues().get(j).getDescriptionText());
-                updateIssue.setString(8, db.getProjects().get(i).getIssues().get(j).getCreatedBy());
-                updateIssue.setString(9, db.getProjects().get(i).getIssues().get(j).getAssignee());
-                updateIssue.setTimestamp(10, db.getProjects().get(i).getIssues().get(j).getTimestamp());
+            for (int j = 0; j < node.get("projects").get(i).get("issues").size(); j++) {
+                updateIssue.setInt(1, node.get("projects").get(i).get("id").asInt());
+                updateIssue.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
+                updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
+                updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
+                updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).get("tag").asText());
+                updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
+                updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
+                updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
+
+                Timestamp temp = new Timestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asInt());
+                updateIssue.setTimestamp(10, temp);
                 updateIssue.addBatch();
 
                 //add comments
-                for (int k = 0; k < db.getProjects().get(i).getIssues().get(j).getComments().size(); k++) {
-                    updateComment.setInt(1, db.getProjects().get(i).getId());
-                    updateComment.setInt(2, db.getProjects().get(i).getIssues().get(j).getId());
-                    updateComment.setInt(3, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getComment_id());
-                    updateComment.setString(4, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getText());
-                    updateComment.setTimestamp(5, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getTimestamp());
-                    updateComment.setString(6, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getUser());
+                for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).get("comments").size(); k++) {
+                    updateComment.setInt(1, node.get("projects").get(i).get("id").asInt());
+                    updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                    updateComment.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                    updateComment.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("text").asText());
+
+                    temp = new Timestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asInt());
+                    updateComment.setTimestamp(5, temp);
+                    updateComment.setString(6, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("user").asText());
                     updateComment.addBatch();
 
                     //add react
-                    for (int l = 0; l < db.getProjects().get(i).getIssues().get(j).getComments().get(k).getReact().size(); l++) {
-                        updateReact.setInt(1, db.getProjects().get(i).getId());
-                        updateReact.setInt(2, db.getProjects().get(i).getIssues().get(j).getId());
-                        updateReact.setInt(3, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getComment_id());
-                        updateReact.setString(4, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getReact().get(l).getReaction());
-                        updateReact.setInt(5, db.getProjects().get(i).getIssues().get(j).getComments().get(k).getReact().get(l).getCount());
+                    for (int l = 0; l < node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").size(); l++) {
+                        updateReact.setInt(1, node.get("projects").get(i).get("id").asInt());
+                        updateReact.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                        updateReact.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                        updateReact.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("reaction").asText());
+                        updateReact.setInt(5, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("count").asInt());
                         updateReact.addBatch();
 
-                        if (i == db.getProjects().size() - 1) {
+                        if (i == node.get("projects").size() - 1) {
                             updateProject.executeBatch();
                             updateComment.executeBatch();
                             updateIssue.executeBatch();
@@ -152,13 +153,13 @@ public class MySQLOperation {
         }
 
         //add user information
-        for (int i = 0; i < db.getUsers().size(); i++) {
-            updateUser.setInt(1, db.getUsers().get(i).getUserid());
-            updateUser.setString(2, db.getUsers().get(i).getUsername());
-            updateUser.setString(3, db.getUsers().get(i).getPassword());
+        for (int i = 0; i < node.get("users").size(); i++) {
+            updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
+            updateUser.setString(2, node.get("users").get(i).get("username").asText());
+            updateUser.setString(3, node.get("users").get(i).get("password").asText());
             updateUser.addBatch();
 
-            if (i == db.getUsers().size() - 1) {
+            if (i == node.get("users").size() - 1) {
                 updateUser.executeBatch();
             }
         }
