@@ -356,17 +356,17 @@ public class MySQLOperation {
 
     public static void showIssueDashboard(int project_id) {
         List<Issue> issueList = getIssueList(project_id);
-        System.out.printf("\n%s\n%-3s %-50s %-20s %-10s %-10s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
+        System.out.printf("\n%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
 
         for (int i = 0; i < issueList.size(); i++) {
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
-            System.out.printf("%-3d %-50s %-20s %-10s %-10d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
+            System.out.printf("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
         }
     }
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        initializedDatabase();
-//        showProjectDashboard();
-//        showIssueDashboard(1);
-//    }
+        showProjectDashboard();
+        showIssueDashboard(1);
+    }
 }
