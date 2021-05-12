@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -199,7 +200,7 @@ public class MySQLOperation {
         updateCount.setInt(3, comment_id);
         updateCount.execute();
     }
-    
+
     //search using id
     public static Issue searchIssue(int project_id, int issue_id) {
         Connection myConn = null;
@@ -213,7 +214,7 @@ public class MySQLOperation {
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
             myRs = pstmt.executeQuery();
-            
+
             //get parameter for creating issue object
             myRs.next();
             String title = myRs.getString("title");
@@ -225,16 +226,16 @@ public class MySQLOperation {
             String asignee = myRs.getString("assignee");
             Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
             List<Comment> comments = null;
-            
+
             return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return null;
     }
-    
+
     public static List<Project> getProjectList() {
         Connection myConn = null;
         Statement stmt = null;
@@ -299,11 +300,57 @@ public class MySQLOperation {
         return issueList;
     }
 
-    public static void showDashboard() {
+    public static List<Issue> getAllIssueList() {
+        Connection myConn = null;
+        Statement stmt = null;
+        ResultSet myRs = null;
+        List<Issue> issueList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_ALL_ISSUE_LIST = "SELECT * FROM issues";
+            stmt = myConn.createStatement();
+
+            myRs = stmt.executeQuery(SQL_GET_ALL_ISSUE_LIST);
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int issue_id = myRs.getInt("issue_id");
+                String title = myRs.getString("title");
+                int priority = myRs.getInt("priority");
+                String status = myRs.getString("status");
+                String[] tag = {myRs.getString("tag")};
+                String descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String asignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                List<Comment> comments = null;
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                issueList.add(newIssue);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return issueList;
+    }
+
+    public static void showProjectDashboard() {
         List<Project> projectList = getProjectList();
-        System.out.printf("%-3s %-20s %-20s\n", "ID", "Project Name", "Issue");
+        System.out.printf("\n%s\n%-3s %-20s %-20s\n", "Project board", "ID", "Project Name", "Issue");
+
         for (int i = 0; i < projectList.size(); i++) {
             System.out.printf("%-3d %-20s %-20d\n", projectList.get(i).getId(), projectList.get(i).getName(), projectList.get(i).getIssues().size());
+        }
+    }
+
+    public static void showIssueDashboard(int project_id) {
+        List<Issue> issueList = getIssueList(project_id);
+        System.out.printf("\n%s\n%-3s %-50s %-20s %-20s %-10s %-30s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
+
+        for (int i = 0; i < issueList.size(); i++) {
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
+            System.out.printf("%-3d %-50s %-20s %-20s %-10d %-30s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
         }
     }
 
