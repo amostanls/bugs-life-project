@@ -7,10 +7,12 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -195,6 +197,41 @@ public class MySQLOperation {
         updateCount.setInt(2, issue_id);
         updateCount.setInt(3, comment_id);
         updateCount.execute();
+    }
+    
+    //search using id
+    public static Issue searchIssue(int project_id, int issue_id) {
+        Connection myConn = null;
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            myConn = getConnection();
+            String SQL_SEARCH = "SELECT * FROM issues WHERE project_id = ? AND issue_id = ?";
+            pstmt = myConn.prepareStatement(SQL_SEARCH);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            myRs = pstmt.executeQuery();
+            
+            //get parameter for creating issue object
+            myRs.next();
+            String title = myRs.getString("title");
+            int priority = myRs.getInt("priority");
+            String status = myRs.getString("status");
+            String[] tag = {myRs.getString("tag")};
+            String descriptionText = myRs.getString("descriptionText");
+            String createdBy = myRs.getString("createdBy");
+            String asignee = myRs.getString("assignee");
+            Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+            List<Comment> comments = null;
+            
+            return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
     public static void main(String[] args) {
