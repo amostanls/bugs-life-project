@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -232,6 +233,78 @@ public class MySQLOperation {
         }
         
         return null;
+    }
+    
+    public static List<Project> getProjectList() {
+        Connection myConn = null;
+        Statement stmt = null;
+        ResultSet myRs = null;
+        List<Project> projectList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects;";
+            stmt = myConn.createStatement();
+
+            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
+
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int id = myRs.getInt("project_id");
+                String name = myRs.getString("name");
+                List<Issue> issueList = getIssueList(id);
+                Project newProject = new Project(id, name, issueList);
+                projectList.add(newProject);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return projectList;
+    }
+
+    public static List<Issue> getIssueList(int project_id) {
+        Connection myConn = null;
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        List<Issue> issueList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_SEARCH = "SELECT * FROM issues WHERE project_id = ?";
+            pstmt = myConn.prepareStatement(SQL_SEARCH);
+            pstmt.setInt(1, project_id);
+            myRs = pstmt.executeQuery();
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int issue_id = myRs.getInt("issue_id");
+                String title = myRs.getString("title");
+                int priority = myRs.getInt("priority");
+                String status = myRs.getString("status");
+                String[] tag = {myRs.getString("tag")};
+                String descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String asignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                List<Comment> comments = null;
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                issueList.add(newIssue);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return issueList;
+    }
+
+    public static void showDashboard() {
+        List<Project> projectList = getProjectList();
+        System.out.printf("%-3s %-20s %-20s\n", "ID", "Project Name", "Issue");
+        for (int i = 0; i < projectList.size(); i++) {
+            System.out.printf("%-3d %-20s %-20d\n", projectList.get(i).getId(), projectList.get(i).getName(), projectList.get(i).getIssues().size());
+        }
     }
 
     public static void main(String[] args) {
