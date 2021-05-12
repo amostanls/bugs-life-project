@@ -263,7 +263,7 @@ public class MySQLOperation {
             while (myRs.next()) {
                 int id = myRs.getInt("project_id");
                 String name = myRs.getString("name");
-                List<Issue> issueList = getIssueList(id);
+                List<Issue> issueList = getIssueListByPriority(id);
                 Project newProject = new Project(id, name, issueList);
                 projectList.add(newProject);
             }
@@ -276,7 +276,7 @@ public class MySQLOperation {
     }
 
     //get particular issue list for  project
-    public static List<Issue> getIssueList(int project_id) {
+    public static List<Issue> getIssueListByPriority(int project_id) {
         Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -284,7 +284,42 @@ public class MySQLOperation {
 
         try {
             myConn = getConnection();
-            String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ?";
+            String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY priority DESC";
+            pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
+            pstmt.setInt(1, project_id);
+            myRs = pstmt.executeQuery();
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int issue_id = myRs.getInt("issue_id");
+                String title = myRs.getString("title");
+                int priority = myRs.getInt("priority");
+                String status = myRs.getString("status");
+                String[] tag = {myRs.getString("tag")};
+                String descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String asignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                List<Comment> comments = getCommentList(project_id, issue_id);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                issueList.add(newIssue);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return issueList;
+    }
+
+    public static List<Issue> getIssueListByTimestamp(int project_id) {
+        Connection myConn = null;
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        List<Issue> issueList = new ArrayList<>();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY issue_timestamp DESC";
             pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
             pstmt.setInt(1, project_id);
             myRs = pstmt.executeQuery();
@@ -418,8 +453,14 @@ public class MySQLOperation {
         System.out.println("Enter selected issue ID to check project: ");
     }
 
-    public static void showIssueDashboard(int project_id) {
-        List<Issue> issueList = getIssueList(project_id);
+    public static void showIssueDashboard(int project_id, String sortedBy) {
+        List<Issue> issueList = new ArrayList<>();
+
+        if (sortedBy.equalsIgnoreCase("Timestamp")) {
+            issueList = getIssueListByTimestamp(project_id);
+        } else if (sortedBy.equalsIgnoreCase("Priority")){
+            issueList = getIssueListByPriority(project_id);
+        }
         System.out.printf("\n%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
 
         for (int i = 0; i < issueList.size(); i++) {
@@ -432,9 +473,9 @@ public class MySQLOperation {
                 "or 'c' to create issue");
     }
 
-    public static void main(String[] args) {
-//        initializedDatabase();
-//        showProjectDashboard();
-        showIssueDashboard(1);
-    }
+//    public static void main(String[] args) {
+////        initializedDatabase();
+////        showProjectDashboard();
+//        showIssueDashboard(2,"priority");
+//    }
 }
