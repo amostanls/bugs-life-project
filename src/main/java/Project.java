@@ -47,5 +47,4 @@ public class Project implements Serializable {
     public void setIssues(List<Issue> input) {
         this.issues = input;
     }
-
 }
