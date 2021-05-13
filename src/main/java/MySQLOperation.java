@@ -295,7 +295,7 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
                 issueList.add(newIssue);
             }
 
@@ -353,7 +353,7 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
                 issueList.add(newIssue);
             }
 
@@ -410,7 +410,7 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
                 issueList.add(newIssue);
             }
 
@@ -470,7 +470,7 @@ public class MySQLOperation {
             Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
             List<Comment> comments = null;
 
-            return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+            return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -523,7 +523,7 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
                 issueList.add(newIssue);
             }
 
@@ -583,11 +583,11 @@ public class MySQLOperation {
         return newIssueList;
     }
 
-    public static List<Comment> getCommentList(int project_id, int issue_id) {
+    public static ArrayList<Comment> getCommentList(int project_id, int issue_id) {
         Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        List<Comment> commentList = new ArrayList<>();
+        ArrayList<Comment> commentList = new ArrayList<>();
 
         try {
             myConn = getConnection();
@@ -603,7 +603,7 @@ public class MySQLOperation {
                 List<React> react = getReactList(project_id, issue_id, comment_id);
                 Timestamp timestamp = myRs.getTimestamp("comment_timestamp");
                 String user = myRs.getString("user");
-                Comment newComment = new Comment(comment_id, text, null, timestamp, user);
+                Comment newComment = new Comment(comment_id, text, timestamp, user);
                 commentList.add(newComment);
             }
 
