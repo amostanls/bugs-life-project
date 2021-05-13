@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class main_class {
+    private static int userid = -1;
+
     public static void main(String[] args) {
         ArrayList<User>users;
         ArrayList<Project>projects;
@@ -19,4 +21,9 @@ public class main_class {
         System.out.println(issue.toString());
         //login loginPage = new login();
     }
+
+    public static void main_page() {
+
+    }
+
 }

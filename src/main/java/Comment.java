@@ -33,6 +33,14 @@ public class Comment implements Serializable {
         this.user = user;
     }
 
+    public Comment(int comment_id, String text, ArrayList<React> react, Timestamp timestamp, String user) {
+        this.comment_id = comment_id;
+        this.text = text;
+        this.react = react;
+        this.timestamp = timestamp;
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         String res = "";

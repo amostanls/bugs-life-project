@@ -42,6 +42,19 @@ public class Issue implements Serializable {
         this.comments = new ArrayList<>();
     }
 
+    public Issue(int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, ArrayList<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.priority = priority;
+        this.status = status;
+        this.tag = tag;
+        this.descriptionText = descriptionText;
+        this.createdBy = createdBy;
+        this.assignee = assignee;
+        this.timestamp = timestamp;
+        this.comments = comments;
+    }
+
     public void addComment(Comment comment) {
         comments.add(comment);
     }

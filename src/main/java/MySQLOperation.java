@@ -294,8 +294,8 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
 
@@ -352,8 +352,8 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
 
@@ -409,8 +409,8 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
 
@@ -468,9 +468,9 @@ public class MySQLOperation {
             String createdBy = myRs.getString("createdBy");
             String asignee = myRs.getString("assignee");
             Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-            List<Comment> comments = null;
+            ArrayList<Comment> comments = (ArrayList<Comment>) null;
 
-            return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
+            return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -522,8 +522,8 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
 
@@ -583,11 +583,11 @@ public class MySQLOperation {
         return newIssueList;
     }
 
-    public static ArrayList<Comment> getCommentList(int project_id, int issue_id) {
+    public static List<Comment> getCommentList(int project_id, int issue_id) {
         Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        ArrayList<Comment> commentList = new ArrayList<>();
+        List<Comment> commentList = new ArrayList<>();
 
         try {
             myConn = getConnection();

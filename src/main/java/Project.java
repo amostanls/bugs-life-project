@@ -6,6 +6,7 @@
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,12 +17,19 @@ public class Project implements Serializable {
 
     private int id;
     private String name;
-    private List<Issue> issues;
+    private ArrayList<Issue> issues;
 
     public Project(int id, String name, List<Issue> issues) {
         this.id = id;
         this.name = name;
-        this.issues = issues;
+        this.issues = (ArrayList<Issue>) issues;
+    }
+
+    //Issueboard
+    public String issueBoard() {
+        String res = "";
+
+        return res;
     }
 
     public int getId() {
@@ -40,11 +48,11 @@ public class Project implements Serializable {
         this.name = input;
     }
 
-    public List<Issue> getIssues() {
+    public ArrayList<Issue> getIssues() {
         return issues;
     }
 
-    public void setIssues(List<Issue> input) {
-        this.issues = input;
+    public void setIssues(ArrayList<Issue> issues) {
+        this.issues = issues;
     }
 }
