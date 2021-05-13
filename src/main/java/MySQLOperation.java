@@ -294,7 +294,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -352,7 +352,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -409,7 +409,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -468,7 +468,7 @@ public class MySQLOperation {
             String createdBy = myRs.getString("createdBy");
             String asignee = myRs.getString("assignee");
             Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-            List<Comment> comments = null;
+            ArrayList<Comment> comments = (ArrayList<Comment>) null;
 
             return new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
 
@@ -522,7 +522,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                List<Comment> comments = getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -603,7 +603,7 @@ public class MySQLOperation {
                 List<React> react = getReactList(project_id, issue_id, comment_id);
                 Timestamp timestamp = myRs.getTimestamp("comment_timestamp");
                 String user = myRs.getString("user");
-                Comment newComment = new Comment(comment_id, text, null, timestamp, user);
+                Comment newComment = new Comment(comment_id, text, timestamp, user);
                 commentList.add(newComment);
             }
 

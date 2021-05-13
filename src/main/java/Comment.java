@@ -7,25 +7,85 @@
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 /**
  *
  * @author tanweilok
  */
+
 public class Comment implements Serializable {
     private int comment_id;
     private String text;
-    private List<React> react;
+    private ArrayList<React> react;
     private Timestamp timestamp;
     private String user;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public Comment(int comment_id, String text, List<React> react, Timestamp timestamp, String user) {
+    public Comment(int comment_id, String text, Timestamp timestamp, String user) {
+        this.comment_id = comment_id;
+        this.text = text;
+        this.react = new ArrayList<>();
+        this.timestamp = timestamp;
+        this.user = user;
+    }
+
+    public Comment(int comment_id, String text, ArrayList<React> react, Timestamp timestamp, String user) {
         this.comment_id = comment_id;
         this.text = text;
         this.react = react;
         this.timestamp = timestamp;
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        String res = "";
+        res += String.format("%s %s \t\t\t %s %s\n", "Created On:", sdf.format(timestamp), "By:", user);
+        res += String.format("%s\n", text);
+        for(int i=0; i<react.size(); i++)
+            res += String.format("$$ %s\n", react.get(i).toString());
+        res += "$$\n";
+        return res;
+    }
+
+    public void addReact(String reaction) {
+        int ind = getIndex(reaction);
+        if(ind==-1) {
+            react.add(new React(reaction, 1));
+        }else {
+            react.get(ind).inc();
+        }
+        sorting();
+        return;
+    }
+
+    public void delReact(String reaction) {
+        int ind = getIndex(reaction);
+        if(ind==-1) {
+            //impossible
+        }else {
+            react.get(ind).dec();
+            if(react.get(ind).getCount()==0)react.remove(ind);
+        }
+        sorting();
+        return;
+    }
+
+    public void sorting() {
+        //most react emoji will display first
+        Collections.sort(react);
+    }
+
+    public int getIndex(String reaction) {
+        for(int i=0; i<react.size(); i++) {
+            if(react.get(i).getReaction().equals(reaction))return i;
+        }
+        //new reaction
+        return -1;
     }
 
     public Timestamp getTimestamp() {
@@ -60,13 +120,11 @@ public class Comment implements Serializable {
         this.text = text;
     }
 
-    public List<React> getReact() {
+    public ArrayList<React> getReact() {
         return react;
     }
 
-    public void setReact(List<React> react) {
+    public void setReact(ArrayList<React> react) {
         this.react = react;
     }
-    
-    
 }

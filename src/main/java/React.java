@@ -11,13 +11,33 @@ import java.io.Serializable;
  *
  * @author tanweilok
  */
-public class React implements Serializable {
+public class React implements Serializable, Comparable<React> {
     private String reaction;
     private int count;
 
     public React(String reaction, int count) {
         this.reaction = reaction;
         this.count = count;
+    }
+
+    public void inc() {
+        count++;
+    }
+
+    public void dec() {
+        count--;
+    }
+
+    @Override
+    public int compareTo(React o) {
+        if(o.getCount()>count)return -1;
+        if(o.getCount()==count)return 0;
+        return 1;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d %s %s", count, "people react with",  reaction);
     }
 
     public String getReaction() {

@@ -7,6 +7,8 @@
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,9 +25,24 @@ public class Issue implements Serializable {
     private String descriptionText;
     private String createdBy, assignee;
     private Timestamp timestamp;
-    private List<Comment> comments;
+    private ArrayList<Comment> comments;
 
-    public Issue(int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, List<Comment> comments) {
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public Issue(int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp) {
+        this.id = id;
+        this.title = title;
+        this.priority = priority;
+        this.status = status;
+        this.tag = tag;
+        this.descriptionText = descriptionText;
+        this.createdBy = createdBy;
+        this.assignee = assignee;
+        this.timestamp = timestamp;
+        this.comments = new ArrayList<>();
+    }
+
+    public Issue(int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, ArrayList<Comment> comments) {
         this.id = id;
         this.title = title;
         this.priority = priority;
@@ -37,7 +54,34 @@ public class Issue implements Serializable {
         this.timestamp = timestamp;
         this.comments = comments;
     }
-    
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
+    @Override
+    public String toString() {
+        String res = "";
+        res += String.format("%s %d \t\t\t %s %s\n", "Issue ID:", id, "Status:", status);
+        res += String.format("%s ","Tag:");
+        for(int i=0; i<tag.length; i++) {
+            if(i>0)res+=", ";
+            res += tag[i];
+        }
+        res += String.format("\t\t\t %s %d \t\t\t %s %s\n","Priority:", priority, "Created On:", sdf.format(timestamp));
+        res += String.format("%s\n", title);
+        res += String.format("%s %s \t\t\t\t\t\t\t\t %s %s\n\n", "Assigned to:", assignee, "Created By:", createdBy);
+        res += String.format("%s\n%s\n", "Issue Description",
+                                         "-----------------");
+        res += String.format("%s\n\n",descriptionText);
+        res += String.format("%s\n%s\n", "Comments",
+                                         "---------");
+        for(int i=0; i<comments.size(); i++) {
+            res += String.format("%s%d \t\t\t %s\n", "#", i+1, comments.get(i));
+        }
+        return res;
+    }
+
     public int getId() {
         return id;
     }
@@ -110,12 +154,11 @@ public class Issue implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public List<Comment> getComments() {
+    public ArrayList<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
     }
-
 }
