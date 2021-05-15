@@ -1,10 +1,9 @@
-import me.xdrop.fuzzywuzzy.FuzzySearch;
+package bugs;
 
-import javax.swing.*;
+import bugs.Comment;
+
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
 
 public class main_class {
     private static int userid = -1;
@@ -20,6 +19,10 @@ public class main_class {
         issue.addComment(comment);
         System.out.println(issue.toString());
         //login loginPage = new login();
+        System.out.println("\n");
+        Project a = new Project(1,"kek");
+        a.addIssue(issue);
+        System.out.println(a.issueBoard());
     }
 
     public static void main_page() {

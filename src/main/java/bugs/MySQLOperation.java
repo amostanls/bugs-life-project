@@ -1,7 +1,7 @@
+package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;

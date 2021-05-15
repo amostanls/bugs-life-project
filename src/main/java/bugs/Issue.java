@@ -1,15 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
+package bugs;/*
+ * To change this license header, choose License Headers in bugs.Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
 
+import bugs.Comment;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -68,7 +69,7 @@ public class Issue implements Serializable {
             if(i>0)res+=", ";
             res += tag[i];
         }
-        res += String.format("\t\t\t %s %d \t\t\t %s %s\n","Priority:", priority, "Created On:", sdf.format(timestamp));
+        res += String.format("\t\t\t %s %d \t\t\t %s %s\n","Priority:", priority, "Created On:", getTime());
         res += String.format("%s\n", title);
         res += String.format("%s %s \t\t\t\t\t\t\t\t %s %s\n\n", "Assigned to:", assignee, "Created By:", createdBy);
         res += String.format("%s\n%s\n", "Issue Description",
@@ -80,6 +81,19 @@ public class Issue implements Serializable {
             res += String.format("%s%d \t\t\t %s\n", "#", i+1, comments.get(i));
         }
         return res;
+    }
+
+    public String getTags() {
+        String res="";
+        for(int i=0; i< tag.length; i++) {
+            if(i>0)res+=", ";
+            res += tag[i];
+        }
+        return res;
+    }
+
+    public String getTime() {
+        return (String)sdf.format(timestamp);
     }
 
     public int getId() {
