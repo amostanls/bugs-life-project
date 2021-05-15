@@ -958,6 +958,7 @@ public class MySQLOperation {
 
     public static void main(String[] args) {
 //        initializedDatabase();
-        showUserInterface();
+//        showUserInterface();
+        showIssueDashboard(1,"priority","jhoe");
     }
 }
