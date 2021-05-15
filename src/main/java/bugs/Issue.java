@@ -63,8 +63,8 @@ public class Issue implements Serializable {
     @Override
     public String toString() {
         String res = "";
-        res += String.format("%s %d \t\t\t %s %s\n", "bugs.Issue ID:", id, "Status:", status);
-        res += String.format("%s ","bugs.Tag:");
+        res += String.format("%s %d \t\t\t %s %s\n", "Issue ID:", id, "Status:", status);
+        res += String.format("%s ","Tag:");
         for(int i=0; i<tag.length; i++) {
             if(i>0)res+=", ";
             res += tag[i];
@@ -72,7 +72,7 @@ public class Issue implements Serializable {
         res += String.format("\t\t\t %s %d \t\t\t %s %s\n","Priority:", priority, "Created On:", getTime());
         res += String.format("%s\n", title);
         res += String.format("%s %s \t\t\t\t\t\t\t\t %s %s\n\n", "Assigned to:", assignee, "Created By:", createdBy);
-        res += String.format("%s\n%s\n", "bugs.Issue Description",
+        res += String.format("%s\n%s\n", "Issue Description",
                                          "-----------------");
         res += String.format("%s\n\n",descriptionText);
         res += String.format("%s\n%s\n", "Comments",
