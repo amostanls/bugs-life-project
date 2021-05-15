@@ -23,6 +23,62 @@ public class util {
         return res;
     };
 
+    public static String ask(int len, String command) {
+        Scanner in = new Scanner(System.in);
+        while(true){
+            System.out.print(command);
+            String s = in.next();
+            if (isInteger(s)) {
+                Integer res = Integer.parseInt(s);
+                if(0<=res&&res<=len) {
+                    return res.toString();
+                }else {
+                    System.out.println("Invalid Input");
+                }
+            }else if(s.equals("s")||s.equals("c")){
+                return s;
+            }else{
+                System.out.println("Invalid input");
+            }
+        }
+    }
+
+    public static int ask0(int len, String command) {
+        Scanner in = new Scanner(System.in);
+        while(true){
+            System.out.print(command);
+            String s = in.next();
+            if (isInteger(s)) {
+                int res = Integer.parseInt(s);
+                if(0<=res&&res<=len) {
+                    return res;
+                }else {
+                    System.out.println("Invalid Input");
+                }
+            }else {
+                System.out.println("Invalid input");
+            }
+        }
+    }
+
+    public static int ask1(int len, String command) {
+        Scanner in = new Scanner(System.in);
+        while(true){
+            System.out.print(command);
+            String s = in.next();
+            if (isInteger(s)) {
+                int res = Integer.parseInt(s);
+                if(1<=res&&res<=len) {
+                    return res;
+                }else {
+                    System.out.println("Invalid Input");
+                }
+            }else {
+                System.out.println("Invalid input");
+            }
+        }
+    }
+
     public int choice0(int len) {
         Scanner in = new Scanner(System.in);
         while(true){
@@ -113,6 +169,13 @@ public class util {
         for(int i=0; i<left; i++)res+=" ";
         res += tmp;
         res += " |";
+        return res;
+    }
+
+    public static String minus_plus(int len) {
+        String res = "";
+        for(int i=0; i<len; i++)res+="-";
+        res +="+";
         return res;
     }
 }
