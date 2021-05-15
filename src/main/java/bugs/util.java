@@ -1,3 +1,5 @@
+package bugs;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -82,4 +84,35 @@ public class util {
         this.choices.add(choices);
     }
 
+    public static String centre(int len, Object tmp) {
+        String cur = (String) tmp.toString();
+        String res = " ";
+        int right = (len-cur.length())/2;
+        int left = len-cur.length()-right;
+        for(int i = 0; i < left; i++) res += " ";
+        res += tmp;
+        for(int i=0; i<right; i++)res+=" ";
+        res += " |";
+        return res;
+    }
+
+    public static String left(int len, Object tmp) {
+        String cur = (String) tmp.toString();
+        String res = " ";
+        int right = len - cur.length();
+        res += tmp;
+        for(int i=0; i<right; i++)res+=" ";
+        res += " |";
+        return res;
+    }
+
+    public static String right(int len, Object tmp) {
+        String cur = (String) tmp.toString();
+        String res = " ";
+        int left = len - cur.length();
+        for(int i=0; i<left; i++)res+=" ";
+        res += tmp;
+        res += " |";
+        return res;
+    }
 }

@@ -1,7 +1,7 @@
+package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -714,7 +714,7 @@ public class MySQLOperation {
         boolean inputIsInt = false;
         Scanner sc = new Scanner(System.in);
         List<Project> projectList = getProjectList();
-        System.out.printf("\n%s\n%-3s %-20s %-20s\n", "Project board", "ID", "Project Name", "Issue");
+        System.out.printf("\n%s\n%-3s %-20s %-20s\n", "bugs.Project board", "ID", "bugs.Project Name", "bugs.Issue");
 
         for (int i = 0; i < projectList.size(); i++) {
             System.out.printf("%-3d %-20s %-20d\n", projectList.get(i).getId(), projectList.get(i).getName(), projectList.get(i).getIssues().size());
@@ -787,7 +787,7 @@ public class MySQLOperation {
     }
 
     public static void displayIssue(List<Issue> issueList) {
-        System.out.printf("\n%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
+        System.out.printf("\n%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "bugs.Issue board", "ID", "Title", "Status", "bugs.Tag", "Priority", "Time", "Assignee", "createdBy");
 
         for (int i = 0; i < issueList.size(); i++) {
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
@@ -809,7 +809,7 @@ public class MySQLOperation {
             pstmt.setString(2, password);
             myRs = pstmt.executeQuery();
 
-            //get parameter for creating User object
+            //get parameter for creating bugs.User object
             if (myRs.next()) {
                 int userid = myRs.getInt("userid");
                 boolean admin = myRs.getBoolean("admin");
