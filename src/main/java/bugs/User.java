@@ -1,5 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
+package bugs;/*
+ * To change this license header, choose License Headers in bugs.Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -24,6 +24,13 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.name = name;
+        this.admin = admin;
+    }
+
+    public User(int userid, String username, String password, boolean admin) {
+        this.userid = userid;
+        this.username = username;
+        this.password = password;
         this.admin = admin;
     }
 
