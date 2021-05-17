@@ -12,7 +12,7 @@ public class util {
         while(true){
             System.out.println(Choices);
             System.out.print(command);
-            String s = in.next();
+            String s = in.nextLine();
             if (isInteger(s)) {
                 Integer res = Integer.parseInt(s);
                 if(0<=res&&res<=len) {
@@ -35,7 +35,7 @@ public class util {
         while(true){
             System.out.println(Choices);
             System.out.print(command);
-            String s = in.next();
+            String s = in.nextLine();
             if (isInteger(s)) {
                 int res = Integer.parseInt(s);
                 if(0<=res&&res<=len) {
@@ -56,7 +56,7 @@ public class util {
         while(true){
             System.out.println(Choices);
             System.out.print(command);
-            String s = in.next();
+            String s = in.nextLine();
             if (isInteger(s)) {
                 int res = Integer.parseInt(s);
                 if(1<=res&&res<=len) {
@@ -98,7 +98,7 @@ public class util {
         while(true){
             if(withchoices)displayChoices();
             System.out.printf("%s %d %s %d %s ","Enter Your Choice between",0,"and",len,":");
-            String s = in.next();
+            String s = in.nextLine();
             if (isInteger(s)) {
                 int res = Integer.parseInt(s);
                 if(0<=res&&res<=len) {
@@ -120,7 +120,7 @@ public class util {
         while(true){
             if(withchoices)displayChoices();
             System.out.printf("%s %d %s %d %s ","Enter Your Choice between",1,"and",len,":");
-            String s = in.next();
+            String s = in.nextLine();
             if (isInteger(s)) {
                 int res = Integer.parseInt(s);
                 if(1<=res&&res<=len) {
@@ -142,10 +142,11 @@ public class util {
     public static String specialchoice(){
         Scanner in = new Scanner(System.in);
         int len = tags.length;
+        addChoices(tags);
         while(true){
             displayChoices();
             System.out.printf("%s %d %s %d %s ","Enter Your Choice between",1,"and",len,":");
-            String s = in.next();
+            String s = in.nextLine();
             if (isInteger(s)) {
                 int res = Integer.parseInt(s);
                 if(1<=res&&res<len) {
@@ -153,7 +154,7 @@ public class util {
                     return tags[res-1];
                 }else if(res==len){
                     choices.remove(choices.size()-1);
-                    System.out.println("Others: ");
+                    System.out.print("Others: ");
                     s = in.nextLine();
                     return s;
                 }else{

@@ -8,7 +8,7 @@ import static bugs.Page_main.*;
 import static bugs.util.*;
 
 public class Page_project {
-    public static void proj_page() throws IOException {
+    public static void proj_page() {
         String c=null;
         do {
             c = ask(project.getIssues().size(), "Enter 0 to go back. \nEnter selected issue ID to check issue\nor 's' to search\nor 'c' to create issue: ", project.issueBoard());

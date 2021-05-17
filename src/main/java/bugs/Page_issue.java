@@ -1,6 +1,7 @@
 package bugs;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.*;
 import static bugs.util.*;
@@ -34,7 +35,7 @@ public class Page_issue {
         //only admin can do? assignee part?
     }
 
-    public static void createIssue() throws IOException {
+    public static void createIssue() {
         Scanner in = new Scanner(System.in);
         System.out.print("Title: ");
         String title = in.nextLine();
@@ -46,7 +47,7 @@ public class Page_issue {
         System.out.println("Priority (1-9), The higher the value, the higher the priority of this issue is.");
         int priority = choice1(9, false);
 
-        String tag = specialchoice(); //there's self-defined tag, which is speacial
+        String tag = specialchoice(); //there's self-defined tag, which is special
 
         String name = user.getName();
 
@@ -54,10 +55,17 @@ public class Page_issue {
         System.out.println("Description text: ");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String text="", line;
-
-        while((line = br.readLine()) != "*****"){
-            text += line;
+        String text="";
+        String line;
+        try {
+            while ((line = br.readLine()) != "*****\n")
+            {
+                String[] tokens = line.split("\\s");
+                text+=(Arrays.toString(tokens));
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());

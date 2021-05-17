@@ -27,7 +27,7 @@ public class Page_main {
     public static Comment comment;
     public static HashMap<String, Integer>username_id;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Comment comment1 = new Comment(2, "nice one, it's helpful", new Timestamp(timestamp.getTime()), "amos");
         comment1.addReact("happy");
@@ -36,6 +36,7 @@ public class Page_main {
         Project a = new Project(1,"TableView Widget");
         a.addIssue(issue);
         addProject(a);
+        user = new User(10, "dummy", "dummy", "Dummy", true);
 //        System.out.println(comment.toString());
 //        System.out.println(issue.toString());
 //        System.out.println("\n");
@@ -47,7 +48,7 @@ public class Page_main {
         main_page();
     }
 
-    public static void main_page() throws IOException {
+    public static void main_page(){
         int c = 0;
         do {
             c = ask0(projects.size(),"Enter 0 to quit.\nEnter selected project ID to check project: ", projectBoard());
