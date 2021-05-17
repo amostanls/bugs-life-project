@@ -92,7 +92,7 @@ public class Project implements Serializable {
         for(int i=0; i<issues.size(); i++) {
             Issue cur = issues.get(i);
             String tmp = "|";
-            tmp += right(len_id,cur.getId());
+            tmp += right(len_id,i+1);
             tmp += left(len_title,cur.getTitle());
             tmp += left(len_status,cur.getStatus());
             tmp += left(len_tag, cur.getTags());

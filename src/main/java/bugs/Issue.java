@@ -60,6 +60,11 @@ public class Issue implements Serializable {
         comments.add(comment);
     }
 
+    public int getCommentId(int c) {
+        Comment comment = (Comment) comments.get(c);
+        return comment.getComment_id();
+    }
+
     @Override
     public String toString() {
         String res = "";

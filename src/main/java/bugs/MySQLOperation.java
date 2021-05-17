@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 /*  OPERATION FOR MYSQL
 SHOW DATABASES;
-USE sql6411496;
+USE bugs_life;
 SHOW TABLES;
 SELECT * FROM projects;
 SELECT * FROM issues;
@@ -78,9 +78,9 @@ ALTER TABLE users ADD UNIQUE(username);
 public class MySQLOperation {
 
     private static Connection getConnection() throws Exception {
-        final String user = "sql6411496";
-        final String pass = "eIXUjnTvTP";
-        final String path = "jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6411496?zeroDateTimeBehavior=CONVERT_TO_NULL";
+        final String user = "rotabite";
+        final String pass = "root@123456";
+        final String path = "jdbc:mysql://db4free.net:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL";
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
         Connection myConn = DriverManager.getConnection(path, user, pass);
@@ -957,7 +957,8 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-//        initializedDatabase();
-        showUserInterface();
+        initializedDatabase();
+//        showUserInterface();
+//        showIssueDashboard(1,"priority","jhoe");
     }
 }
