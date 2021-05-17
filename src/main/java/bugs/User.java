@@ -6,6 +6,7 @@ package bugs;/*
 
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  *
@@ -18,6 +19,7 @@ public class User implements Serializable {
     private String password;
     private String name;
     private boolean admin;
+    private HashMap<Integer,String> comment_reacted = new HashMap<>();
     
     public User(int userid, String username, String password, String name, boolean admin) {
         this.userid = userid;
@@ -32,6 +34,27 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.admin = admin;
+    }
+
+    public void addReaction(int commentid, String reaction) {
+        comment_reacted.put(commentid, reaction);
+        return;
+    }
+
+    public void delReaction(int commentid) {
+        comment_reacted.remove(commentid);
+        return;
+    }
+
+    public void modify(int commentid, String reaction) {
+        delReaction(commentid);
+        addReaction(commentid, reaction);
+        return;
+    }
+
+    public String getReaction(int commentid) {
+        if(comment_reacted.containsKey(commentid))return comment_reacted.get(commentid);
+        else return null;
     }
 
     public int getUserid() {

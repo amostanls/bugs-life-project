@@ -41,10 +41,6 @@ public class Project implements Serializable {
     }
 
     public void addIssue(Issue o) {
-        System.out.println("len id: "+len_id);
-        System.out.println("len title: "+len_title);
-        System.out.println("len status: "+len_status);
-        System.out.println("len tag: "+len_tag);
         issues.add(o);
         len_id = Math.max(len_id,(int)Integer.toString(issues.size()).length());
         len_title = Math.max(len_title,(int)o.getTitle().length());
@@ -54,25 +50,22 @@ public class Project implements Serializable {
         len_time = Math.max(len_time,(int)o.getTime().length());
         len_assignee = Math.max(len_assignee,(int)o.getAssignee().length());
         len_createdby = Math.max(len_createdby,(int)o.getCreatedBy().length());
-        System.out.println("len id: "+len_id);
-        System.out.println("len title: "+len_title);
-        System.out.println("len status: "+len_status);
-        System.out.println("len tag: "+len_tag);
     }
 
     //Issueboard
     public String issueBoard() {
 
-        String res = "bugs.Issue board\n";
+        String res = "Issue board\n";
         res += "+";
-        for(int i=0; i<len_id+2; i++)res+="-"; res+="+"; //id
-        for(int i=0; i<len_title+2; i++)res+="-"; res+="+"; //title
-        for(int i=0; i<len_status+2; i++)res+="-"; res+="+"; //status
-        for(int i=0; i<len_tag+2; i++)res+="-"; res+="+"; //tag
-        for(int i=0; i<len_priority+2; i++)res+="-"; res+="+"; //priority
-        for(int i=0; i<len_time+2; i++)res+="-"; res+="+"; //time
-        for(int i=0; i<len_assignee+2; i++)res+="-"; res+="+"; //assignee
-        for(int i=0; i<len_createdby+2; i++)res+="-"; res+="+\n"; //createdby
+        res += minus_plus(len_id+2);
+        res += minus_plus(len_title+2);
+        res += minus_plus(len_status+2);
+        res += minus_plus(len_tag+2);
+        res += minus_plus(len_priority+2);
+        res += minus_plus(len_time+2);
+        res += minus_plus(len_assignee+2);
+        res += minus_plus(len_createdby+2);
+        res += "\n";
 
         res += "|";
         res += centre(len_id,"ID");
@@ -86,19 +79,20 @@ public class Project implements Serializable {
         res += "\n";
 
         res += "+";
-        for(int i=0; i<len_id+2; i++)res+="-"; res+="+"; //id
-        for(int i=0; i<len_title+2; i++)res+="-"; res+="+"; //title
-        for(int i=0; i<len_status+2; i++)res+="-"; res+="+"; //status
-        for(int i=0; i<len_tag+2; i++)res+="-"; res+="+"; //tag
-        for(int i=0; i<len_priority+2; i++)res+="-"; res+="+"; //priority
-        for(int i=0; i<len_time+2; i++)res+="-"; res+="+"; //time
-        for(int i=0; i<len_assignee+2; i++)res+="-"; res+="+"; //assignee
-        for(int i=0; i<len_createdby+2; i++)res+="-"; res+="+\n"; //createdby
+        res += minus_plus(len_id+2);
+        res += minus_plus(len_title+2);
+        res += minus_plus(len_status+2);
+        res += minus_plus(len_tag+2);
+        res += minus_plus(len_priority+2);
+        res += minus_plus(len_time+2);
+        res += minus_plus(len_assignee+2);
+        res += minus_plus(len_createdby+2);
+        res += "\n";
 
         for(int i=0; i<issues.size(); i++) {
             Issue cur = issues.get(i);
             String tmp = "|";
-            tmp += right(len_id,(i+1));
+            tmp += right(len_id,i+1);
             tmp += left(len_title,cur.getTitle());
             tmp += left(len_status,cur.getStatus());
             tmp += left(len_tag, cur.getTags());
@@ -111,14 +105,15 @@ public class Project implements Serializable {
         }
 
         res += "+";
-        for(int i=0; i<len_id+2; i++)res+="-"; res+="+"; //id
-        for(int i=0; i<len_title+2; i++)res+="-"; res+="+"; //title
-        for(int i=0; i<len_status+2; i++)res+="-"; res+="+"; //status
-        for(int i=0; i<len_tag+2; i++)res+="-"; res+="+"; //tag
-        for(int i=0; i<len_priority+2; i++)res+="-"; res+="+"; //priority
-        for(int i=0; i<len_time+2; i++)res+="-"; res+="+"; //time
-        for(int i=0; i<len_assignee+2; i++)res+="-"; res+="+"; //assignee
-        for(int i=0; i<len_createdby+2; i++)res+="-"; res+="+\n"; //createdby
+        res += minus_plus(len_id+2);
+        res += minus_plus(len_title+2);
+        res += minus_plus(len_status+2);
+        res += minus_plus(len_tag+2);
+        res += minus_plus(len_priority+2);
+        res += minus_plus(len_time+2);
+        res += minus_plus(len_assignee+2);
+        res += minus_plus(len_createdby+2);
+        res += "\n";
 
         return res;
     }

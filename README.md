@@ -1,3 +1,3 @@
 # bugs-life-project
 
-bugs.Project for WIA1002
+Project for WIA1002
