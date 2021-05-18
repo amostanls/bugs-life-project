@@ -2,6 +2,7 @@ package bugs;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.*;
 import static bugs.util.*;
@@ -51,23 +52,14 @@ public class Page_issue {
 
         String name = user.getName();
 
-        System.out.println("(Enter \"*****\" at the last line of text to stop writing)");
+        System.out.println("(Enter \"*****\" at the last line of text to stop writing and leave a space if you want the line to be blank by putting \" \")");
         System.out.println("Description text: ");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String text="";
-        String line;
-        try {
-            while ((line = br.readLine()) != "*****\n")
-            {
-                String[] tokens = line.split("\\s");
-                text+=(Arrays.toString(tokens));
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String line = in.nextLine();
+        //please handle blank spaces in GUI, I cannot find way to do it.
+        text = line;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         Issue issue = new Issue(issueenum++, title, priority, status[status_id], new String[]{tag},  text, name, "None", new Timestamp(timestamp.getTime()));

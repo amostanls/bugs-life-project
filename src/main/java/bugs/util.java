@@ -183,6 +183,10 @@ public class util {
         }
     }
 
+    public static boolean checkEnd(String s) {
+        return s.equals("*****");
+    }
+
     public String[] getEmojis() {
         return emojis;
     }
