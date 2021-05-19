@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class util {
     private static ArrayList<ArrayList<String>> choices = new ArrayList<>(); //2d ArrayList
 
-    public static String ask(int len, String command, String Choices) {
+    public static String ask(int len, String command, String Choices, boolean search) {
         //for project page
         Scanner in = new Scanner(System.in);
         while(true){
@@ -21,9 +21,10 @@ public class util {
                     System.out.println("Invalid Input");
                     prompt_any();
                 }
-            }else if(s.equals("s")||s.equals("c")){
-                return s;
             }else{
+                if(search&&s.equals("s"))return s;
+                else if(s.equals("r"))return s;
+                if(s.equals("c"))return s;
                 System.out.println("Invalid input");
                 prompt_any();
             }
@@ -41,11 +42,11 @@ public class util {
                 if(0<=res&&res<=len) {
                     return res;
                 }else {
-                    System.out.print("Invalid Input");
+                    System.out.println("Invalid Input");
                     prompt_any();
                 }
             }else {
-                System.out.print("Invalid input");
+                System.out.println("Invalid input");
                 prompt_any();
             }
         }
@@ -93,10 +94,13 @@ public class util {
 
     }
 
-    public static int choice0(int len, boolean withchoices) {
+    public static int choice0(int len, boolean withchoices, boolean zero) {
         Scanner in = new Scanner(System.in);
         while(true){
-            if(withchoices)displayChoices();
+            if(withchoices) {
+                if(zero)displayChoices0();
+                else displayChoices();
+            }
             System.out.printf("%s %d %s %d %s ","Enter Your Choice between",0,"and",len,":");
             String s = in.nextLine();
             if (isInteger(s)) {
@@ -172,6 +176,12 @@ public class util {
         int last = choices.size()-1;
         for(int i = 0; i< choices.get(last).size(); i++)
             System.out.printf("%d. %s\n",i+1,choices.get(last).get(i));
+    }
+
+    public static void displayChoices0() {
+        int last = choices.size()-1;
+        for(int i = 0; i< choices.get(last).size(); i++)
+            System.out.printf("%d. %s\n",i,choices.get(last).get(i));
     }
 
     public static boolean isInteger(String s){

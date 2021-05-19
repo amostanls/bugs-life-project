@@ -19,12 +19,12 @@ public class authentication {
             User user = (User) users.get(userid);
             if(password.equals(user.getPassword()))return userid;
             else {
-                System.out.println("Incorrect password");
+                System.out.println("Incorrect password.");
                 prompt_any();
                 return -1;
             }
         }else {
-            System.out.println("Username is not found");
+            System.out.println("Username is not found.");
             prompt_any();
             return -1;
         }
@@ -34,7 +34,7 @@ public class authentication {
         Scanner in = new Scanner(System.in);
         System.out.println("~~~ Register ~~~");
         System.out.println("Please ensure your password length is at least 8 characters long.");
-        System.out.println("Name: ");
+        System.out.print("Name: ");
         String name = in.nextLine();
         System.out.print("Username: ");
         String username = in.nextLine();
@@ -48,13 +48,14 @@ public class authentication {
             prompt_any();
             return -1;
         }else if(!password_length(password)||!password.equals(password2)){
-            System.out.println("Passwords has less than 8 characters or passwords do no match");
+            System.out.println("Passwords has less than 8 characters or passwords do no match.");
             prompt_any();
             return -1;
         }else {
             //register
             User user = new User(userenum++, username, password, name, false);
             users.add(user);
+            username_id.put(username, user.getUserid());
             return user.getUserid();
         }
     }
@@ -65,7 +66,7 @@ public class authentication {
         Scanner in = new Scanner(System.in);
         System.out.println("~~~ Register ~~~");
         System.out.println("Please ensure your password length is at least 8 characters long.");
-        System.out.println("Name: ");
+        System.out.print("Name: ");
         String name = in.nextLine();
         System.out.print("Username: ");
         String username = in.nextLine();
@@ -85,12 +86,13 @@ public class authentication {
             prompt_any();
             return -1;
         }else if(!password_length(password)||!password.equals(password2)){
-            System.out.println("Passwords has less than 8 characters or passwords do no match");
+            System.out.println("Passwords has less than 8 characters or passwords do no match.");
             prompt_any();
             return -1;
         }else {
             User user = new User(userenum++, username, password, name, true);
             users.add(user);
+            username_id.put(username, user.getUserid());
             return user.getUserid();
        }
     }

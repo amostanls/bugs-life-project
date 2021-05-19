@@ -11,14 +11,25 @@ public class Page_project {
     public static void proj_page() {
         String c=null;
         do {
-            c = ask(project.getIssues().size(), "Enter 0 to go back. \nEnter selected issue ID to check issue\nor 's' to search\nor 'c' to create issue: ", project.issueBoard());
+            c = ask(project.getIssues().size(), "Enter selected issue ID to check issue\nor 's' to search\nor 'c' to create issue\nor '0' to go back: ", project.issueBoard(), true);
             if(c.equals("s")) {
                 //search issue
+                if(project.getIssues().isEmpty()) {
+                    System.out.println("There is no issue found in this project.\nCreate one before searching.");
+                    prompt_any();
+                    continue;
+                }
                 System.out.println("search");
             }else if(c.equals("c")) {
                 //create issue
                 createIssue();
             }else{
+                //select id
+                if(project.getIssues().isEmpty()) {
+                    System.out.println("There is no issue found in this project.\nCreate one before selecting.");
+                    prompt_any();
+                    continue;
+                }
                 int choice = Integer.parseInt(c);
                 if(choice==0)return;
                 setIssueid(choice-1);

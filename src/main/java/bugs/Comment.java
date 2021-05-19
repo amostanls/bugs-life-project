@@ -25,6 +25,15 @@ public class Comment implements Serializable {
     private String user;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    public Comment(int comment_id, String text, String user) {
+        this.comment_id = comment_id;
+        this.text = text;
+        this.user = user;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        this.timestamp = timestamp;
+        react = new ArrayList<>();
+    }
+
     public Comment(int comment_id, String text, Timestamp timestamp, String user) {
         this.comment_id = comment_id;
         this.text = text;
@@ -81,8 +90,10 @@ public class Comment implements Serializable {
     }
 
     public int getIndex(String reaction) {
+        if(reaction==null)return -1;
         for(int i=0; i<react.size(); i++) {
-            if(react.get(i).getReaction().equals(reaction))return i;
+            String curr = react.get(i).getReaction();
+            if(curr.equals(reaction))return i;
         }
         //new reaction
         return -1;
