@@ -1,6 +1,8 @@
 package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -212,7 +214,7 @@ public class MySQLOperation {
         updateCount.setInt(3, comment_id);
         updateCount.execute();
     }
-
+/*
     public static List<Project> getProjectList() {
         Connection myConn = null;
         Statement stmt = null;
@@ -239,6 +241,34 @@ public class MySQLOperation {
         return projectList;
     }
 
+
+ */
+
+    public static ObservableList<Project> getProjectList() {
+        Connection myConn = null;
+        Statement stmt = null;
+        ResultSet myRs = null;
+        ObservableList<Project> projectList= FXCollections.observableArrayList();
+
+        try {
+            myConn = getConnection();
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
+            stmt = myConn.createStatement();
+            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int id = myRs.getInt("project_id");
+                String name = myRs.getString("name");
+                List<Issue> issues = getIssueListByPriority(id);
+                projectList.add(new Project(id, name, issues));
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return projectList;
+    }
     private static int getLastProjectID() {
         Connection myConn = null;
         Statement stmt = null;

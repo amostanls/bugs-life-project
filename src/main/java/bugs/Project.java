@@ -19,6 +19,7 @@ public class Project implements Serializable {
     private int id;
     private String name;
     private ArrayList<Issue> issues;
+    private int issuesNumber;
     private int len_id = 2;
     private int len_title = 5;
     private int len_status = 6;
@@ -38,6 +39,7 @@ public class Project implements Serializable {
         this.id = id;
         this.name = name;
         this.issues = (ArrayList<Issue>) issues;
+        this.issuesNumber=issues.size();
     }
 
     public void addIssue(Issue o) {
@@ -118,6 +120,13 @@ public class Project implements Serializable {
         return res;
     }
 
+    public int getIssuesNumber() {
+        return issuesNumber;
+    }
+
+    public void setIssuesNumber(int issuesNumber) {
+        this.issuesNumber = issuesNumber;
+    }
 
     public int getId() {
         return id;
