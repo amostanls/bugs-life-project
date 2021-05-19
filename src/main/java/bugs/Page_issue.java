@@ -24,7 +24,7 @@ public class Page_issue {
                     continue;
                 }
                 System.out.println("Enter selected comment ID to react.\nor '0' to go back.");
-                int choice = choice0(issue.getComments().size(), false);
+                int choice = choice0(issue.getComments().size(), false, false);
                 if(choice>0)Reacting(choice);
             }else if(c.equals("c")) {
                 createComment();
@@ -60,7 +60,7 @@ public class Page_issue {
 
         String name = user.getName();
 
-        System.out.println("(Enter \"*****\" at the last line of text to stop writing and leave a space if you want the line to be blank by putting \" \")");
+//        System.out.println("(Enter \"*****\" at the last line of text to stop writing and leave a space if you want the line to be blank by putting \" \")");
         System.out.println("Description text: ");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 

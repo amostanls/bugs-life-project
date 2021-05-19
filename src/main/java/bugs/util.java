@@ -94,10 +94,13 @@ public class util {
 
     }
 
-    public static int choice0(int len, boolean withchoices) {
+    public static int choice0(int len, boolean withchoices, boolean zero) {
         Scanner in = new Scanner(System.in);
         while(true){
-            if(withchoices)displayChoices();
+            if(withchoices) {
+                if(zero)displayChoices0();
+                else displayChoices();
+            }
             System.out.printf("%s %d %s %d %s ","Enter Your Choice between",0,"and",len,":");
             String s = in.nextLine();
             if (isInteger(s)) {
@@ -173,6 +176,12 @@ public class util {
         int last = choices.size()-1;
         for(int i = 0; i< choices.get(last).size(); i++)
             System.out.printf("%d. %s\n",i+1,choices.get(last).get(i));
+    }
+
+    public static void displayChoices0() {
+        int last = choices.size()-1;
+        for(int i = 0; i< choices.get(last).size(); i++)
+            System.out.printf("%d. %s\n",i,choices.get(last).get(i));
     }
 
     public static boolean isInteger(String s){

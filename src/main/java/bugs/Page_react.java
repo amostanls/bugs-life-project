@@ -8,7 +8,7 @@ import static bugs.util.*;
 
 public class Page_react {
 
-    private static String[] reactions = {"thumbsUp", "thumbsDown", "happy", "sad", "angry"};
+    private static final String[] reactions = {"Go Back","thumbsUp", "thumbsDown", "happy", "sad", "angry"};
 
     public static void Reacting(int comment_ind) {
         comment_ind--;
@@ -19,23 +19,28 @@ public class Page_react {
             String reacted = user.getReaction(commentid);
             System.out.println("~~~ Reacting ~~~");
             System.out.println(comment.getText());
-            String[] toreact = reactions;
-            if(reacted!=null)System.out.println("You have reacted " + reacted);
-            for (int i = 0; i < reactions.length; i++)
-                if (reactions[i].equals(reacted)) toreact[i] = "Remove " + toreact[i];
+            String[] toreact = new String[6];
+            if(reacted!=null)System.out.println("You have reacted with " + reacted);
+            for (int i = 0; i < reactions.length; i++) {
+                if (reactions[i].equals(reacted)) toreact[i] = "Remove " + reactions[i];
+                else toreact[i] = reactions[i];
+            }
             addChoices(toreact);
-            System.out.println("0. Go Back");
-            int choice = choice0(toreact.length, true);
+            int choice = choice0(toreact.length, true, true);
             if(choice==0)break;
             else {
-                choice--;
                 //remove old
-                user.delReaction(commentid);
-                comment.delReact(reacted);
+                if(reacted!=null) {
+                    user.delReaction(commentid);
+                    comment.delReact(reacted);
+                }
                 //add new
-                if(reacted!=null&&!reacted.equals(reactions[choice])){
+                if(reacted==null){
                     user.addReaction(commentid, reactions[choice]);
-                    comment.addReact(reacted);
+                    comment.addReact(reactions[choice]);
+                }else if(!reacted.equals(reactions[choice])){
+                    user.addReaction(commentid, reactions[choice]);
+                    comment.addReact(reactions[choice]);
                 }
             }
         }

@@ -26,12 +26,11 @@ public class Page_main {
     public static Project project;
     public static Issue issue;
     public static HashMap<String, Integer>username_id = new HashMap<>();
-    public static Timestamp timestamp;
 
-    private static String[] start_page={"Log In", "Registration", "Registration (Admin Only)"};
+    private static String[] start_page={"Terminate the program", "Log In", "Registration", "Registration (Admin Only)"};
 
     public static void main(String[] args) {
-        timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 //        Comment comment1 = new Comment(2, "nice one, it's helpful", new Timestamp(timestamp.getTime()), "amos");
 //        comment1.addReact("happy");
 //        Issue issue = new Issue(2, "cannot launch app", 2, "In Progress", new String[]{(new String("Frontend"))}, "tak boleh open", "ben", "josh", new Timestamp(timestamp.getTime()));
@@ -50,8 +49,7 @@ public class Page_main {
         int id = -1;
         while(true) {
             addChoices(start_page);
-            System.out.println("0. Terminate the program");
-            int c = choice0(3, true);
+            int c = choice0(3, true, true);
             if (c == 0) break;
             else if (c == 1) id = login();
             else if(c==2) id = register();
