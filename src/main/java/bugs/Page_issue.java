@@ -6,20 +6,28 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.*;
 import static bugs.util.*;
+import static bugs.Page_comment.*;
 import static bugs.Page_main.*;
+import static bugs.Page_react.*;
 
 public class Page_issue {
 
     public static void issue_page() {
         String c=null;
         do {
-            c = ask(0, "Enter 0 to go back. \nEnter 'r' to react\nor 'c' to comment\nor 'help' for more commands: ", issue.toString());
+            c = ask(0, "Enter\n'r' to react\nor 'c' to comment\nor '0' to go back.\nor 'help' for more commands: ", issue.toString(), false);
             if(c.equals("r")) {
-                //react
-                System.out.println("react");
+                //react, select which comment to react first
+                if(issue.getComments().isEmpty()) {
+                    System.out.println("There is no comments found in this issue.\nCreate one before reacting.");
+                    prompt_any();
+                    continue;
+                }
+                System.out.println("Enter selected comment ID to react.\nor '0' to go back.");
+                int choice = choice0(issue.getComments().size(), false);
+                if(choice>0)Reacting(choice);
             }else if(c.equals("c")) {
-                //comment
-                System.out.println("comment");
+                createComment();
             }else if(c.equals("help")){
 
             }else {
@@ -70,26 +78,4 @@ public class Page_issue {
     public static void addIssue(Issue tmp) {
         project.addIssue(tmp);
     }
-
-    private static String[] reactions = {"happy", "sad", "angry"};
-
-    //choose comment to react
-    //if no comment
-    //there is comment, check reacted with respectively comment id
-    public static void react_page() {
-        int c = -1;
-        int size = issue.getComments().size();
-        if(size==0) {
-            System.out.println("There is no comment to react.");
-            return;
-        }
-        do {
-            c = ask0(size,"Enter 0 to not react. \nEnter selected comment ID to react", issue.toString());
-            if(c>0) {
-                //check if user has reacted this comment
-
-            }
-        }while(c!=0);
-    }
-
 }

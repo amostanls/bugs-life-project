@@ -7,13 +7,14 @@ import java.util.HashMap;
 
 import static bugs.Page_project.*;
 import static bugs.util.*;
+import static bugs.authentication.*;
 
 public class Page_main {
     // this one use for database, inc one when there's new registration / project / issue / comment
-    public static int userenum = 1;
-    public static int projectenum = 1;
-    public static int issueenum = 1;
-    public static int commentenum = 1;
+    public static int userenum = 0;
+    public static int projectenum = 0;
+    public static int issueenum = 0;
+    public static int commentenum = 0;
 
     public static ArrayList<User>users = new ArrayList<>();
     public static ArrayList<Project>projects = new ArrayList<>();
@@ -24,20 +25,20 @@ public class Page_main {
     public static User user;
     public static Project project;
     public static Issue issue;
-    public static Comment comment;
-    public static HashMap<String, Integer>username_id;
+    public static HashMap<String, Integer>username_id = new HashMap<>();
     public static Timestamp timestamp;
+
+    private static String[] start_page={"Log In", "Registration", "Registration (Admin Only)"};
 
     public static void main(String[] args) {
         timestamp = new Timestamp(System.currentTimeMillis());
-        Comment comment1 = new Comment(2, "nice one, it's helpful", new Timestamp(timestamp.getTime()), "amos");
-        comment1.addReact("happy");
-        Issue issue = new Issue(2, "cannot launch app", 2, "In Progress", new String[]{(new String("Frontend"))}, "tak boleh open", "ben", "josh", new Timestamp(timestamp.getTime()));
-        issue.addComment(comment1);
+//        Comment comment1 = new Comment(2, "nice one, it's helpful", new Timestamp(timestamp.getTime()), "amos");
+//        comment1.addReact("happy");
+//        Issue issue = new Issue(2, "cannot launch app", 2, "In Progress", new String[]{(new String("Frontend"))}, "tak boleh open", "ben", "josh", new Timestamp(timestamp.getTime()));
+//        issue.addComment(comment1);
         Project a = new Project(1,"TableView Widget");
-        a.addIssue(issue);
+//        a.addIssue(issue);
         addProject(a);
-        user = new User(10, "dummy", "dummy", "Dummy", true);
 //        System.out.println(comment.toString());
 //        System.out.println(issue.toString());
 //        System.out.println("\n");
@@ -46,14 +47,26 @@ public class Page_main {
 //        login loginPage = new login();
         //need to load all things from database
         //all enum as well
-
-        main_page();
+        int id = -1;
+        while(true) {
+            addChoices(start_page);
+            System.out.println("0. Terminate the program");
+            int c = choice0(3, true);
+            if (c == 0) break;
+            else if (c == 1) id = login();
+            else if(c==2) id = register();
+            else id = registerAdmin();
+            if(id!=-1) {
+                user = (User) users.get(id);
+                main_page();
+            }
+        }
     }
 
     public static void main_page(){
         int c = 0;
         do {
-            c = ask0(projects.size(),"Enter 0 to quit.\nEnter selected project ID to check project: ", projectBoard());
+            c = ask0(projects.size(),"Enter selected project ID to check project \nor '0' to log out: ", projectBoard());
             if(c>0) {
                 setProjid(c - 1);
                 project = (Project) projects.get(c - 1);
