@@ -26,9 +26,10 @@ public class Page_main {
     public static Issue issue;
     public static Comment comment;
     public static HashMap<String, Integer>username_id;
+    public static Timestamp timestamp;
 
     public static void main(String[] args) {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        timestamp = new Timestamp(System.currentTimeMillis());
         Comment comment1 = new Comment(2, "nice one, it's helpful", new Timestamp(timestamp.getTime()), "amos");
         comment1.addReact("happy");
         Issue issue = new Issue(2, "cannot launch app", 2, "In Progress", new String[]{(new String("Frontend"))}, "tak boleh open", "ben", "josh", new Timestamp(timestamp.getTime()));
@@ -44,6 +45,7 @@ public class Page_main {
 //        System.out.println(projects.size());
 //        login loginPage = new login();
         //need to load all things from database
+        //all enum as well
 
         main_page();
     }
