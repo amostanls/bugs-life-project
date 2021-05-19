@@ -1,12 +1,3 @@
-MySQLOperation.class
-Comment.class
-Database.class
-Project.class
-Tag.class
-Issue.class
-User.class
-login$1.class
-login.class
-React.class
-main_class.class
-Json.class
+home\main.class
+home\issues.class
+home\Controller.class
