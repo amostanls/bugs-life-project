@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -79,14 +80,38 @@ ALTER TABLE users ADD UNIQUE(username);
  */
 public class MySQLOperation {
 
+    private static String HOST = "127.0.0.1";
+    private static int PORT = 3306;
+    private static String DB_NAME = "bugs_life";
+    private static String USERNAME = "root";
+    private static String PASSWORD = "";
+    private static Connection connection;
+
     private static Connection getConnection() throws Exception {
+        /*this is for online database
+        *not preferable, very very slow
+        * might take minutes
         final String user = "rotabite";
         final String pass = "root@123456";
         final String path = "jdbc:mysql://db4free.net:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL";
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
         Connection myConn = DriverManager.getConnection(path, user, pass);
+
         return myConn;
+
+         */
+
+
+        try {
+            connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s", HOST, PORT, DB_NAME), USERNAME, PASSWORD);
+        } catch (SQLException ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return connection;
+
+
     }
 
     private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
@@ -134,7 +159,7 @@ public class MySQLOperation {
                     updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
                     updateComment.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
                     updateComment.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("text").asText());
-                    
+
                     newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
                     updateComment.setTimestamp(5, newTs);
                     updateComment.setString(6, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("user").asText());
@@ -165,7 +190,7 @@ public class MySQLOperation {
             updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
             updateUser.setString(2, node.get("users").get(i).get("username").asText());
             updateUser.setString(3, node.get("users").get(i).get("password").asText());
-            updateUser.setBoolean(4,false);
+            updateUser.setBoolean(4, false);
             updateUser.addBatch();
 
             if (i == node.get("users").size() - 1) {
@@ -248,7 +273,7 @@ public class MySQLOperation {
         Connection myConn = null;
         Statement stmt = null;
         ResultSet myRs = null;
-        ObservableList<Project> projectList= FXCollections.observableArrayList();
+        ObservableList<Project> projectList = FXCollections.observableArrayList();
 
         try {
             myConn = getConnection();
@@ -269,6 +294,7 @@ public class MySQLOperation {
 
         return projectList;
     }
+
     private static int getLastProjectID() {
         Connection myConn = null;
         Statement stmt = null;
@@ -789,7 +815,7 @@ public class MySQLOperation {
         //get different order of issue list order from timestamp or priority
         if (sortedBy.equalsIgnoreCase("Timestamp")) {
             issueList = getIssueListByTimestamp(project_id);
-        } else if (sortedBy.equalsIgnoreCase("Priority")){
+        } else if (sortedBy.equalsIgnoreCase("Priority")) {
             issueList = getIssueListByPriority(project_id);
         }
 
@@ -850,25 +876,25 @@ public class MySQLOperation {
             myConn.commit();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            if(myRs!=null){
-                try{
+        } finally {
+            if (myRs != null) {
+                try {
                     myRs.close();
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(pstmt!=null){
-                try{
+            if (pstmt != null) {
+                try {
                     pstmt.close();
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(myConn!=null){
-                try{
+            if (myConn != null) {
+                try {
                     myConn.close();
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
@@ -889,7 +915,7 @@ public class MySQLOperation {
             String password = sc.nextLine();
 
             //assign new user object if password and username exist
-            newUser = login(username,password);
+            newUser = login(username, password);
 
             //notification if wrong password / username
             if (newUser == null) {
@@ -972,8 +998,8 @@ public class MySQLOperation {
             pstmt.setInt(2, issue_id);
             pstmt.setInt(3, comment_id);
             pstmt.setString(4, text);
-            pstmt.setTimestamp(5,comment_timestamp);
-            pstmt.setString(6,username);
+            pstmt.setTimestamp(5, comment_timestamp);
+            pstmt.setString(6, username);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -983,7 +1009,7 @@ public class MySQLOperation {
     public static void showUserInterface() {
         User currentUser = showLoginPage();
         int selectionOfProject = showProjectDashboard();
-        showIssueDashboard(selectionOfProject,"priority", currentUser.getUsername());
+        showIssueDashboard(selectionOfProject, "priority", currentUser.getUsername());
     }
 
     public static void main(String[] args) {
