@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="829.0" style="-fx-background-color: #FFF;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #FFF;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.Controller">
    <children>
       <VBox prefHeight="518.0" prefWidth="237.0" style="-fx-background-color: #EBE8F9;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -90,14 +90,14 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TableView fx:id="projectTable" layoutX="277.0" layoutY="202.0" prefHeight="279.0" prefWidth="516.0">
+      <TableView fx:id="projectTable" layoutX="277.0" layoutY="202.0" onMouseClicked="#switchToIssues" prefHeight="528.0" prefWidth="1027.0">
         <columns>
           <TableColumn fx:id="project_id" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="project_name" prefWidth="212.0" text="Project Name" />
             <TableColumn fx:id="project_issues" prefWidth="75.0" text="Issues" />
         </columns>
       </TableView>
-      <HBox layoutX="281.0" layoutY="109.0" prefHeight="63.0" prefWidth="516.0" style="-fx-background-color: #F3F3F3;">
+      <HBox layoutX="281.0" layoutY="109.0" prefHeight="63.0" prefWidth="1027.0" style="-fx-background-color: #F3F3F3;">
          <children>
             <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#getAddView" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -124,19 +124,5 @@
             </TextField>
          </children>
       </HBox>
-      <VBox fx:id="displayBox" alignment="CENTER" layoutX="293.0" layoutY="242.0" prefHeight="226.0" prefWidth="486.0" style="-fx-background-color: #FFF;">
-         <children>
-            <Label fx:id="label1" alignment="BASELINE_LEFT" prefHeight="37.0" prefWidth="190.0" text="Connected to Database">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="label2" alignment="BASELINE_LEFT" prefHeight="47.0" prefWidth="103.0" text="Initializing...">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
    </children>
 </AnchorPane>

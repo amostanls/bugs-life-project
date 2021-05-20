@@ -166,7 +166,7 @@ public class MySQLOperation {
             updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
             updateUser.setString(2, node.get("users").get(i).get("username").asText());
             updateUser.setString(3, node.get("users").get(i).get("password").asText());
-            updateUser.setBoolean(4,false);
+            updateUser.setBoolean(4, false);
             updateUser.addBatch();
 
             if (i == node.get("users").size() - 1) {
@@ -244,7 +244,7 @@ public class MySQLOperation {
         Statement stmt = null;
         ResultSet myRs = null;
 
-        ObservableList<Project> projectList= FXCollections.observableArrayList();
+        ObservableList<Project> projectList = FXCollections.observableArrayList();
 
         try {
             String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
@@ -264,6 +264,7 @@ public class MySQLOperation {
 
         return projectList;
     }
+
     private static int getLastProjectID(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
@@ -331,6 +332,40 @@ public class MySQLOperation {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         List<Issue> issueList = new ArrayList<>();
+
+        try {
+            String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY priority DESC";
+            pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
+            pstmt.setInt(1, project_id);
+            myRs = pstmt.executeQuery();
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int issue_id = myRs.getInt("issue_id");
+                String title = myRs.getString("title");
+                int priority = myRs.getInt("priority");
+                String status = myRs.getString("status");
+                String[] tag = {myRs.getString("tag")};
+                String descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String asignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
+                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                issueList.add(newIssue);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return issueList;
+    }
+
+    public static ObservableList<Issue> getIssueList(Connection myConn, int project_id) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        ObservableList<Issue> issueList = FXCollections.observableArrayList();
 
         try {
             String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY priority DESC";
@@ -674,7 +709,7 @@ public class MySQLOperation {
         //get different order of issue list order from timestamp or priority
         if (sortedBy.equalsIgnoreCase("Timestamp")) {
             issueList = getIssueListByTimestamp(myConn, project_id);
-        } else if (sortedBy.equalsIgnoreCase("Priority")){
+        } else if (sortedBy.equalsIgnoreCase("Priority")) {
             issueList = getIssueListByPriority(myConn, project_id);
         }
 
@@ -751,7 +786,7 @@ public class MySQLOperation {
             String password = sc.nextLine();
 
             //assign new user object if password and username exist
-            newUser = login(myConn, username,password);
+            newUser = login(myConn, username, password);
 
             //notification if wrong password / username
             if (newUser == null) {
@@ -831,8 +866,8 @@ public class MySQLOperation {
             pstmt.setInt(2, issue_id);
             pstmt.setInt(3, comment_id);
             pstmt.setString(4, text);
-            pstmt.setTimestamp(5,comment_timestamp);
-            pstmt.setString(6,username);
+            pstmt.setTimestamp(5, comment_timestamp);
+            pstmt.setString(6, username);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -842,13 +877,22 @@ public class MySQLOperation {
     public static void showUserInterface(Connection myConn) {
         User currentUser = showLoginPage(myConn);
         int selectionOfProject = showProjectDashboard(myConn);
-        showIssueDashboard(myConn, selectionOfProject,"priority", currentUser.getUsername());
+        showIssueDashboard(myConn, selectionOfProject, "priority", currentUser.getUsername());
     }
 
+    public static Connection myConn;
+
+    static {
+        try {
+            myConn = getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) throws Exception {
 //        initializedDatabase();
-        Connection myConn = getConnection();
+        //myConn = getConnection();
         showUserInterface(myConn);
 //        showIssueDashboard(1,"priority","jhoe");
     }
