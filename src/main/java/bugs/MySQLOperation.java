@@ -166,7 +166,7 @@ public class MySQLOperation {
             updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
             updateUser.setString(2, node.get("users").get(i).get("username").asText());
             updateUser.setString(3, node.get("users").get(i).get("password").asText());
-            updateUser.setBoolean(4,false);
+            updateUser.setBoolean(4, false);
             updateUser.addBatch();
 
             if (i == node.get("users").size() - 1) {
@@ -254,30 +254,6 @@ public class MySQLOperation {
         return projectList;
     }
 
-    public static ObservableList<Project> getProjectListObservable(Connection myConn) {
-        Statement stmt = null;
-        ResultSet myRs = null;
-
-        ObservableList<Project> projectList= FXCollections.observableArrayList();
-
-        try {
-            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
-            stmt = myConn.createStatement();
-            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
-            //get parameter for creating issue object
-            while (myRs.next()) {
-                int id = myRs.getInt("project_id");
-                String name = myRs.getString("name");
-                List<Issue> issues = getIssueListByPriority(myConn, id);
-                projectList.add(new Project(id, name, issues));
-            }
-
-        } catch (Exception ex) {
-            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return projectList;
-    }
     private static int getLastProjectID(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
@@ -350,7 +326,7 @@ public class MySQLOperation {
             }
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        }  finally {
+        } finally {
             if (myRs != null) {
                 try {
                     myRs.close();
@@ -852,7 +828,7 @@ public class MySQLOperation {
         //get different order of issue list order from timestamp or priority
         if (sortedBy.equalsIgnoreCase("Timestamp")) {
             issueList = getIssueListByTimestamp(myConn, project_id);
-        } else if (sortedBy.equalsIgnoreCase("Priority")){
+        } else if (sortedBy.equalsIgnoreCase("Priority")) {
             issueList = getIssueListByPriority(myConn, project_id);
         }
 
@@ -944,7 +920,7 @@ public class MySQLOperation {
             String password = sc.nextLine();
 
             //assign new user object if password and username exist
-            newUser = login(myConn, username,password);
+            newUser = login(myConn, username, password);
 
             //notification if wrong password / username
             if (newUser == null) {
@@ -1039,8 +1015,8 @@ public class MySQLOperation {
             pstmt.setInt(2, issue_id);
             pstmt.setInt(3, comment_id);
             pstmt.setString(4, text);
-            pstmt.setTimestamp(5,comment_timestamp);
-            pstmt.setString(6,username);
+            pstmt.setTimestamp(5, comment_timestamp);
+            pstmt.setString(6, username);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -1065,23 +1041,34 @@ public class MySQLOperation {
     public static void showUserInterface(Connection myConn) {
         User currentUser = showLoginPage(myConn);
         int selectionOfProject = showProjectDashboard(myConn);
-        showIssueDashboard(myConn, selectionOfProject,"priority", currentUser.getUsername());
+        showIssueDashboard(myConn, selectionOfProject, "priority", currentUser.getUsername());
     }
 
+    //do not remove
+    public static Connection myConn;
 
-    public static void main(String[] args){
+    static {
+        try {
+            myConn = getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //
+    public static void main(String[] args) {
 //        initializedDatabase();
-        Connection myConn = null;
+        myConn = null;
         try {
             myConn = getConnection();
             showUserInterface(myConn);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(myConn!=null){
-                try{
+            if (myConn != null) {
+                try {
                     myConn.close();
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
