@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="829.0" style="-fx-background-color: #FFF;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="829.0" style="-fx-background-color: #FFF;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.Controller">
    <children>
       <VBox prefHeight="518.0" prefWidth="237.0" style="-fx-background-color: #EBE8F9;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -124,5 +124,19 @@
             </TextField>
          </children>
       </HBox>
+      <VBox fx:id="displayBox" alignment="CENTER" layoutX="293.0" layoutY="242.0" prefHeight="226.0" prefWidth="486.0" style="-fx-background-color: #FFF;">
+         <children>
+            <Label fx:id="label1" alignment="BASELINE_LEFT" prefHeight="37.0" prefWidth="190.0" text="Connected to Database">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="label2" alignment="BASELINE_LEFT" prefHeight="47.0" prefWidth="103.0" text="Initializing...">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

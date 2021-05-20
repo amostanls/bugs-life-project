@@ -1,6 +1,9 @@
 package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -77,7 +80,7 @@ ALTER TABLE users ADD UNIQUE(username);
  */
 public class MySQLOperation {
 
-    private static Connection getConnection() throws Exception {
+    public static Connection getConnection() throws Exception {
         final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
         final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
@@ -237,6 +240,30 @@ public class MySQLOperation {
         return projectList;
     }
 
+    public static ObservableList<Project> getProjectListObservable(Connection myConn) {
+        Statement stmt = null;
+        ResultSet myRs = null;
+
+        ObservableList<Project> projectList= FXCollections.observableArrayList();
+
+        try {
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
+            stmt = myConn.createStatement();
+            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
+            //get parameter for creating issue object
+            while (myRs.next()) {
+                int id = myRs.getInt("project_id");
+                String name = myRs.getString("name");
+                List<Issue> issues = getIssueListByPriority(myConn, id);
+                projectList.add(new Project(id, name, issues));
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return projectList;
+    }
     private static int getLastProjectID(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
