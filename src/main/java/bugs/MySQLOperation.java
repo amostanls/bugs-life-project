@@ -1,10 +1,7 @@
 package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,7 +20,7 @@ import java.util.logging.Logger;
 
 /*  OPERATION FOR MYSQL
 SHOW DATABASES;
-USE bugs_life;
+USE 5peJ8pFLLQ;
 SHOW TABLES;
 SELECT * FROM projects;
 SELECT * FROM issues;
@@ -80,38 +77,14 @@ ALTER TABLE users ADD UNIQUE(username);
  */
 public class MySQLOperation {
 
-    private static String HOST = "127.0.0.1";
-    private static int PORT = 3306;
-    private static String DB_NAME = "bugs_life";
-    private static String USERNAME = "root";
-    private static String PASSWORD = "";
-    private static Connection connection;
-
     private static Connection getConnection() throws Exception {
-        /*this is for online database
-        *not preferable, very very slow
-        * might take minutes
-        final String user = "rotabite";
-        final String pass = "root@123456";
-        final String path = "jdbc:mysql://db4free.net:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL";
+        final String user = "5peJ8pFLLQ";
+        final String pass = "h6Tpwh3kYW";
+        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
         Connection myConn = DriverManager.getConnection(path, user, pass);
-
         return myConn;
-
-         */
-
-
-        try {
-            connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s", HOST, PORT, DB_NAME), USERNAME, PASSWORD);
-        } catch (SQLException ex) {
-            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return connection;
-
-
     }
 
     private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
@@ -190,7 +163,7 @@ public class MySQLOperation {
             updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
             updateUser.setString(2, node.get("users").get(i).get("username").asText());
             updateUser.setString(3, node.get("users").get(i).get("password").asText());
-            updateUser.setBoolean(4, false);
+            updateUser.setBoolean(4,false);
             updateUser.addBatch();
 
             if (i == node.get("users").size() - 1) {
@@ -239,15 +212,13 @@ public class MySQLOperation {
         updateCount.setInt(3, comment_id);
         updateCount.execute();
     }
-/*
-    public static List<Project> getProjectList() {
-        Connection myConn = null;
+
+    public static List<Project> getProjectList(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
         List<Project> projectList = new ArrayList<>();
 
         try {
-            myConn = getConnection();
             String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
             stmt = myConn.createStatement();
             myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
@@ -255,7 +226,7 @@ public class MySQLOperation {
             while (myRs.next()) {
                 int id = myRs.getInt("project_id");
                 String name = myRs.getString("name");
-                List<Issue> issues = getIssueListByPriority(id);
+                List<Issue> issues = getIssueListByPriority(myConn, id);
                 projectList.add(new Project(id, name, issues));
             }
 
@@ -266,42 +237,11 @@ public class MySQLOperation {
         return projectList;
     }
 
-
- */
-
-    public static ObservableList<Project> getProjectList() {
-        Connection myConn = null;
-        Statement stmt = null;
-        ResultSet myRs = null;
-        ObservableList<Project> projectList = FXCollections.observableArrayList();
-
-        try {
-            myConn = getConnection();
-            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
-            stmt = myConn.createStatement();
-            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
-            //get parameter for creating issue object
-            while (myRs.next()) {
-                int id = myRs.getInt("project_id");
-                String name = myRs.getString("name");
-                List<Issue> issues = getIssueListByPriority(id);
-                projectList.add(new Project(id, name, issues));
-            }
-
-        } catch (Exception ex) {
-            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return projectList;
-    }
-
-    private static int getLastProjectID() {
-        Connection myConn = null;
+    private static int getLastProjectID(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
 
         try {
-            myConn = getConnection();
             String SQL_GET_LAST_PROJECT_ID = "SELECT * FROM projects ORDER BY project_id DESC LIMIT 1";
             stmt = myConn.createStatement();
             myRs = stmt.executeQuery(SQL_GET_LAST_PROJECT_ID);
@@ -326,14 +266,12 @@ public class MySQLOperation {
         return false;
     }
 
-    public static List<Issue> getAllIssueList() {
-        Connection myConn = null;
+    public static List<Issue> getAllIssueList(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
         List<Issue> issueList = new ArrayList<>();
 
         try {
-            myConn = getConnection();
             String SQL_GET_ALL_ISSUE_LIST = "SELECT * FROM issues";
             stmt = myConn.createStatement();
 
@@ -350,49 +288,24 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
-
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (myConn != null) {
-                try {
-                    myConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            return issueList;
         }
+        return issueList;
     }
 
     //get particular issue list for  project
-    public static List<Issue> getIssueListByPriority(int project_id) {
-        Connection myConn = null;
+    public static List<Issue> getIssueListByPriority(Connection myConn, int project_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         List<Issue> issueList = new ArrayList<>();
 
         try {
-            myConn = getConnection();
             String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY priority DESC";
             pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
             pstmt.setInt(1, project_id);
@@ -408,48 +321,24 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (myConn != null) {
-                try {
-                    myConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return issueList;
         }
+
+        return issueList;
     }
 
-    public static List<Issue> getIssueListByTimestamp(int project_id) {
-        Connection myConn = null;
+    public static List<Issue> getIssueListByTimestamp(Connection myConn, int project_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         List<Issue> issueList = new ArrayList<>();
 
         try {
-            myConn = getConnection();
             String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY issue_timestamp DESC";
             pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
             pstmt.setInt(1, project_id);
@@ -465,7 +354,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -477,13 +366,11 @@ public class MySQLOperation {
         return issueList;
     }
 
-    private static int getLastIssueID(int project_id) {
-        Connection myConn = null;
+    private static int getLastIssueID(Connection myConn, int project_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
         try {
-            myConn = getConnection();
             String SQL_GET_LAST_ISSUE_ID = "SELECT * FROM issues WHERE project_id = ? ORDER BY issue_id DESC LIMIT 1";
             pstmt = myConn.prepareStatement(SQL_GET_LAST_ISSUE_ID);
             pstmt.setInt(1, project_id);
@@ -501,13 +388,11 @@ public class MySQLOperation {
     }
 
     //get particular issue using id
-    public static Issue selectIssue(int project_id, int issue_id) {
-        Connection myConn = null;
+    public static Issue selectIssue(Connection myConn, int project_id, int issue_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
         try {
-            myConn = getConnection();
             String SQL_SEARCH = "SELECT * FROM issues WHERE project_id = ? AND issue_id = ?";
             pstmt = myConn.prepareStatement(SQL_SEARCH);
             pstmt.setInt(1, project_id);
@@ -551,15 +436,13 @@ public class MySQLOperation {
         return builder.toString();
     }
 
-    private static List<Issue> searchIssueFromTitleAndDescription(int project_id, String str) {
+    private static List<Issue> searchIssueFromTitleAndDescription(Connection myConn, int project_id, String str) {
         String searchStr = getKeyWord(str);
-        Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         List<Issue> issueList = new ArrayList<>();
 
         try {
-            myConn = getConnection();
             String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? AND (title = '\"+str+\"' OR title REGEXP ? OR descriptionText REGEXP ?)";
             pstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
             pstmt.setInt(1, project_id);
@@ -578,7 +461,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(project_id, issue_id);
+                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
                 Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -590,19 +473,17 @@ public class MySQLOperation {
         return issueList;
     }
 
-    private static List<Issue> searchIssueFromComment(int project_id, String str) {
-        List<Issue> issueList = getIssueListByPriority(project_id);
+    private static List<Issue> searchIssueFromComment(Connection myConn, int project_id, String str) {
+        List<Issue> issueList = getIssueListByPriority(myConn, project_id);
         List<Issue> newIssueList = new ArrayList<>();
 
         for (int i = 0; i < issueList.size(); i++) {
 
             String searchStr = getKeyWord(str);
-            Connection myConn = null;
             PreparedStatement pstmt = null;
             ResultSet myRs = null;
 
             try {
-                myConn = getConnection();
                 String SQL_GET_COMMENT_LIST = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ? AND text REGEXP ?";
                 pstmt = myConn.prepareStatement(SQL_GET_COMMENT_LIST);
                 pstmt.setInt(1, project_id);
@@ -613,7 +494,7 @@ public class MySQLOperation {
                 //get parameter for creating issue object
                 while (myRs.next()) {
                     int issue_id = myRs.getInt("issue_id");
-                    Issue newIssue = selectIssue(project_id, issue_id);
+                    Issue newIssue = selectIssue(myConn, project_id, issue_id);
                     newIssueList.add(newIssue);
                 }
 
@@ -625,9 +506,9 @@ public class MySQLOperation {
         return newIssueList;
     }
 
-    public static List<Issue> searchIssue(int project_id, String str) {
-        List<Issue> issueListFromTextAndDescription = searchIssueFromTitleAndDescription(project_id, str);
-        List<Issue> issueListFromComment = searchIssueFromComment(project_id, str);
+    public static List<Issue> searchIssue(Connection myConn, int project_id, String str) {
+        List<Issue> issueListFromTextAndDescription = searchIssueFromTitleAndDescription(myConn, project_id, str);
+        List<Issue> issueListFromComment = searchIssueFromComment(myConn, project_id, str);
         List<Issue> newIssueList = issueListFromTextAndDescription;
 
         for (int i = 0; i < issueListFromComment.size(); i++) {
@@ -639,14 +520,12 @@ public class MySQLOperation {
         return newIssueList;
     }
 
-    public static List<Comment> getCommentList(int project_id, int issue_id) {
-        Connection myConn = null;
+    public static List<Comment> getCommentList(Connection myConn, int project_id, int issue_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         List<Comment> commentList = new ArrayList<>();
 
         try {
-            myConn = getConnection();
             String SQL_GET_COMMENT_LIST = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ?";
             pstmt = myConn.prepareStatement(SQL_GET_COMMENT_LIST);
             pstmt.setInt(1, project_id);
@@ -656,7 +535,7 @@ public class MySQLOperation {
             while (myRs.next()) {
                 int comment_id = myRs.getInt("comment_id");
                 String text = myRs.getString("text");
-                List<React> react = getReactList(project_id, issue_id, comment_id);
+                List<React> react = getReactList(myConn, project_id, issue_id, comment_id);
                 Timestamp timestamp = myRs.getTimestamp("comment_timestamp");
                 String user = myRs.getString("user");
                 Comment newComment = new Comment(comment_id, text, timestamp, user);
@@ -665,40 +544,17 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (myConn != null) {
-                try {
-                    myConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return commentList;
         }
+
+        return commentList;
+
     }
 
-    private static int getLastCommentID(int project_id, int issue_id) {
-        Connection myConn = null;
+    private static int getLastCommentID(Connection myConn, int project_id, int issue_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
         try {
-            myConn = getConnection();
             String SQL_GET_LAST_COMMENT_ID = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ? ORDER BY comment_id DESC LIMIT 1";
             pstmt = myConn.prepareStatement(SQL_GET_LAST_COMMENT_ID);
             pstmt.setInt(1, project_id);
@@ -716,14 +572,12 @@ public class MySQLOperation {
         return -1;
     }
 
-    public static List<React> getReactList(int project_id, int issue_id, int comment_id) {
-        Connection myConn = null;
+    public static List<React> getReactList(Connection myConn, int project_id, int issue_id, int comment_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         List<React> reactList = new ArrayList<>();
 
         try {
-            myConn = getConnection();
             String SQL_GET_REACT_LIST = "SELECT * FROM react WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
             pstmt = myConn.prepareStatement(SQL_GET_REACT_LIST);
             pstmt.setInt(1, project_id);
@@ -740,36 +594,14 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (myConn != null) {
-                try {
-                    myConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            return reactList;
         }
+        return reactList;
     }
 
-    public static int showProjectDashboard() {
+    public static int showProjectDashboard(Connection myConn) {
         boolean inputIsInt = false;
         Scanner sc = new Scanner(System.in);
-        List<Project> projectList = getProjectList();
+        List<Project> projectList = getProjectList(myConn);
         System.out.printf("\n%s\n%-3s %-20s %-20s\n", "Project board", "ID", "Project Name", "Issue");
 
         for (int i = 0; i < projectList.size(); i++) {
@@ -807,16 +639,16 @@ public class MySQLOperation {
         return true;
     }
 
-    public static void showIssueDashboard(int project_id, String sortedBy, String username) {
+    public static void showIssueDashboard(Connection myConn, int project_id, String sortedBy, String username) {
         boolean correctInput = false;
         Scanner sc = new Scanner(System.in);
         List<Issue> issueList = new ArrayList<>();
 
         //get different order of issue list order from timestamp or priority
         if (sortedBy.equalsIgnoreCase("Timestamp")) {
-            issueList = getIssueListByTimestamp(project_id);
-        } else if (sortedBy.equalsIgnoreCase("Priority")) {
-            issueList = getIssueListByPriority(project_id);
+            issueList = getIssueListByTimestamp(myConn, project_id);
+        } else if (sortedBy.equalsIgnoreCase("Priority")){
+            issueList = getIssueListByPriority(myConn, project_id);
         }
 
         displayIssue(issueList);
@@ -829,15 +661,15 @@ public class MySQLOperation {
 
             if (isInt(input)) {
                 correctInput = true;
-                selectIssue(project_id, Integer.parseInt(input));
+                selectIssue(myConn, project_id, Integer.parseInt(input));
             } else if (input.equals("s")) {
                 correctInput = true;
                 System.out.print("Enter keyword you would like to search: ");
                 String str = sc.nextLine();
-                searchIssue(project_id, str);
+                searchIssue(myConn, project_id, str);
             } else if (input.equals("s")) {
                 correctInput = true;
-                createIssue(project_id, username);
+                createIssue(myConn, project_id, username);
             }
         }
     }
@@ -851,8 +683,7 @@ public class MySQLOperation {
         }
     }
 
-    private static User login(String username, String password) {
-        Connection myConn = null;
+    private static User login(Connection myConn, String username, String password) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -876,34 +707,12 @@ public class MySQLOperation {
             myConn.commit();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (myConn != null) {
-                try {
-                    myConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         return null;
     }
 
-    public static User showLoginPage() {
+    public static User showLoginPage(Connection myConn) {
         Scanner sc = new Scanner(System.in);
         User newUser = null;
 
@@ -915,7 +724,7 @@ public class MySQLOperation {
             String password = sc.nextLine();
 
             //assign new user object if password and username exist
-            newUser = login(username, password);
+            newUser = login(myConn, username,password);
 
             //notification if wrong password / username
             if (newUser == null) {
@@ -927,13 +736,12 @@ public class MySQLOperation {
     }
 
     //realated to tag
-    public static void createIssue(int project_id, String username) {
+    public static void createIssue(Connection myConn, int project_id, String username) {
         Scanner sc = new Scanner(System.in);
-        Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
-        int issue_id = getLastIssueID(project_id) + 1;
+        int issue_id = getLastIssueID(myConn, project_id) + 1;
         String title;
         int priority;
         String status = "In Progress";
@@ -957,7 +765,6 @@ public class MySQLOperation {
         assignee = sc.nextLine();
 
         try {
-            myConn = getConnection();
             String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_ISSUE);
             pstmt.setInt(1, project_id);
@@ -976,13 +783,12 @@ public class MySQLOperation {
         }
     }
 
-    public static void createComment(int project_id, int issue_id, String username) {
+    public static void createComment(Connection myConn, int project_id, int issue_id, String username) {
         Scanner sc = new Scanner(System.in);
-        Connection myConn = null;
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
-        int comment_id = getLastCommentID(project_id, issue_id) + 1;
+        int comment_id = getLastCommentID(myConn, project_id, issue_id) + 1;
         String text;
         Timestamp comment_timestamp;
         comment_timestamp = new java.sql.Timestamp(new Date().getTime());
@@ -998,23 +804,25 @@ public class MySQLOperation {
             pstmt.setInt(2, issue_id);
             pstmt.setInt(3, comment_id);
             pstmt.setString(4, text);
-            pstmt.setTimestamp(5, comment_timestamp);
-            pstmt.setString(6, username);
+            pstmt.setTimestamp(5,comment_timestamp);
+            pstmt.setString(6,username);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static void showUserInterface() {
-        User currentUser = showLoginPage();
-        int selectionOfProject = showProjectDashboard();
-        showIssueDashboard(selectionOfProject, "priority", currentUser.getUsername());
+    public static void showUserInterface(Connection myConn) {
+        User currentUser = showLoginPage(myConn);
+        int selectionOfProject = showProjectDashboard(myConn);
+        showIssueDashboard(myConn, selectionOfProject,"priority", currentUser.getUsername());
     }
 
-    public static void main(String[] args) {
-        initializedDatabase();
-//        showUserInterface();
+
+    public static void main(String[] args) throws Exception {
+//        initializedDatabase();
+        Connection myConn = getConnection();
+        showUserInterface(myConn);
 //        showIssueDashboard(1,"priority","jhoe");
     }
 }
