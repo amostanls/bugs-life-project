@@ -232,8 +232,22 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
         return projectList;
     }
 
@@ -252,6 +266,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return -1;
@@ -294,7 +323,21 @@ public class MySQLOperation {
             }
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-
+        }  finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return issueList;
     }
@@ -328,6 +371,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return issueList;
@@ -361,6 +419,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return issueList;
@@ -382,6 +455,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return -1;
@@ -415,6 +503,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return null;
@@ -468,6 +571,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return issueList;
@@ -500,6 +618,21 @@ public class MySQLOperation {
 
             } catch (Exception ex) {
                 Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (myRs != null) {
+                    try {
+                        myRs.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (pstmt != null) {
+                    try {
+                        pstmt.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 
@@ -544,6 +677,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return commentList;
@@ -567,6 +715,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return -1;
@@ -594,6 +757,21 @@ public class MySQLOperation {
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return reactList;
     }
@@ -707,6 +885,21 @@ public class MySQLOperation {
             myConn.commit();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return null;
@@ -780,6 +973,21 @@ public class MySQLOperation {
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -809,6 +1017,21 @@ public class MySQLOperation {
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -819,10 +1042,24 @@ public class MySQLOperation {
     }
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
 //        initializedDatabase();
-        Connection myConn = getConnection();
-        showUserInterface(myConn);
+        Connection myConn = null;
+        try {
+            myConn = getConnection();
+            showUserInterface(myConn);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(myConn!=null){
+                try{
+                    myConn.close();
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
 //        showIssueDashboard(1,"priority","jhoe");
     }
 }
