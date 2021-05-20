@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -35,6 +36,13 @@ public class commentController implements Initializable {
 
     @FXML
     private TextArea issueComment;
+
+    @FXML
+    void refreshTable(MouseEvent event) throws Exception {
+        Controller.updateTable();
+        setTextField();
+    }
+
     @FXML
     void overview(ActionEvent event) throws IOException {
 

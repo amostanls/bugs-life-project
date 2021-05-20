@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public class Issue implements Serializable {
 
+    private int project_id;
     private int id;
     private String title;
     private int priority;
@@ -31,7 +32,8 @@ public class Issue implements Serializable {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public Issue(int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp) {
+    public Issue(int project_id,int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp) {
+        this.project_id=project_id;
         this.id = id;
         this.title = title;
         this.priority = priority;
@@ -44,7 +46,8 @@ public class Issue implements Serializable {
         this.comments = new ArrayList<>();
     }
 
-    public Issue(int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, ArrayList<Comment> comments) {
+    public Issue(int project_id,int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, ArrayList<Comment> comments) {
+        this.project_id=project_id;
         this.id = id;
         this.title = title;
         this.priority = priority;

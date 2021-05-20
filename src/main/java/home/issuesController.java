@@ -62,6 +62,13 @@ public class issuesController implements Initializable {
     private TableColumn<Issue, String> issueCreatedBy;
 
     private static int selectedIssue;
+
+    @FXML
+    void refreshTable(MouseEvent event) throws Exception {
+        Controller.updateTable();
+        setIssueTable();
+    }
+
     @FXML
     void overview(ActionEvent event) throws IOException {
 

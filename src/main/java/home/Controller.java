@@ -76,11 +76,8 @@ public class Controller implements Initializable {
 
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
-
         updateTable();
         setProjectTable();
-        System.out.println("Refresh");
-
     }
 
     @FXML
@@ -118,7 +115,7 @@ public class Controller implements Initializable {
         }
     }
 
-    public void updateTable() throws Exception {
+    public static void updateTable() throws Exception {
         finalProjectList=MySQLOperation.getProjectList(myConn);
     }
 
