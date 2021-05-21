@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static bugs.MySQLOperation.myConn;
+//import static bugs.MySQLOperation.myConn;
 
 
 public class projectController implements Initializable {

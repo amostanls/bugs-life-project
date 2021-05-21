@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static bugs.MySQLOperation.myConn;
+//import static bugs.MySQLOperation.myConn;
 
 public class Controller implements Initializable {
 
@@ -81,7 +81,7 @@ public class Controller implements Initializable {
 
 
     public static void updateTable() throws Exception {
-        setFinalProjectList(MySQLOperation.getProjectList(myConn));
+//        setFinalProjectList(MySQLOperation.getProjectList(myConn));
     }
 
     public static int getSelectedProjectId() {
