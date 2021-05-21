@@ -18,9 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static home.Controller.*;
+import static home.Controller.getFinalProjectList;
+import static home.Controller.getSelectedID;
+import static home.issuesController.getSelectedIssue;
 
 public class commentController implements Initializable {
+
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
     @FXML
     private TextArea issueHeader;
@@ -37,6 +43,15 @@ public class commentController implements Initializable {
         setTextField();
     }
 
+    @FXML
+    void overview(ActionEvent event) throws IOException {
+
+        Parent root= FXMLLoader.load(getClass().getResource("main.fxml"));
+        stage=(Stage)((Node)event.getSource()).getScene().getWindow();
+        scene=new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,11 +59,11 @@ public class commentController implements Initializable {
     }
 
     public void setTextField() {
-        ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedProjectId() - 1).getIssues();
+        ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedID() - 1).getIssues();
 
-        issueHeader.setText(issueList.get(getSelectedIssueId()-1).printHeader());
-        issueDescription.setText(issueList.get(getSelectedIssueId()-1).printIssue());
-        issueComment.setText(issueList.get(getSelectedIssueId()-1).printComment());
+        issueHeader.setText(issueList.get(getSelectedIssue()-1).printHeader());
+        issueDescription.setText(issueList.get(getSelectedIssue()-1).printIssue());
+        issueComment.setText(issueList.get(getSelectedIssue()-1).printComment());
 
 
     }

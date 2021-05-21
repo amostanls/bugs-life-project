@@ -23,12 +23,16 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ResourceBundle;
 
+import static bugs.MySQLOperation.myConn;
 import static home.Controller.getFinalProjectList;
-import static home.Controller.getSelectedProjectId;
-
+import static home.Controller.getSelectedID;
 
 public class issuesController implements Initializable {
     //ObservableList<Issue> issueList = FXCollections.observableArrayList();
+
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
     @FXML
     private TableView<Issue> issueTable;
@@ -57,6 +61,7 @@ public class issuesController implements Initializable {
     @FXML
     private TableColumn<Issue, String> issueCreatedBy;
 
+    private static int selectedIssue;
 
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
@@ -64,14 +69,32 @@ public class issuesController implements Initializable {
         setIssueTable();
     }
 
+    @FXML
+    void overview(ActionEvent event) throws IOException {
+
+        Parent root= FXMLLoader.load(getClass().getResource("main.fxml"));
+        stage=(Stage)((Node)event.getSource()).getScene().getWindow();
+        scene=new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
     public void switchToComment(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
-            int selectedIssue=issueTable.getSelectionModel().getSelectedItem().getId();
-            Controller.setSelectedIssueId(selectedIssue);
-            Controller c=new Controller();
-            c.switchToComment();
-            //Controller.switchToComment();
+
+            selectedIssue=issueTable.getSelectionModel().getSelectedItem().getId();
+            /*
+            FXMLLoader loader=new FXMLLoader(getClass().getResource("comment.fxml"));
+            root=loader.load();
+            commentController comment_Controller=loader.getController();
+            comment_Controller.updateTextField(selectedIssue);
+
+             */
+            Parent root= FXMLLoader.load(getClass().getResource("comment.fxml"));
+            stage=(Stage)((Node)event.getSource()).getScene().getWindow();
+            scene=new Scene(root);
+            stage.setScene(scene);
+            stage.show();
 
         }
     }
@@ -94,8 +117,13 @@ public class issuesController implements Initializable {
     }
 
     public void setIssueTable() throws Exception{
-        ObservableList<Issue> issueList = FXCollections.observableArrayList(getFinalProjectList().get(getSelectedProjectId()-1).getIssues());
+        ObservableList<Issue> issueList = FXCollections.observableArrayList(getFinalProjectList().get(getSelectedID()-1).getIssues());
+        //issueList.clear();
+        //issueList= MySQLOperation.getIssueList(myConn,Controller.selectedID);
         issueTable.setItems(issueList);
     }
 
+    public static int getSelectedIssue() {
+        return selectedIssue;
+    }
 }
