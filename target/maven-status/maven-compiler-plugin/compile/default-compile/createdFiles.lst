@@ -1,5 +1,7 @@
+home\issueAddController.class
+home\Controller.class
+home\projectEditController.class
+home\progressBarController.class
 home\projectController$1.class
 home\main.class
 home\projectController.class
-home\Controller.class
-home\projectEditController.class

@@ -20,7 +20,7 @@
       </Label>
       <HBox layoutX="57.0" layoutY="99.0" prefHeight="63.0" prefWidth="1044.0" style="-fx-background-color: #F3F3F3;">
          <children>
-            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="addComment" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#getAddView" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/add.png" />
                </image>

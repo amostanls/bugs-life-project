@@ -116,8 +116,7 @@ public class Issue implements Serializable {
 
     public String printComment(){
         String res="";
-        res += String.format("%s\n%s\n", "Comments",
-                "---------");
+        //res += String.format("%s\n%s\n", "Comments", "---------");
         for(int i=0; i<comments.size(); i++) {
             res += String.format("%s%d \t\t\t %s\n", "#", i+1, comments.get(i));
         }

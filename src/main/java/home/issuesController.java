@@ -15,13 +15,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static home.Controller.getFinalProjectList;
 import static home.Controller.getSelectedProjectId;
@@ -56,6 +60,24 @@ public class issuesController implements Initializable {
 
     @FXML
     private TableColumn<Issue, String> issueCreatedBy;
+
+    @FXML
+    private ImageView addComment;
+
+    @FXML
+    void getAddView(MouseEvent event) {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("issue_add.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(issuesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 
     @FXML

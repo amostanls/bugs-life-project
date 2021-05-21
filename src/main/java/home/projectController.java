@@ -8,6 +8,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,7 +41,7 @@ import java.util.logging.Logger;
 //import static bugs.MySQLOperation.myConn;
 
 
-public class projectController implements Initializable {
+public class projectController implements Initializable  {
 
     private boolean isEditing=false;
 
@@ -73,6 +75,7 @@ public class projectController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);

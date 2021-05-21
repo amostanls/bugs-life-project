@@ -2,40 +2,20 @@ package home;
 
 import bugs.MySQLOperation;
 import bugs.Project;
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-//import static bugs.MySQLOperation.myConn;
 
 public class Controller implements Initializable {
 
@@ -43,6 +23,7 @@ public class Controller implements Initializable {
     private static int selectedIssueId=0;
     private static int selectedCommentId=0;
     private static List<Project> finalProjectList;
+    private static String username="lim";
 
 
     @FXML
@@ -81,7 +62,9 @@ public class Controller implements Initializable {
 
 
     public static void updateTable() throws Exception {
-//        setFinalProjectList(MySQLOperation.getProjectList(myConn));
+
+        setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.connectionToDatabase()));
+
     }
 
     public static int getSelectedProjectId() {
@@ -115,4 +98,32 @@ public class Controller implements Initializable {
     public static void setFinalProjectList(List<Project> finalProjectList) {
         Controller.finalProjectList = finalProjectList;
     }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        Controller.username = username;
+    }
+
+    /*
+    @Override
+    protected Task createTask() {
+        try{
+            setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.myConnection));
+        }catch(Exception e){
+            try {
+                MySQLOperation.myConnection=MySQLOperation.getConnection();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+        finally {
+            setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.myConnection));
+        }
+        return null;
+    }
+
+ */
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -346,31 +347,6 @@ public class MySQLOperation {
         }
 
         return requiredProject;
-    }
-
-    public static ObservableList<Project> getProjectListObservable(Connection myConn) {
-        Statement stmt = null;
-        ResultSet myRs = null;
-
-        ObservableList<Project> projectList= FXCollections.observableArrayList();
-
-        try {
-            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
-            stmt = myConn.createStatement();
-            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
-            //get parameter for creating issue object
-            while (myRs.next()) {
-                int id = myRs.getInt("project_id");
-                String name = myRs.getString("name");
-                List<Issue> issues = getIssueListByPriority(myConn, id);
-                projectList.add(new Project(id, name, issues));
-            }
-
-        } catch (Exception ex) {
-            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return projectList;
     }
 
     private static int getLastProjectID(Connection myConn) {
@@ -1050,7 +1026,7 @@ public class MySQLOperation {
         return newUser;
     }
 
-    //realated to tag
+    //related to tag
     public static void createIssue(Connection myConn, int project_id, String username) {
         Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
@@ -1078,6 +1054,60 @@ public class MySQLOperation {
         priority = Integer.parseInt(sc.nextLine());
         System.out.print("Enter assignee: ");
         assignee = sc.nextLine();
+
+        try {
+            String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            pstmt = myConn.prepareStatement(SQL_CREATE_ISSUE);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.setString(3, title);
+            pstmt.setInt(4, priority);
+            pstmt.setString(5, status);
+            pstmt.setString(6, tag[0]);
+            pstmt.setString(7, descriptionText);
+            pstmt.setString(8, createdBy);
+            pstmt.setString(9, assignee);
+            pstmt.setTimestamp(10, issue_timestamp);
+            pstmt.execute();
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void createIssueJavaFX(Connection myConn, int project_id, String username,String tag1, int priority,String title,String assignee,String descriptionText) {
+        Scanner sc = new Scanner(System.in);
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        int issue_id = getLastIssueID(myConn, project_id) + 1;
+
+        String status = "In Progress";
+        String[] tag = new String[5];
+
+        String createdBy = username;
+        Timestamp issue_timestamp;
+        issue_timestamp = new java.sql.Timestamp(new Date().getTime());
+        List<Comment> commentList = new ArrayList<>();
+        Issue newIssue = null;
+
+
+        tag[0] = tag1;
+
 
         try {
             String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -1313,6 +1343,19 @@ public class MySQLOperation {
             }
         }
     }
+
+    public static Connection connectionToDatabase(){
+        Connection myConnection = null;
+        try {
+            myConnection = getConnection();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return myConnection;
+    }
+
+
 
     public static void main(String[] args){
 //        initializedDatabase();
