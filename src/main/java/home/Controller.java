@@ -32,7 +32,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static bugs.MySQLOperation.myConn;
+//import static bugs.MySQLOperation.myConn;
 
 public class Controller implements Initializable {
 
@@ -74,7 +74,7 @@ public class Controller implements Initializable {
     }
 
     public static void updateTable() throws Exception {
-        setFinalProjectList(MySQLOperation.getProjectList(myConn));
+//        setFinalProjectList(MySQLOperation.getProjectList(myConn));
     }
 
     public static int getSelectedProjectId() {

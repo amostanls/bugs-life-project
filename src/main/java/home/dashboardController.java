@@ -30,7 +30,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static bugs.MySQLOperation.myConn;
+//import static bugs.MySQLOperation.myConn;
 
 
 public class dashboardController implements Initializable {

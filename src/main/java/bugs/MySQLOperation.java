@@ -1209,7 +1209,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void updateIssue(Connection myConn, int project_id, int issue_id, String newTitle) {
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String columnName, String newValue) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -1217,7 +1217,7 @@ public class MySQLOperation {
             String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
                     "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
                     "WHERE project_id = ? AND issue_id = ?";
-            String SQL_UPDATE_PROJECTS = "UPDATE issues SET title = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_ISSUES = "UPDATE issues SET "+columnName+" = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
 
             //update table issues history
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
@@ -1226,8 +1226,8 @@ public class MySQLOperation {
             pstmt.execute();
 
             //update table issues
-            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
-            pstmt.setString(1, newTitle);
+            pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES);
+            pstmt.setString(1, newValue);
 
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
             pstmt.setTimestamp(2, currentTimestamp);
@@ -1320,7 +1320,7 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            updateIssue(myConn, 1, 1, "another");
+            updateIssue(myConn, 1, 1, "descriptionText", "another");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
