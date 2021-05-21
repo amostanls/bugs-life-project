@@ -1,6 +1,9 @@
 package home;
 
 import bugs.Issue;
+import com.jfoenix.controls.JFXToggleButton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -18,24 +22,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static home.Controller.getFinalProjectList;
-import static home.Controller.getSelectedID;
-import static home.issuesController.getSelectedIssue;
+import static home.Controller.*;
 
 public class commentController implements Initializable {
 
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+    @FXML
+    private TextField issueID;
 
     @FXML
-    private TextArea issueHeader;
+    private TextField issueTag;
 
     @FXML
-    private TextArea issueDescription;
+    private TextField issuePriority;
+
+    @FXML
+    private TextField issueCreatedOn;
+
+    @FXML
+    private TextField issueTitle;
+
+    @FXML
+    private TextField issueAssignedTo;
+
+    @FXML
+    private TextField issueCreatedBy;
+
+    @FXML
+    private TextArea issueDesc;
 
     @FXML
     private TextArea issueComment;
+
+    @FXML
+    private TextField issueStatus;
+
+    @FXML
+    private JFXToggleButton isEditToggle;
+
 
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
@@ -43,28 +66,62 @@ public class commentController implements Initializable {
         setTextField();
     }
 
-    @FXML
-    void overview(ActionEvent event) throws IOException {
 
-        Parent root= FXMLLoader.load(getClass().getResource("main.fxml"));
-        stage=(Stage)((Node)event.getSource()).getScene().getWindow();
-        scene=new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
+
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        isEditable(false);
+        isEditToggle.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if(isEditToggle.isSelected()==true){
+                    isEditable(true);
+                }else{
+                    isEditable(false);
+                }
+            }
+        });
         setTextField();
     }
 
+
+
+
+    public void isEditable(boolean b){
+        issueID.setEditable(b);
+        issueTag.setEditable(b);
+        issueStatus.setEditable(b);
+        issuePriority.setEditable(b);
+        issueCreatedOn.setEditable(b);
+        issueTitle.setEditable(b);
+        issueAssignedTo.setEditable(b);
+        issueCreatedBy.setEditable(b);
+        issueDesc.setEditable(b);
+        issueComment.setEditable(b);
+    }
     public void setTextField() {
-        ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedID() - 1).getIssues();
+        ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedProjectId() - 1).getIssues();
+        Issue issue_temp = issueList.get(getSelectedIssueId() - 1);
+        issueID.setText(issue_temp.getId()+"");
+        issueStatus.setText(issue_temp.getStatus());
+        issueTag.setText(issue_temp.getTags()+"");
+        issuePriority.setText(issue_temp.getPriority()+"");
+        issueCreatedOn.setText(issue_temp.getTimestamp()+"");
+        issueTitle.setText(issue_temp.getTitle()+"");
+        issueAssignedTo.setText(issue_temp.getAssignee()+"");
+        issueCreatedBy.setText(issue_temp.getCreatedBy()+"");
+        issueDesc.setText(issue_temp.getDescriptionText()+"");
+        issueComment.setText(issue_temp.printComment());
+    /*
+        issueHeader.setText(issueList.get(getSelectedIssueId()-1).printHeader());
+        issueDescription.setText(issueList.get(getSelectedIssueId()-1).printIssue());
+        issueComment.setText(issueList.get(getSelectedIssueId()-1).printComment());
 
-        issueHeader.setText(issueList.get(getSelectedIssue()-1).printHeader());
-        issueDescription.setText(issueList.get(getSelectedIssue()-1).printIssue());
-        issueComment.setText(issueList.get(getSelectedIssue()-1).printComment());
 
+     */
 
     }
 }

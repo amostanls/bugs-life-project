@@ -1217,7 +1217,7 @@ public class MySQLOperation {
             String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
                     "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
                     "WHERE project_id = ? AND issue_id = ?";
-            String SQL_UPDATE_PROJECTS = "UPDATE issues SET title = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
 
             //update table issues history
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
@@ -1226,7 +1226,7 @@ public class MySQLOperation {
             pstmt.execute();
 
             //update table issues
-            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
+            pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES);
             pstmt.setString(1, newTitle);
 
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
@@ -1313,6 +1313,18 @@ public class MySQLOperation {
             }
         }
     }
+
+    public static Connection myConn;
+
+    static {
+        try {
+            myConn = getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    ;
 
     public static void main(String[] args){
 //        initializedDatabase();
