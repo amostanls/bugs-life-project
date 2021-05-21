@@ -35,7 +35,7 @@ public class Page_main {
 //        comment1.addReact("happy");
 //        Issue issue = new Issue(2, "cannot launch app", 2, "In Progress", new String[]{(new String("Frontend"))}, "tak boleh open", "ben", "josh", new Timestamp(timestamp.getTime()));
 //        issue.addComment(comment1);
-        Project a = new Project(1,"TableView Widget");
+        Project a = new Project(1,"TableView Widget", timestamp);
 //        a.addIssue(issue);
         addProject(a);
 //        System.out.println(comment.toString());

@@ -30,7 +30,10 @@ SELECT * FROM issues;
 SELECT * FROM comments;
 SELECT * FROM react;
 SELECT * FROM users;
+SELECT * FROM projects_history;
 
+DROP TABLE projects_history;
+DROP TABLE comments_history;
 DROP TABLE projects;
 DROP TABLE issues;
 DROP TABLE comments;
@@ -38,34 +41,38 @@ DROP TABLE react;
 DROP TABLE users;
 
 CREATE TABLE projects (
-project_id INT, 
-name VARCHAR(20));
+project_id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(20) NOT NULL,
+project_timestamp TIMESTAMP NOT NULL);
 
 CREATE TABLE issues (
-project_id INT, 
-issue_id INT, 
-title VARCHAR(50), 
-priority INT, 
-status VARCHAR(20), 
-tag VARCHAR(20), 
-descriptionText VARCHAR(500), 
-createdBy VARCHAR(20), 
-assignee VARCHAR(20), 
+project_id INT NOT NULL,
+issue_id INT NOT NULL,
+PRIMARY KEY (project_id, issue_id),
+title VARCHAR(50),
+priority INT,
+status VARCHAR(20),
+tag VARCHAR(20),
+descriptionText VARCHAR(500),
+createdBy VARCHAR(20),
+assignee VARCHAR(20),
 issue_timestamp TIMESTAMP);
 
 CREATE TABLE comments (
-project_id INT, 
-issue_id INT, 
-comment_id INT, 
-text VARCHAR(250), 
-comment_timestamp TIMESTAMP, 
+project_id INT NOT NULL,
+issue_id INT NOT NULL,
+comment_id INT NOT NULL,
+PRIMARY KEY (project_id, issue_id, comment_id),
+text VARCHAR(250),
+comment_timestamp TIMESTAMP,
 user VARCHAR(25));
 
 CREATE TABLE react (
-project_id INT, 
-issue_id INT, 
-comment_id INT, 
-reaction VARCHAR(10), 
+project_id INT NOT NULL,
+issue_id INT NOT NULL,
+comment_id INT NOT NULL,
+reaction VARCHAR(10),
+PRIMARY KEY (project_id, issue_id, comment_id, reaction),
 count INT);
 
 CREATE TABLE users (
@@ -77,6 +84,31 @@ admin boolean
 
 ALTER TABLE users ADD UNIQUE(userid);
 ALTER TABLE users ADD UNIQUE(username);
+
+CREATE TABLE projects_history (
+project_id INT NOT NULL,
+version_id INT UNIQUE AUTO_INCREMENT,
+name VARCHAR(20) NOT NULL,
+originalTime TIMESTAMP NOT NULL,
+PRIMARY KEY (project_id, originalTime),
+CONSTRAINT project_id_fk
+    FOREIGN KEY profile_id_fkx (project_id)
+    REFERENCES projects(project_id)
+);
+
+CREATE TABLE comments_history (
+project_id INT NOT NULL,
+issue_id INT NOT NULL,
+comment_id INT NOT NULL,
+version_id INT UNIQUE AUTO_INCREMENT,
+text VARCHAR(250),
+comment_timestamp TIMESTAMP,
+user VARCHAR(25),
+PRIMARY KEY (project_id, issue_id, comment_id, comment_timestamp),
+CONSTRAINT pic_fk
+    FOREIGN KEY pic_fkx (project_id, issue_id, comment_id)
+    REFERENCES comments (project_id, issue_id, comment_id)
+);
  */
 public class MySQLOperation {
 
@@ -94,7 +126,7 @@ public class MySQLOperation {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parse(jsonUrl);
 
-        String INSERT_PROJECT = "INSERT INTO projects (project_id, name) VALUE (?,?)";
+        String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
         String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
         String INSERT_COMMENT = "INSERT INTO comments (project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";  //6
         String INSERT_REACT = "INSERT INTO react (project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)"; //2
@@ -110,6 +142,9 @@ public class MySQLOperation {
         for (int i = 0; i < node.get("projects").size(); i++) {
             updateProject.setInt(1, node.get("projects").get(i).get("id").asInt());
             updateProject.setString(2, node.get("projects").get(i).get("name").asText());
+
+            Timestamp newTimestamp = convertStringTimestamp("1565192640");
+            updateProject.setTimestamp(3, newTimestamp);
             updateProject.addBatch();
 
             //add issues
@@ -254,6 +289,43 @@ public class MySQLOperation {
         return projectList;
     }
 
+    public static Project getProject(Connection myConn, int project_id) {
+        Statement stmt = null;
+        ResultSet myRs = null;
+        Project requiredProject = null;
+
+        try {
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects WHERE project_id = '"+project_id+"'";
+            stmt = myConn.createStatement();
+            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
+
+            myRs.next();
+            String name = myRs.getString("name");
+            Timestamp project_timestamp = myRs.getTimestamp("project_timestamp");
+            requiredProject = new Project(project_id, name, project_timestamp);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return requiredProject;
+    }
+
     public static ObservableList<Project> getProjectListObservable(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
@@ -278,6 +350,7 @@ public class MySQLOperation {
 
         return projectList;
     }
+
     private static int getLastProjectID(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
@@ -1068,13 +1141,117 @@ public class MySQLOperation {
         showIssueDashboard(myConn, selectionOfProject,"priority", currentUser.getUsername());
     }
 
+    public static void updateProject(Connection myConn, int project_id, String newName) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        Project requiredProject = getProject(myConn, project_id);
+
+        try {
+            String SQL_UPDATE_PROJECTS_HISTORY = "INSERT INTO projects_history(project_id, name, originalTime) VALUES (?, ?, ?)";
+            String SQL_UPDATE_PROJECTS = "UPDATE projects SET name = ?, project_timestamp = ? WHERE project_id = ?";
+
+            //update table project history
+            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS_HISTORY);
+            pstmt.setInt(1, project_id);
+            pstmt.setString(2, requiredProject.getName());
+            pstmt.setTimestamp(3, requiredProject.getProject_timestamp());
+            pstmt.execute();
+
+            //update table projects
+            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
+            pstmt.setString(1,newName);
+
+            Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+            pstmt.setTimestamp(2, currentTimestamp);
+
+            pstmt.setInt(3, project_id);
+            pstmt.execute();
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void updateComment(Connection myConn, int project_id, int issue_id, int comment_id, String newText) {
+        List<Comment> comments = getCommentList(myConn, project_id, issue_id);
+        Comment requiredComment = null;
+        for (Comment c : comments) {
+            if (c.getComment_id() == comment_id) {
+                requiredComment = c;
+            }
+        }
+
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            String SQL_UPDATE_COMMENTS_HISTORY = "INSERT INTO comments_history(project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";
+            String SQL_UPDATE_COMMNETS = "UPDATE comments SET text = ?, comment_timestamp = ? WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
+
+            //update table project history
+            pstmt = myConn.prepareStatement(SQL_UPDATE_COMMENTS_HISTORY);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.setInt(3, requiredComment.getComment_id());
+            pstmt.setString(4, newText);
+            pstmt.setTimestamp(5, requiredComment.getTimestamp());
+            pstmt.setString(6, requiredComment.getUser());
+            pstmt.execute();
+
+            //update table projects
+            pstmt = myConn.prepareStatement(SQL_UPDATE_COMMNETS);
+            pstmt.setString(1,newText);
+
+            Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+            pstmt.setTimestamp(2, currentTimestamp);
+
+            pstmt.setInt(3, project_id);
+            pstmt.setInt(4, issue_id);
+            pstmt.setInt(5, comment_id);
+            pstmt.execute();
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static void main(String[] args){
 //        initializedDatabase();
+
         Connection myConn = null;
         try {
             myConn = getConnection();
-            showUserInterface(myConn);
+            updateComment(myConn, 1, 1, 1, "no problem anymore");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -1086,7 +1263,6 @@ public class MySQLOperation {
                 }
             }
         }
-
 //        showIssueDashboard(1,"priority","jhoe");
     }
 }

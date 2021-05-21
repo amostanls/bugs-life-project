@@ -1,6 +1,8 @@
 package bugs;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Scanner;
 
 import static bugs.Page_issue.*;
@@ -45,7 +47,8 @@ public class Page_project {
         System.out.println("~~~ Create New Project ~~~");
         System.out.print("Name: ");
         String name = in.nextLine();
-        Project current = new Project(projectenum++, name);
+        Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+        Project current = new Project(projectenum++, name, currentTimestamp);
         addProject(current);
         return;
     }
