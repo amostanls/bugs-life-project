@@ -25,14 +25,18 @@ import java.util.logging.Logger;
 SHOW DATABASES;
 USE 5peJ8pFLLQ;
 SHOW TABLES;
+
 SELECT * FROM projects;
 SELECT * FROM issues;
 SELECT * FROM comments;
 SELECT * FROM react;
 SELECT * FROM users;
 SELECT * FROM projects_history;
+SELECT * FROM issues_history;
+SELECT * FROM comments_history;
 
 DROP TABLE projects_history;
+DROP TABLE issues_history;
 DROP TABLE comments_history;
 DROP TABLE projects;
 DROP TABLE issues;
@@ -94,6 +98,24 @@ PRIMARY KEY (project_id, originalTime),
 CONSTRAINT project_id_fk
     FOREIGN KEY profile_id_fkx (project_id)
     REFERENCES projects(project_id)
+);
+
+CREATE TABLE issues_history (
+project_id INT NOT NULL,
+issue_id INT NOT NULL,
+version_id INT UNIQUE AUTO_INCREMENT,
+title VARCHAR(50),
+priority INT,
+status VARCHAR(20),
+tag VARCHAR(20),
+descriptionText VARCHAR(500),
+createdBy VARCHAR(20),
+assignee VARCHAR(20),
+issue_timestamp TIMESTAMP,
+PRIMARY KEY (project_id, issue_id, issue_timestamp),
+CONSTRAINT pi_fk
+    FOREIGN KEY pi_fk (project_id, issue_id)
+    REFERENCES issues (project_id, issue_id)
 );
 
 CREATE TABLE comments_history (
@@ -418,7 +440,7 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
-                Issue newIssue = new Issue(issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
         } catch (Exception ex) {
@@ -1187,6 +1209,53 @@ public class MySQLOperation {
         }
     }
 
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String newTitle) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
+                    "SELECT project_id, issue_id, title, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
+                    "WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_PROJECTS = "UPDATE issues SET title = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+
+            //update table issues history
+            pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.execute();
+
+            //update table issues
+            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
+            pstmt.setString(1, newTitle);
+
+            Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+            pstmt.setTimestamp(2, currentTimestamp);
+
+            pstmt.setInt(3, project_id);
+            pstmt.setInt(4, issue_id);
+            pstmt.execute();
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static void updateComment(Connection myConn, int project_id, int issue_id, int comment_id, String newText) {
         List<Comment> comments = getCommentList(myConn, project_id, issue_id);
         Comment requiredComment = null;
@@ -1251,7 +1320,7 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            updateComment(myConn, 1, 1, 1, "no problem anymore");
+            updateIssue(myConn, 1, 1, "new title");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
