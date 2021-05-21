@@ -104,7 +104,13 @@ public class commentController implements Initializable {
     }
     public void setTextField() {
         ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedProjectId() - 1).getIssues();
-        Issue issue_temp = issueList.get(getSelectedIssueId() - 1);
+        //Issue issue_temp = getFinalProjectList().get(getSelectedProjectId()-1).getIssues().get(getSelectedIssueId()-1);
+        Issue issue_temp=null;
+        for(int i=0;i<issueList.size();i++){
+            if(issueList.get(i).getId()==getSelectedIssueId()){
+                issue_temp=issueList.get(i);
+            }
+        }
         issueID.setText(issue_temp.getId()+"");
         issueStatus.setText(issue_temp.getStatus());
         issueTag.setText(issue_temp.getTags()+"");
