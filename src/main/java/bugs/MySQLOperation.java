@@ -1214,8 +1214,8 @@ public class MySQLOperation {
         ResultSet myRs = null;
 
         try {
-            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
-                    "SELECT project_id, issue_id, title, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
+            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
+                    "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
                     "WHERE project_id = ? AND issue_id = ?";
             String SQL_UPDATE_PROJECTS = "UPDATE issues SET title = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
 
@@ -1320,7 +1320,7 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            updateIssue(myConn, 1, 1, "new title");
+            updateIssue(myConn, 1, 1, "another");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
