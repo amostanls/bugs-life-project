@@ -22,11 +22,8 @@ public class main extends Application {
         Scene scene=new Scene(root);
 
 
-        //stage.initStyle(StageStyle.UNDECORATED);
-        //String css=this.getClass().getResource("main.css").toExternalForm();
-        //scene.getStylesheets().add(css);
         stage.setTitle("Bugs Life");
-        stage.setResizable(false);
+        //stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

@@ -70,7 +70,7 @@ public class Page_issue {
         text = line;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        Issue issue = new Issue(issueenum++, title, priority, status[status_id], new String[]{tag},  text, name, "None", new Timestamp(timestamp.getTime()));
+        Issue issue = new Issue(1,issueenum++, title, priority, status[status_id], new String[]{tag},  text, name, "None", new Timestamp(timestamp.getTime()));
         addIssue(issue);
         return;
     }
