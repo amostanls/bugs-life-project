@@ -1,2 +1,4 @@
 home\main.class
 home\Controller.class
+home\FxmlLoader.class
+home\dashboardController.class

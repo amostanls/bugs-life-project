@@ -17,6 +17,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -34,50 +36,20 @@ import static bugs.MySQLOperation.myConn;
 
 public class Controller implements Initializable {
 
-
-    @FXML
-    private TableView<Project> projectTable;
-
-    @FXML
-    private TableColumn<Project, String> project_id;
-
-    @FXML
-    private TableColumn<Project, String> project_name;
-
-    @FXML
-    private TableColumn<Project, Integer> project_issues;
-
-
-
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+    private static int selectedProjectId=0;
+    private static int selectedIssueId=0;
+    private static int selectedCommentId=0;
     private static List<Project> finalProjectList;
-    private static int selectedID;
 
-    private static boolean initialise=true;
+
     @FXML
-    void getAddView(MouseEvent event) {
+    private BorderPane mainPane;
 
-    }
 
     @FXML
     void overview(ActionEvent event) throws IOException {
-//dont need
-        Parent root= FXMLLoader.load(getClass().getResource("main.fxml"));
-        stage=(Stage)((Node)event.getSource()).getScene().getWindow();
-        scene=new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-
-
-    @FXML
-    void refreshTable(MouseEvent event) throws Exception {
-        updateTable();
-        setProjectTable();
+        Pane view=new FxmlLoader().getPage("dashboard");
+        mainPane.setCenter(view);
     }
 
     @FXML
@@ -85,52 +57,55 @@ public class Controller implements Initializable {
 
     }
 
-    public void switchToIssues(MouseEvent event) throws IOException {
-        if (event.getClickCount() == 2) {//Checking double click
-            selectedID=projectTable.getSelectionModel().getSelectedItem().getId();
-            Parent root= FXMLLoader.load(getClass().getResource("issue.fxml"));
-            stage=(Stage)((Node)event.getSource()).getScene().getWindow();
-            scene=new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+    void switchToIssues() throws IOException {
+        Pane view=new FxmlLoader().getPage("issue");
+        mainPane.setCenter(view);
+    }
 
-        }
+    void switchToComment(){
+        Pane view=new FxmlLoader().getPage("comment");
+        mainPane.setCenter(view);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        project_id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        project_name.setCellValueFactory(new PropertyValueFactory<>("name"));
-        project_issues.setCellValueFactory(new PropertyValueFactory<>("issuesNumber"));
-
-        try {
-            if(initialise){
-                updateTable();
-                initialise=false;
-            }
-
-            setProjectTable();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Pane view=new FxmlLoader().getPage("dashboard");
+        mainPane.setCenter(view);
     }
 
     public static void updateTable() throws Exception {
-        finalProjectList=MySQLOperation.getProjectList(myConn);
+        setFinalProjectList(MySQLOperation.getProjectList(myConn));
     }
 
-    public void setProjectTable(){
-        ObservableList<Project> projectList = FXCollections.observableList(finalProjectList);
-        projectTable.setItems(projectList);
-        //System.out.println(projectList.get(0).getIssues());
+    public static int getSelectedProjectId() {
+        return selectedProjectId;
     }
 
+    public static void setSelectedProjectId(int selectedProjectId) {
+        Controller.selectedProjectId = selectedProjectId;
+    }
+
+    public static int getSelectedIssueId() {
+        return selectedIssueId;
+    }
+
+    public static void setSelectedIssueId(int selectedIssueId) {
+        Controller.selectedIssueId = selectedIssueId;
+    }
+
+    public static int getSelectedCommentId() {
+        return selectedCommentId;
+    }
+
+    public static void setSelectedCommentId(int selectedCommentId) {
+        Controller.selectedCommentId = selectedCommentId;
+    }
 
     public static List<Project> getFinalProjectList() {
         return finalProjectList;
     }
 
-    public static int getSelectedID() {
-        return selectedID;
+    public static void setFinalProjectList(List<Project> finalProjectList) {
+        Controller.finalProjectList = finalProjectList;
     }
 }
