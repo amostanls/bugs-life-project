@@ -10,3 +10,4 @@ home\main.class
 login\registerController.class
 home\projectController.class
 login\loginController.class
+home\projectAddController.class

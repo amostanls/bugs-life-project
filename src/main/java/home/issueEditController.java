@@ -28,9 +28,6 @@ public class issueEditController implements Initializable {
     private TextField issueTitle;
 
     @FXML
-    private TextField issueAssignedTo;
-
-    @FXML
     private TextArea issueDesc;
 
     @FXML
@@ -52,9 +49,9 @@ public class issueEditController implements Initializable {
         if(!priorityString.isEmpty()) priority=Integer.valueOf(priorityString);
 
         String title=issueTitle.getText();
-        String assignee=issueAssignedTo.getText();
+
         String issueDescription=issueDesc.getText();
-        if(tag.isEmpty() ||title.isEmpty() ||assignee.isEmpty() ||issueDescription.isEmpty() || priorityString.isEmpty()||status.isEmpty()){
+        if(tag.isEmpty() ||title.isEmpty() ||issueDescription.isEmpty() || priorityString.isEmpty()||status.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please Fill All DATA");
@@ -67,12 +64,14 @@ public class issueEditController implements Initializable {
             alert.showAndWait();
         }
         else{
-            if(!tag.equals(issue_temp.getTags())) updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),"tag",tag);
-            if(!status.equals(issue_temp.getStatus())) updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),"status",status);
-            if(priority!=issue_temp.getPriority()) updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),"priority",priority);
-            if(!issueDescription.equals(issue_temp.getTags())) updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),"tag",tag);
-            if(!tag.equals(issue_temp.getTags())) updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),"tag",tag);
-            if(!tag.equals(issue_temp.getTags())) updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),"tag",tag);
+            //connect to database
+            if(tag.equals(issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus())&& priority==issue_temp.getPriority()){
+                //same,no change in data
+                System.out.println("SAME");
+            }
+            else{
+                updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),title,priority,status,tag,issueDescription);
+            }
 
             clean();
             ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
@@ -83,7 +82,7 @@ public class issueEditController implements Initializable {
         issueTag.clear();
         issuePriority.clear();
         issueTitle.clear();
-        issueAssignedTo.clear();
+        issueStatus.clear();
         issueDesc.clear();
     }
 
@@ -113,7 +112,7 @@ public class issueEditController implements Initializable {
         issuePriority.setText(issue_temp.getPriority()+"");
 
         issueTitle.setText(issue_temp.getTitle()+"");
-        issueAssignedTo.setText(issue_temp.getAssignee()+"");
+
 
         issueDesc.setText(issue_temp.getDescriptionText()+"");
 
