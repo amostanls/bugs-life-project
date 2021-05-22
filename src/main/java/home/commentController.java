@@ -69,10 +69,6 @@ public class commentController implements Initializable {
     }
 
 
-
-
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isEditable(false);

@@ -2,9 +2,3 @@
     -fx-background-image: url('lowPolyLandscape.jpg');
     -fx-background-size: cover;
 }
-
-.text-field {
-    -fx-prompt-text-fill: white;
-    -fx-text-fill: white;
-    -fx-font-size: 12pt;
-}
