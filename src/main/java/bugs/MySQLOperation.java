@@ -1167,17 +1167,11 @@ public class MySQLOperation {
         int issue_id = getLastIssueID(myConn, project_id) + 1;
 
         String status = "In Progress";
-        String[] tag = new String[5];
-
         String createdBy = username;
         Timestamp issue_timestamp;
         issue_timestamp = new java.sql.Timestamp(new Date().getTime());
         List<Comment> commentList = new ArrayList<>();
         Issue newIssue = null;
-
-
-        tag[0] = tag1;
-
 
         try {
             String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -1187,7 +1181,7 @@ public class MySQLOperation {
             pstmt.setString(3, title);
             pstmt.setInt(4, priority);
             pstmt.setString(5, status);
-            pstmt.setString(6, tag[0]);
+            pstmt.setString(6, tag1);
             pstmt.setString(7, descriptionText);
             pstmt.setString(8, createdBy);
             pstmt.setString(9, assignee);

@@ -3,6 +3,9 @@ package home;
 import bugs.Issue;
 import bugs.MySQLOperation;
 import bugs.Project;
+import com.jfoenix.controls.JFXToggleButton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -65,6 +69,11 @@ public class issuesController implements Initializable {
     private ImageView addComment;
 
     @FXML
+    private JFXToggleButton isEditToggle;
+
+    private boolean isEditing=false;
+
+    @FXML
     void getAddView(MouseEvent event) {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource("issue_add.fxml"));
@@ -79,10 +88,25 @@ public class issuesController implements Initializable {
         }
     }
 
+    void getEditView(){
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("issue_edit.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
         Controller.updateTable();
+        JOptionPane.showMessageDialog(null,"Refresh Completed");
         setIssueTable();
     }
 
@@ -92,13 +116,22 @@ public class issuesController implements Initializable {
             int selectedIssue=issueTable.getSelectionModel().getSelectedItem().getId();
             //System.out.println(selectedIssue);
             Controller.setSelectedIssueId(selectedIssue);
-            Controller.switchToComment();
+            if(isEditing==false) Controller.switchToComment();
+            else getEditView();
+
 
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        isEditToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(isEditToggle.isSelected()==true){
+                isEditing=true;
+            }else{
+                isEditing=false;
+            }
+        });
         issueId.setCellValueFactory(new PropertyValueFactory<>("id"));
         issueTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         issueStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
