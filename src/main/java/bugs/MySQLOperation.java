@@ -478,10 +478,10 @@ public class MySQLOperation {
     }
 
     //get particular issue list for  project
-    public static List<Issue> getIssueListByPriority(Connection myConn, int project_id) {
+    public static ArrayList<Issue> getIssueListByPriority(Connection myConn, int project_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        List<Issue> issueList = new ArrayList<>();
+        ArrayList<Issue> issueList = new ArrayList<>();
 
         try {
             String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY priority DESC";
@@ -630,11 +630,11 @@ public class MySQLOperation {
             String[] tag = {myRs.getString("tag")};
             String descriptionText = myRs.getString("descriptionText");
             String createdBy = myRs.getString("createdBy");
-            String asignee = myRs.getString("assignee");
+            String assignee = myRs.getString("assignee");
             Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-            ArrayList<Comment> comments = (ArrayList<Comment>) null;
+            ArrayList<Comment> comments = getCommentList(myConn, project_id, issue_id);
 
-            return new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+            return new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, comments);
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -674,11 +674,11 @@ public class MySQLOperation {
         return builder.toString();
     }
 
-    private static List<Issue> searchIssueFromTitleAndDescription(Connection myConn, int project_id, String str) {
+    private static ArrayList<Issue> searchIssueFromTitleAndDescription(Connection myConn, int project_id, String str) {
         String searchStr = getKeyWord(str);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        List<Issue> issueList = new ArrayList<>();
+        ArrayList<Issue> issueList = new ArrayList<>();
 
         try {
             String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? AND (title = '\"+str+\"' OR title REGEXP ? OR descriptionText REGEXP ?)";
@@ -726,9 +726,9 @@ public class MySQLOperation {
         return issueList;
     }
 
-    private static List<Issue> searchIssueFromComment(Connection myConn, int project_id, String str) {
-        List<Issue> issueList = getIssueListByPriority(myConn, project_id);
-        List<Issue> newIssueList = new ArrayList<>();
+    private static ArrayList<Issue> searchIssueFromComment(Connection myConn, int project_id, String str) {
+        ArrayList<Issue> issueList = getIssueListByPriority(myConn, project_id);
+        ArrayList<Issue> newIssueList = new ArrayList<>();
 
         for (int i = 0; i < issueList.size(); i++) {
 
@@ -748,7 +748,15 @@ public class MySQLOperation {
                 while (myRs.next()) {
                     int issue_id = myRs.getInt("issue_id");
                     Issue newIssue = selectIssue(myConn, project_id, issue_id);
-                    newIssueList.add(newIssue);
+                    boolean contain = false;
+                    for (Issue issue : newIssueList) {
+                        if (issue.equal(newIssue)) {
+                            contain = true;
+                        }
+                    }
+                    if (contain == false) {
+                        newIssueList.add(newIssue);
+                    }
                 }
 
             } catch (Exception ex) {
@@ -777,15 +785,9 @@ public class MySQLOperation {
     public static List<Issue> searchIssue(Connection myConn, int project_id, String str) {
         List<Issue> issueListFromTextAndDescription = searchIssueFromTitleAndDescription(myConn, project_id, str);
         List<Issue> issueListFromComment = searchIssueFromComment(myConn, project_id, str);
-        List<Issue> newIssueList = issueListFromTextAndDescription;
 
-        for (int i = 0; i < issueListFromComment.size(); i++) {
-            if (!newIssueList.contains(issueListFromComment.get(i))) {
-                newIssueList.add(issueListFromComment.get(i));
-            }
-        }
-
-        return newIssueList;
+        issueListFromTextAndDescription.addAll(issueListFromComment);
+        return issueListFromTextAndDescription;
     }
 
     public static ArrayList<Comment> getCommentList(Connection myConn, int project_id, int issue_id) {
@@ -1519,6 +1521,8 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
+            List<Issue> issues = searchIssue(myConn,1,"this");
+            displayIssue(issues);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
