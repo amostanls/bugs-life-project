@@ -19,9 +19,9 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <HBox layoutX="63.0" layoutY="85.0" prefHeight="63.0" prefWidth="1027.0" style="-fx-background-color: #F3F3F3;">
+      <HBox layoutX="51.0" layoutY="85.0" prefHeight="65.0" prefWidth="1030.0">
          <children>
-            <HBox prefHeight="63.0" prefWidth="750.0">
+            <HBox prefHeight="63.0" prefWidth="737.0">
                <children>
                   <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#getAddView" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -54,7 +54,7 @@
             </TextField>
          </children>
       </HBox>
-      <TableView fx:id="projectTable" layoutX="50.0" layoutY="162.0" onMouseClicked="#switchToIssues" prefHeight="528.0" prefWidth="1027.0">
+      <TableView fx:id="projectTable" layoutX="50.0" layoutY="162.0" onMouseClicked="#switchToIssues" prefHeight="528.0" prefWidth="1030.0">
          <columns>
             <TableColumn fx:id="project_id" prefWidth="75.0" text="ID" />
             <TableColumn fx:id="project_name" prefWidth="212.0" text="Project Name" />

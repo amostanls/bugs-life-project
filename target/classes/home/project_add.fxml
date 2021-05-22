@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.projectAddController">
    <children>
       <HBox alignment="CENTER" prefHeight="116.0" prefWidth="602.0">
          <children>
@@ -33,7 +33,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <JFXButton fx:id="saveBtn" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #00E676;" text="Save">
+            <JFXButton fx:id="saveBtn" onAction="#setSaveBtn" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #00E676;" text="Save">
                <font>
                   <Font name="Century Gothic" size="24.0" />
                </font>
@@ -41,7 +41,7 @@
                   <Insets right="30.0" />
                </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="cancelBtn" layoutX="241.0" layoutY="37.0" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #d9534f;" text="Cancel">
+            <JFXButton fx:id="cancelBtn" layoutX="241.0" layoutY="37.0" onAction="#setCancelBtn" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #d9534f;" text="Cancel">
                <font>
                   <Font name="Century Gothic" size="24.0" />
                </font>

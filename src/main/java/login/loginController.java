@@ -44,7 +44,7 @@ public class loginController implements Initializable {
         Stage stage=new Stage();
 
         stage.setTitle("Bugs Life");
-        //stage.setResizable(false);
+        stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
@@ -75,9 +75,12 @@ public class loginController implements Initializable {
             //Controller.callBuffer();
 
             //connect to database
-            User currentUser= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,password);
-            if(currentUser!=null){
+            User currentUser_temp= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,password);
+            if(currentUser_temp!=null){
                 System.out.println("LOGIN successful");
+                System.out.println("Initialising main dashboard");
+                System.out.println("PLease wait");
+                Controller.setCurrentUser(currentUser_temp);
                 Controller.setUsername(username);
 
                 try{
@@ -85,7 +88,7 @@ public class loginController implements Initializable {
                     Stage stage=new Stage();
 
                     stage.setTitle("Bugs Life");
-                    //stage.setResizable(false);
+                    stage.setResizable(false);
                     stage.setScene(new Scene(root));
                     stage.show();
                 }catch(IOException e){

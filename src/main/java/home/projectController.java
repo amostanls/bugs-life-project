@@ -65,7 +65,17 @@ public class projectController implements Initializable  {
 
     @FXML
     void getAddView(MouseEvent event) {
-
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("project_add.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     void getEditView(){

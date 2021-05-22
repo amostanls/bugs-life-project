@@ -274,7 +274,7 @@ public class MySQLOperation {
         updateCount.execute();
     }
 
-    public static void createProject (Connection myConn, String name) {
+    public static void createProject(Connection myConn, String name) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -1244,18 +1244,15 @@ public class MySQLOperation {
         }
     }
 
-    public static void createComment(Connection myConn, int project_id, int issue_id, String username) {
+    public static void createComment(Connection myConn, int project_id, int issue_id, String username, String text) {
         Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
         int comment_id = getLastCommentID(myConn, project_id, issue_id) + 1;
-        String text;
+
         Timestamp comment_timestamp;
         comment_timestamp = new java.sql.Timestamp(new Date().getTime());
-
-        System.out.print("Enter text: ");
-        text = sc.nextLine();
 
         try {
             myConn = getConnection();
