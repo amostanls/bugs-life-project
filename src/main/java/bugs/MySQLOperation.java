@@ -224,7 +224,7 @@ public class MySQLOperation {
             updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
             updateUser.setString(2, node.get("users").get(i).get("username").asText());
             updateUser.setString(3, node.get("users").get(i).get("password").asText());
-            updateUser.setBoolean(4,false);
+            updateUser.setBoolean(4, false);
             updateUser.addBatch();
 
             if (i == node.get("users").size() - 1) {
@@ -318,7 +318,7 @@ public class MySQLOperation {
         Project requiredProject = null;
 
         try {
-            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects WHERE project_id = '"+project_id+"'";
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects WHERE project_id = '" + project_id + "'";
             stmt = myConn.createStatement();
             myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
 
@@ -421,7 +421,7 @@ public class MySQLOperation {
             }
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        }  finally {
+        } finally {
             if (myRs != null) {
                 try {
                     myRs.close();
@@ -796,6 +796,41 @@ public class MySQLOperation {
 
     }
 
+    private static int getLastUserID(Connection myConn) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            String SQL_GET_LAST_ISSUE_ID = "SELECT * FROM users ORDER BY userid DESC LIMIT 1";
+            pstmt = myConn.prepareStatement(SQL_GET_LAST_ISSUE_ID);
+            myRs = pstmt.executeQuery();
+
+            //get parameter for creating issue object
+            myRs.next();
+            return myRs.getInt("userid");
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return -1;
+    }
+
     private static int getLastCommentID(Connection myConn, int project_id, int issue_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -923,7 +958,7 @@ public class MySQLOperation {
         //get different order of issue list order from timestamp or priority
         if (sortedBy.equalsIgnoreCase("Timestamp")) {
             issueList = getIssueListByTimestamp(myConn, project_id);
-        } else if (sortedBy.equalsIgnoreCase("Priority")){
+        } else if (sortedBy.equalsIgnoreCase("Priority")) {
             issueList = getIssueListByPriority(myConn, project_id);
         }
 
@@ -1003,6 +1038,41 @@ public class MySQLOperation {
         return null;
     }
 
+    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin) {
+        //Scanner sc = new Scanner(System.in);
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        int user_id = getLastUserID(myConn) + 1;
+
+        try {
+            String SQL_CREATE_USER = "INSERT INTO users(userid, username, password, admin)VALUES (?, ?, ?, ?)";
+            pstmt = myConn.prepareStatement(SQL_CREATE_USER);
+            pstmt.setInt(1, user_id);
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setBoolean(4, isAdmin);
+            pstmt.execute();
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static User showLoginPage(Connection myConn) {
         Scanner sc = new Scanner(System.in);
         User newUser = null;
@@ -1015,7 +1085,7 @@ public class MySQLOperation {
             String password = sc.nextLine();
 
             //assign new user object if password and username exist
-            newUser = login(myConn, username,password);
+            newUser = login(myConn, username, password);
 
             //notification if wrong password / username
             if (newUser == null) {
@@ -1089,8 +1159,8 @@ public class MySQLOperation {
         }
     }
 
-    public static void createIssueJavaFX(Connection myConn, int project_id, String username,String tag1, int priority,String title,String assignee,String descriptionText) {
-        Scanner sc = new Scanner(System.in);
+    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText) {
+        //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -1164,8 +1234,8 @@ public class MySQLOperation {
             pstmt.setInt(2, issue_id);
             pstmt.setInt(3, comment_id);
             pstmt.setString(4, text);
-            pstmt.setTimestamp(5,comment_timestamp);
-            pstmt.setString(6,username);
+            pstmt.setTimestamp(5, comment_timestamp);
+            pstmt.setString(6, username);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -1190,7 +1260,7 @@ public class MySQLOperation {
     public static void showUserInterface(Connection myConn) {
         User currentUser = showLoginPage(myConn);
         int selectionOfProject = showProjectDashboard(myConn);
-        showIssueDashboard(myConn, selectionOfProject,"priority", currentUser.getUsername());
+        showIssueDashboard(myConn, selectionOfProject, "priority", currentUser.getUsername());
     }
 
     public static void updateProject(Connection myConn, int project_id, String newName) {
@@ -1211,7 +1281,7 @@ public class MySQLOperation {
 
             //update table projects
             pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
-            pstmt.setString(1,newName);
+            pstmt.setString(1, newName);
 
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
             pstmt.setTimestamp(2, currentTimestamp);
@@ -1247,7 +1317,7 @@ public class MySQLOperation {
             String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
                     "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
                     "WHERE project_id = ? AND issue_id = ?";
-            String SQL_UPDATE_ISSUES = "UPDATE issues SET "+columnName+" = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_ISSUES = "UPDATE issues SET " + columnName + " = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
 
             //update table issues history
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
@@ -1314,7 +1384,7 @@ public class MySQLOperation {
 
             //update table projects
             pstmt = myConn.prepareStatement(SQL_UPDATE_COMMNETS);
-            pstmt.setString(1,newText);
+            pstmt.setString(1, newText);
 
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
             pstmt.setTimestamp(2, currentTimestamp);
@@ -1344,20 +1414,18 @@ public class MySQLOperation {
         }
     }
 
-    public static Connection connectionToDatabase(){
+    public static Connection connectionToDatabase() {
         Connection myConnection = null;
         try {
             myConnection = getConnection();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return myConnection;
     }
 
 
-
-    public static void main(String[] args){
+    public static void main(String[] args) {
 //        initializedDatabase();
 
         Connection myConn = null;
@@ -1367,10 +1435,10 @@ public class MySQLOperation {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(myConn!=null){
-                try{
+            if (myConn != null) {
+                try {
                     myConn.close();
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
