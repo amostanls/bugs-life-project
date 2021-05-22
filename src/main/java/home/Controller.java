@@ -2,6 +2,7 @@ package home;
 
 import bugs.MySQLOperation;
 import bugs.Project;
+import bugs.User;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -33,8 +35,11 @@ public class Controller implements Initializable {
     private static int selectedIssueId = 0;
     private static int selectedCommentId = 0;
     private static List<Project> finalProjectList;
+    private static User currentUser;
     private static String username = "";
 
+    @FXML
+    private Label usernameDisplay;
 
     @FXML
     private BorderPane mainPane;
@@ -85,6 +90,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        usernameDisplay.setText(getUsername().toUpperCase());
         staticBorderPane = mainPane;
         Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
@@ -137,8 +143,18 @@ public class Controller implements Initializable {
         Controller.username = username;
     }
 
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        Controller.currentUser = currentUser;
+    }
+
     public static void resetID() {
         setFinalProjectList(null);
+        setCurrentUser(null);
+        setUsername(null);
         projectController.setInitialise(true);
         setSelectedProjectId(0);
         setSelectedIssueId(0);

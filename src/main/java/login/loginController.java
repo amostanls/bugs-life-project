@@ -75,9 +75,10 @@ public class loginController implements Initializable {
             //Controller.callBuffer();
 
             //connect to database
-            User currentUser= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,password);
-            if(currentUser!=null){
+            User currentUser_temp= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,password);
+            if(currentUser_temp!=null){
                 System.out.println("LOGIN successful");
+                Controller.setCurrentUser(currentUser_temp);
                 Controller.setUsername(username);
 
                 try{

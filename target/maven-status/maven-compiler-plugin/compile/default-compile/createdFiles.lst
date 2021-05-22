@@ -1,4 +1,5 @@
 home\issueAddController.class
+home\commentEditController.class
 home\Controller.class
 home\issueEditController.class
 home\projectEditController.class
@@ -11,3 +12,4 @@ login\registerController.class
 home\projectController.class
 login\loginController.class
 home\projectAddController.class
+home\commentAddController.class
