@@ -12,16 +12,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issuesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issuesController">
    <children>
-      <Label layoutX="57.0" layoutY="47.0" prefHeight="40.0" prefWidth="152.0" text="Issues Page">
+      <Label layoutX="57.0" layoutY="38.0" prefHeight="40.0" prefWidth="152.0" text="Issues Page">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <HBox layoutX="57.0" layoutY="99.0" prefHeight="63.0" prefWidth="1044.0" style="-fx-background-color: #F3F3F3;">
+      <HBox layoutX="57.0" layoutY="99.0" prefHeight="63.0" prefWidth="1030.0">
          <children>
-            <HBox prefHeight="63.0" prefWidth="995.0">
+            <HBox prefHeight="63.0" prefWidth="706.0">
                <children>
                   <ImageView fx:id="addComment" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#getAddView" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -51,14 +51,14 @@
                   <Insets left="20.0" />
                </HBox.margin>
             </ImageView>
-            <TextField prefHeight="61.0" prefWidth="327.0">
+            <TextField prefHeight="61.0" prefWidth="246.0">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
             </TextField>
          </children>
       </HBox>
-      <TableView fx:id="issueTable" layoutX="57.0" layoutY="178.0" onMouseClicked="#switchToComment" prefHeight="532.0" prefWidth="1044.0">
+      <TableView fx:id="issueTable" layoutX="57.0" layoutY="178.0" onMouseClicked="#switchToComment" prefHeight="532.0" prefWidth="1030.0">
          <columns>
             <TableColumn fx:id="issueId" prefWidth="50.0" text="ID" />
             <TableColumn fx:id="issueTitle" prefWidth="146.0" text="Title" />

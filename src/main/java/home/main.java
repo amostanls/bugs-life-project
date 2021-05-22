@@ -24,7 +24,7 @@ public class main extends Application {
 
 
         stage.setTitle("Bugs Life");
-        //stage.setResizable(false);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

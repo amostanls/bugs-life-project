@@ -68,22 +68,15 @@ public class commentEditController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         setCommentSelection();
-        if (possible_comments == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setContentText("Wrong secret code");
-            alert.showAndWait();
-            Stage stage = (Stage) usernameDisplay.getScene().getWindow();
-            // do what you have to do
-            stage.close();
-        } else {
-            usernameDisplay.setText(Controller.getUsername());
-            commentSelection.getItems().addAll(comment_list);
-            commentSelection.setValue(comment_list.get(0));
-            commentField.setText(possible_comments.get(0).getText());
-            commentSelection.setOnAction(this::getCommentSelection);
-        }
+
+        usernameDisplay.setText(Controller.getUsername());
+        commentSelection.getItems().addAll(comment_list);
+        commentSelection.setValue(comment_list.get(0));
+        commentField.setText(possible_comments.get(0).getText());
+        commentSelection.setOnAction(this::getCommentSelection);
+
 
     }
 
@@ -115,5 +108,7 @@ public class commentEditController implements Initializable {
             }
         }
     }
+
+
 }
 

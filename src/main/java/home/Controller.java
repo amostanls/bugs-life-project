@@ -71,7 +71,7 @@ public class Controller implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
         Stage stage = new Stage();
         stage.setTitle("Bugs Life");
-        //stage.setResizable(false);
+        stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
         ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();

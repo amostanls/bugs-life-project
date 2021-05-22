@@ -59,7 +59,7 @@ public class registerController implements Initializable {
         Stage stage=new Stage();
 
         stage.setTitle("Bugs Life");
-        //stage.setResizable(false);
+        stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
@@ -121,7 +121,7 @@ public class registerController implements Initializable {
                 Stage stage=new Stage();
 
                 stage.setTitle("Bugs Life");
-                //stage.setResizable(false);
+                stage.setResizable(false);
                 stage.setScene(new Scene(root));
                 stage.show();
             }catch(IOException e){
@@ -158,7 +158,7 @@ public class registerController implements Initializable {
             secretIcon.setVisible(false);
             secretField.setVisible(false);
         }
-        System.out.println(isAdmin);
+        //System.out.println(isAdmin);
     }
 
 
