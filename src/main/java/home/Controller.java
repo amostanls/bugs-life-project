@@ -2,28 +2,38 @@ package home;
 
 import bugs.MySQLOperation;
 import bugs.Project;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Controller implements Initializable {
 
-    private static int selectedProjectId=0;
-    private static int selectedIssueId=0;
-    private static int selectedCommentId=0;
+    private static int selectedProjectId = 0;
+    private static int selectedIssueId = 0;
+    private static int selectedCommentId = 0;
     private static List<Project> finalProjectList;
-    private static String username="";
+    private static String username = "";
 
 
     @FXML
@@ -34,29 +44,49 @@ public class Controller implements Initializable {
 
     @FXML
     void overview(ActionEvent event) throws IOException {
-        Pane view=new FxmlLoader().getPage("dashboard");
+        Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
     }
 
     @FXML
     void search(MouseEvent event) {
-
+        Pane view = new FxmlLoader().getPage("search");
+        mainPane.setCenter(view);
     }
 
+    @FXML
+    void settings(MouseEvent event) {
+        Pane view = new FxmlLoader().getPage("settings");
+        mainPane.setCenter(view);
+    }
+
+    @FXML
+    void signOut(MouseEvent event) throws IOException {
+        resetID();
+        Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle("Bugs Life");
+        //stage.setResizable(false);
+        stage.setScene(new Scene(root));
+        stage.show();
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+    }
+
+
     static void switchToIssues() throws IOException {
-        Pane view=new FxmlLoader().getPage("issue");
+        Pane view = new FxmlLoader().getPage("issue");
         staticBorderPane.setCenter(view);
     }
 
-    static void switchToComment(){
-        Pane view=new FxmlLoader().getPage("comment");
+    static void switchToComment() {
+        Pane view = new FxmlLoader().getPage("comment");
         staticBorderPane.setCenter(view);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        staticBorderPane=mainPane;
-        Pane view=new FxmlLoader().getPage("dashboard");
+        staticBorderPane = mainPane;
+        Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
     }
 
@@ -107,23 +137,12 @@ public class Controller implements Initializable {
         Controller.username = username;
     }
 
-    /*
-    @Override
-    protected Task createTask() {
-        try{
-            setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.myConnection));
-        }catch(Exception e){
-            try {
-                MySQLOperation.myConnection=MySQLOperation.getConnection();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        }
-        finally {
-            setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.myConnection));
-        }
-        return null;
+    public static void resetID() {
+        setFinalProjectList(null);
+        projectController.setInitialise(true);
+        setSelectedProjectId(0);
+        setSelectedIssueId(0);
+        setSelectedCommentId(0);
     }
 
- */
 }

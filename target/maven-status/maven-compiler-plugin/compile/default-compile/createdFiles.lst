@@ -1,8 +1,11 @@
 home\issueAddController.class
 home\Controller.class
+home\issueEditController.class
 home\projectEditController.class
-home\progressBarController.class
+home\bufferController.class
+home\settingsController.class
 home\projectController$1.class
+home\searchController.class
 home\main.class
 login\registerController.class
 home\projectController.class

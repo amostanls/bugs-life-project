@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.searchController">
+   <children>
+      <Label layoutX="53.0" layoutY="21.0" prefHeight="81.0" prefWidth="141.0" text="Search">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <JFXTextArea layoutX="53.0" layoutY="80.0" prefHeight="45.0" prefWidth="488.0" />
+      <TableView layoutX="53.0" layoutY="138.0" prefHeight="218.0" prefWidth="488.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
+      <Label layoutX="253.0" layoutY="45.0" text="Not yet Completed" />
+   </children>
+</AnchorPane>

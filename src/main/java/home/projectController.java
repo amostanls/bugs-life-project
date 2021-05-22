@@ -85,6 +85,7 @@ public class projectController implements Initializable  {
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
         Controller.updateTable();
+        JOptionPane.showMessageDialog(null,"Refresh Completed");
         setProjectTable();
     }
 
@@ -97,14 +98,8 @@ public class projectController implements Initializable  {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedID=projectTable.getSelectionModel().getSelectedItem().getId();
             Controller.setSelectedProjectId(selectedID);
-            if(isEditing==false){
-                Controller.switchToIssues();
-            }
-            else{
-                //edit table
-                getEditView();
-            }
-
+            if(isEditing==false)Controller.switchToIssues();
+            else getEditView();
 
         }
     }
@@ -137,9 +132,15 @@ public class projectController implements Initializable  {
     }
 
     public void setProjectTable(){
-        ObservableList<Project> projectList = FXCollections.observableList(Controller.getFinalProjectList());
-        projectTable.setItems(projectList);
+        if (Controller.getFinalProjectList() != null) {
+            ObservableList<Project> projectList = FXCollections.observableList(Controller.getFinalProjectList());
+            projectTable.setItems(projectList);
+        }
+
         //System.out.println(projectList.get(0).getIssues());
     }
 
+    public static void setInitialise(boolean initialise) {
+        projectController.initialise = initialise;
+    }
 }

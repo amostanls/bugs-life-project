@@ -52,7 +52,7 @@ public class loginController implements Initializable {
     }
 
     @FXML
-    void setEnterBtn(ActionEvent event) {
+    void setEnterBtn(ActionEvent event) throws InterruptedException {
         String username=usernameField.getText();
 
         String password= passwordField.getText();
@@ -72,9 +72,11 @@ public class loginController implements Initializable {
             alert.showAndWait();
         }
         else{
+            //Controller.callBuffer();
+
             //connect to database
-            User newUser= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,password);
-            if(newUser!=null){
+            User currentUser= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,password);
+            if(currentUser!=null){
                 System.out.println("LOGIN successful");
                 Controller.setUsername(username);
 
@@ -89,6 +91,7 @@ public class loginController implements Initializable {
                 }catch(IOException e){
                     Logger.getLogger(main.class.getName()).log(Level.SEVERE,null,e);
                 }
+                //Controller.closeBuffer();
                 ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
 
             }
@@ -110,6 +113,7 @@ public class loginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        clean();
 
     }
 }

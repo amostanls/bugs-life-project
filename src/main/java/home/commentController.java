@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class commentController implements Initializable {
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
         Controller.updateTable();
+        JOptionPane.showMessageDialog(null,"Refresh Completed");
         setTextField();
     }
 

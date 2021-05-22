@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -20,16 +21,28 @@
       </Label>
       <HBox layoutX="57.0" layoutY="99.0" prefHeight="63.0" prefWidth="1044.0" style="-fx-background-color: #F3F3F3;">
          <children>
-            <ImageView fx:id="addComment" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#getAddView" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/add.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/refresh.png" />
-               </image>
-            </ImageView>
+            <HBox prefHeight="63.0" prefWidth="995.0">
+               <children>
+                  <ImageView fx:id="addComment" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#getAddView" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/add.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#refreshTable" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/refresh.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <JFXToggleButton fx:id="isEditToggle" text="Edit">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXToggleButton>
+               </children>
+            </HBox>
             <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/icons8_Search_52px.png" />
@@ -38,7 +51,7 @@
                   <Insets left="20.0" />
                </HBox.margin>
             </ImageView>
-            <TextField prefHeight="61.0" prefWidth="167.0">
+            <TextField prefHeight="61.0" prefWidth="327.0">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>

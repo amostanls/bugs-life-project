@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="200.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.bufferController">
+   <children>
+      <Label fx:id="label" layoutX="42.0" layoutY="43.0" text="Connecting to Database">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="79.0" layoutY="87.0" text="This might take a while">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ProgressIndicator layoutX="144.0" layoutY="123.0" />
+   </children>
+</AnchorPane>
