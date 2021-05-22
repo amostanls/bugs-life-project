@@ -274,6 +274,43 @@ public class MySQLOperation {
         updateCount.execute();
     }
 
+    public static void createProject (Connection myConn, String name) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+//            project_id INT PRIMARY KEY AUTO_INCREMENT,
+//                    name VARCHAR(20) NOT NULL,
+//            project_timestamp TIMESTAMP NOT NULL
+            String SQL_CREATE_PROJECT = "INSERT INTO projects(name, project_timestamp) VALUES (?, ?)";
+            pstmt = myConn.prepareStatement(SQL_CREATE_PROJECT);
+            pstmt.setString(1, name);
+
+            Timestamp project_timestamp;
+            project_timestamp = new java.sql.Timestamp(new Date().getTime());
+            pstmt.setTimestamp(2, project_timestamp);
+
+            pstmt.execute();
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static List<Project> getProjectList(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
@@ -1356,6 +1393,57 @@ public class MySQLOperation {
         }
     }
 
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
+                    "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
+                    "WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+
+            //update table issues history
+            pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.execute();
+
+            //update table issues
+            pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES);
+            pstmt.setString(1, title);
+            pstmt.setInt(2, priority);
+            pstmt.setString(3, status);
+            pstmt.setString(4, tag);
+            pstmt.setString(5, descriptionText);
+
+            Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+            pstmt.setTimestamp(6, currentTimestamp);
+
+            pstmt.setInt(7, project_id);
+            pstmt.setInt(8, issue_id);
+            pstmt.execute();
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static void updateComment(Connection myConn, int project_id, int issue_id, int comment_id, String newText) {
         List<Comment> comments = getCommentList(myConn, project_id, issue_id);
         Comment requiredComment = null;
@@ -1431,7 +1519,7 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            updateIssue(myConn, 1, 1, "descriptionText", "another");
+            updateIssue(myConn, 1, 1, "new testing title",2, "whatever", "new tag","new problem" );
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
