@@ -499,7 +499,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
+                ArrayList<Comment> comments = getCommentList(myConn, project_id, issue_id);
                 Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
                 issueList.add(newIssue);
             }
@@ -788,10 +788,10 @@ public class MySQLOperation {
         return newIssueList;
     }
 
-    public static List<Comment> getCommentList(Connection myConn, int project_id, int issue_id) {
+    public static ArrayList<Comment> getCommentList(Connection myConn, int project_id, int issue_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        List<Comment> commentList = new ArrayList<>();
+        ArrayList<Comment> commentList = new ArrayList<>();
 
         try {
             String SQL_GET_COMMENT_LIST = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ?";
@@ -803,10 +803,10 @@ public class MySQLOperation {
             while (myRs.next()) {
                 int comment_id = myRs.getInt("comment_id");
                 String text = myRs.getString("text");
-                List<React> react = getReactList(myConn, project_id, issue_id, comment_id);
+                ArrayList<React> react = getReactList(myConn, project_id, issue_id, comment_id);
                 Timestamp timestamp = myRs.getTimestamp("comment_timestamp");
                 String user = myRs.getString("user");
-                Comment newComment = new Comment(comment_id, text, timestamp, user);
+                Comment newComment = new Comment(comment_id, text, react, timestamp, user);
                 commentList.add(newComment);
             }
 
@@ -905,10 +905,10 @@ public class MySQLOperation {
         return -1;
     }
 
-    public static List<React> getReactList(Connection myConn, int project_id, int issue_id, int comment_id) {
+    public static ArrayList<React> getReactList(Connection myConn, int project_id, int issue_id, int comment_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        List<React> reactList = new ArrayList<>();
+        ArrayList<React> reactList = new ArrayList<>();
 
         try {
             String SQL_GET_REACT_LIST = "SELECT * FROM react WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
@@ -1513,7 +1513,8 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            updateIssue(myConn, 1, 1, "new testing title",2, "whatever", "new tag","new problem" );
+            List<React> reacts = getReactList(myConn, 1,1,1);
+            reacts.get(0).toString();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
