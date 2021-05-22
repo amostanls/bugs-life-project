@@ -1438,7 +1438,9 @@ public class MySQLOperation {
         }
     }
 
-    public static void updateComment(Connection myConn, int project_id, int issue_id, int comment_id, String newText) {
+    public static void updateComment(Connection myConn, User user, int project_id, int issue_id, int comment_id, String newText) {
+        boolean isOwner = false;
+
         List<Comment> comments = getCommentList(myConn, project_id, issue_id);
         Comment requiredComment = null;
         for (Comment c : comments) {
@@ -1447,52 +1449,60 @@ public class MySQLOperation {
             }
         }
 
+        if (requiredComment.getUser().equals(user.getName())) {
+            isOwner = true;
+        }
+
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
-        try {
-            String SQL_UPDATE_COMMENTS_HISTORY = "INSERT INTO comments_history(project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";
-            String SQL_UPDATE_COMMNETS = "UPDATE comments SET text = ?, comment_timestamp = ? WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
+        if (isOwner) {
+            try {
+                String SQL_UPDATE_COMMENTS_HISTORY = "INSERT INTO comments_history(project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";
+                String SQL_UPDATE_COMMNETS = "UPDATE comments SET text = ?, comment_timestamp = ? WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
 
-            //update table project history
-            pstmt = myConn.prepareStatement(SQL_UPDATE_COMMENTS_HISTORY);
-            pstmt.setInt(1, project_id);
-            pstmt.setInt(2, issue_id);
-            pstmt.setInt(3, requiredComment.getComment_id());
-            pstmt.setString(4, newText);
-            pstmt.setTimestamp(5, requiredComment.getTimestamp());
-            pstmt.setString(6, requiredComment.getUser());
-            pstmt.execute();
+                //update table project history
+                pstmt = myConn.prepareStatement(SQL_UPDATE_COMMENTS_HISTORY);
+                pstmt.setInt(1, project_id);
+                pstmt.setInt(2, issue_id);
+                pstmt.setInt(3, requiredComment.getComment_id());
+                pstmt.setString(4, newText);
+                pstmt.setTimestamp(5, requiredComment.getTimestamp());
+                pstmt.setString(6, requiredComment.getUser());
+                pstmt.execute();
 
-            //update table projects
-            pstmt = myConn.prepareStatement(SQL_UPDATE_COMMNETS);
-            pstmt.setString(1, newText);
+                //update table projects
+                pstmt = myConn.prepareStatement(SQL_UPDATE_COMMNETS);
+                pstmt.setString(1, newText);
 
-            Timestamp currentTimestamp = new Timestamp(new Date().getTime());
-            pstmt.setTimestamp(2, currentTimestamp);
+                Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+                pstmt.setTimestamp(2, currentTimestamp);
 
-            pstmt.setInt(3, project_id);
-            pstmt.setInt(4, issue_id);
-            pstmt.setInt(5, comment_id);
-            pstmt.execute();
+                pstmt.setInt(3, project_id);
+                pstmt.setInt(4, issue_id);
+                pstmt.setInt(5, comment_id);
+                pstmt.execute();
 
-        } catch (Exception ex) {
-            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+            } catch (Exception ex) {
+                Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (myRs != null) {
+                    try {
+                        myRs.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (pstmt != null) {
+                    try {
+                        pstmt.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        } else {
+            System.out.println("You are not the owner of this comments");
         }
     }
 
@@ -1506,15 +1516,12 @@ public class MySQLOperation {
         return myConnection;
     }
 
-
     public static void main(String[] args) {
 //        initializedDatabase();
 
         Connection myConn = null;
         try {
             myConn = getConnection();
-            List<React> reacts = getReactList(myConn, 1,1,1);
-            reacts.get(0).toString();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
