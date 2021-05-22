@@ -959,7 +959,7 @@ public class MySQLOperation {
         }
     }
 
-    private static User login(Connection myConn, String username, String password) {
+    public static User login(Connection myConn, String username, String password) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 

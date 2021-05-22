@@ -90,7 +90,7 @@ public class issuesController implements Initializable {
     public void switchToComment(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedIssue=issueTable.getSelectionModel().getSelectedItem().getId();
-            System.out.println(selectedIssue);
+            //System.out.println(selectedIssue);
             Controller.setSelectedIssueId(selectedIssue);
             Controller.switchToComment();
 

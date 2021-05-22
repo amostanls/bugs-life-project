@@ -4,4 +4,6 @@ home\projectEditController.class
 home\progressBarController.class
 home\projectController$1.class
 home\main.class
+login\registerController.class
 home\projectController.class
+login\loginController.class

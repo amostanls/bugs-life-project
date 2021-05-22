@@ -23,7 +23,7 @@ public class Controller implements Initializable {
     private static int selectedIssueId=0;
     private static int selectedCommentId=0;
     private static List<Project> finalProjectList;
-    private static String username="lim";
+    private static String username="";
 
 
     @FXML
