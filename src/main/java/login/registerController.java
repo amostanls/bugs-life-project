@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,6 +30,7 @@ public class registerController implements Initializable {
 
     private String[] userType={"Regular User","Admin"};
     private boolean isAdmin=false;
+    private String secretCode="bugs";
 
     @FXML
     private TextField usernameField;
@@ -70,8 +72,8 @@ public class registerController implements Initializable {
 
         String password= passwordField.getText();
         String confirmPassword=passwordConfirmField.getText();
-        String secret;
-        if(isAdmin=true)secret=secretField.getText();
+        String secret=null;
+        if(isAdmin==true)secret=secretField.getText();
 
         //String sha256hex = DigestUtils.sha256Hex(password);
 
@@ -93,10 +95,24 @@ public class registerController implements Initializable {
             alert.setContentText("Password must be the same");
             alert.showAndWait();
         }
+        else if(isAdmin==true && secret.isEmpty()){
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in the secret code");
+            alert.showAndWait();
+        }
+        else if((isAdmin==true && !secret.equals(secretCode))){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Wrong secret code");
+            alert.showAndWait();
+        }
+
         else{
             //connect to database
-            //User newUser= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,password);
-            User newUser = null;
+            MySQLOperation.registerUser(MySQLOperation.connectionToDatabase(),username,password,isAdmin);
+            JOptionPane.showMessageDialog(null,"Register Successful");
             System.out.println("Register successful");
             Controller.setUsername(username);
 
@@ -118,11 +134,13 @@ public class registerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         secretBox.setVisible(false);
         secretIcon.setVisible(false);
         secretField.setVisible(false);
         userTypeSelection.getItems().addAll(userType);
         userTypeSelection.setValue(userType[0]);
+        isAdmin=false;
         userTypeSelection.setOnAction(this::getUserType);
     }
 
@@ -135,10 +153,12 @@ public class registerController implements Initializable {
             secretField.setVisible(true);
         }
         else{
+            isAdmin=false;
             secretBox.setVisible(false);
             secretIcon.setVisible(false);
             secretField.setVisible(false);
         }
+        System.out.println(isAdmin);
     }
 
 
