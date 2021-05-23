@@ -134,6 +134,8 @@ public class MySQLOperation {
         final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
         final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
+
+
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
         Connection myConn = DriverManager.getConnection(path, user, pass);
@@ -1107,6 +1109,42 @@ public class MySQLOperation {
         }
     }
 
+    public static void updatePassword(Connection myConn, User user, String newPassword) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            String SQL_UPDATE_PROJECTS = "UPDATE users SET password = ? WHERE username = ? AND userid=?";
+
+            //update table users
+            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
+            pstmt.setString(1, newPassword);
+
+            pstmt.setString(2, user.getUsername());
+            pstmt.setInt(3, user.getUserid());
+            pstmt.execute();
+            System.out.println(newPassword+" "+user.getUsername()+" "+user.getUserid());
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static User showLoginPage(Connection myConn) {
         Scanner sc = new Scanner(System.in);
         User newUser = null;
@@ -1443,7 +1481,7 @@ public class MySQLOperation {
             }
         }
 
-        if (requiredComment.getUser().equals(user.getName())) {
+        if (requiredComment.getUser().equals(user.getUsername())) {
             isOwner = true;
         }
 

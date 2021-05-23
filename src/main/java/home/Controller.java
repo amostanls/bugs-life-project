@@ -15,7 +15,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -54,40 +56,49 @@ public class Controller implements Initializable {
     void overview(ActionEvent event) throws IOException {
         Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
-        new FadeInLeft(view).play();
+        new FadeInRight(view).play();
     }
 
     @FXML
     void search(MouseEvent event) {
         Pane view = new FxmlLoader().getPage("search");
         mainPane.setCenter(view);
-        new FadeInLeft(view).play();
+        new FadeInRight(view).play();
     }
 
     @FXML
     void changeLog(MouseEvent event) {
         Pane view = new FxmlLoader().getPage("changeLog");
         mainPane.setCenter(view);
-        new FadeInLeft(view).play();
+        new FadeInRight(view).play();
     }
 
     @FXML
     void settings(MouseEvent event) {
         Pane view = new FxmlLoader().getPage("settings");
         mainPane.setCenter(view);
-        new FadeInLeft(view).play();
+        new FadeInRight(view).play();
     }
 
     @FXML
     void signOut(MouseEvent event) throws IOException {
-        resetID();
-        Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
-        Stage stage = new Stage();
-        stage.setTitle("Bugs Life");
-        stage.setResizable(false);
-        stage.setScene(new Scene(root));
-        stage.show();
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+
+        Alert alert =new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Logout");
+        alert.setHeaderText("You're about to logout!");
+        alert.setContentText("Are you sure you want to logout?");
+
+        if(alert.showAndWait().get()== ButtonType.OK){
+            resetID();
+            /*Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Bugs Life");
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.show();*/
+            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+        }
+
     }
 
 

@@ -7,6 +7,7 @@ import bugs.MySQLOperation;
 import bugs.User;
 import home.Controller;
 import home.main;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -92,6 +93,11 @@ public class loginController implements Initializable {
                     stage.setResizable(false);
                     stage.setScene(new Scene(root));
                     stage.show();
+                    stage.setOnCloseRequest(t -> {
+                        Platform.exit();
+                        System.exit(0);
+                    });
+
 
                 }catch(IOException e){
                     Logger.getLogger(main.class.getName()).log(Level.SEVERE,null,e);
