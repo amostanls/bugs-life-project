@@ -78,6 +78,7 @@ public class Controller implements Initializable {
         Pane view = new FxmlLoader().getPage("settings");
         mainPane.setCenter(view);
         new FadeInRight(view).play();
+
     }
 
     @FXML

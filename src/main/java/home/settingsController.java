@@ -91,6 +91,7 @@ public class settingsController implements Initializable {
             priviledgeDisplay.setText("Admin");
             enableAdminFunction(true);
 
+
         } else {
             priviledgeDisplay.setText("Regular User");
             enableAdminFunction(false);
