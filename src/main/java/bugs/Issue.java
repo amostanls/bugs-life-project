@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  *
@@ -222,5 +224,12 @@ public class Issue implements Serializable {
 
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+    }
+
+    public boolean equal(Issue anotherIssue) {
+        if (this.getId() == anotherIssue.getId()) {
+            return true;
+        }
+        return false;
     }
 }
