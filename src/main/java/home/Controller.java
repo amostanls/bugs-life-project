@@ -1,5 +1,8 @@
 package home;
 
+import animatefx.animation.FadeIn;
+import animatefx.animation.FadeInLeft;
+import animatefx.animation.FadeInRight;
 import bugs.MySQLOperation;
 import bugs.Project;
 import bugs.User;
@@ -51,18 +54,28 @@ public class Controller implements Initializable {
     void overview(ActionEvent event) throws IOException {
         Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
+        new FadeInLeft(view).play();
     }
 
     @FXML
     void search(MouseEvent event) {
         Pane view = new FxmlLoader().getPage("search");
         mainPane.setCenter(view);
+        new FadeInLeft(view).play();
+    }
+
+    @FXML
+    void changeLog(MouseEvent event) {
+        Pane view = new FxmlLoader().getPage("changeLog");
+        mainPane.setCenter(view);
+        new FadeInLeft(view).play();
     }
 
     @FXML
     void settings(MouseEvent event) {
         Pane view = new FxmlLoader().getPage("settings");
         mainPane.setCenter(view);
+        new FadeInLeft(view).play();
     }
 
     @FXML
@@ -81,11 +94,13 @@ public class Controller implements Initializable {
     static void switchToIssues() throws IOException {
         Pane view = new FxmlLoader().getPage("issue");
         staticBorderPane.setCenter(view);
+        new FadeInRight(view).setSpeed(2).play();
     }
 
     static void switchToComment() {
         Pane view = new FxmlLoader().getPage("comment");
         staticBorderPane.setCenter(view);
+        new FadeInRight(view).setSpeed(2).play();
     }
 
     @Override

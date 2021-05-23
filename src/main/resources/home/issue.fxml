@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issuesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issuesController">
    <children>
       <Label layoutX="57.0" layoutY="38.0" prefHeight="40.0" prefWidth="152.0" text="Issues Page">
          <font>
@@ -40,6 +40,9 @@
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
                   </JFXToggleButton>
                </children>
             </HBox>
@@ -58,16 +61,16 @@
             </TextField>
          </children>
       </HBox>
-      <TableView fx:id="issueTable" layoutX="57.0" layoutY="178.0" onMouseClicked="#switchToComment" prefHeight="532.0" prefWidth="1030.0">
+      <TableView fx:id="issueTable" layoutX="57.0" layoutY="178.0" onMouseClicked="#switchToComment" prefHeight="532.0" prefWidth="1030.0" stylesheets="@tablestyle.css">
          <columns>
             <TableColumn fx:id="issueId" prefWidth="50.0" text="ID" />
-            <TableColumn fx:id="issueTitle" prefWidth="146.0" text="Title" />
-            <TableColumn fx:id="issueStatus" prefWidth="76.0" text="Status" />
-            <TableColumn fx:id="issueTag" prefWidth="77.0" text="Tag" />
-            <TableColumn fx:id="issuePriority" minWidth="7.0" prefWidth="67.0" text="Priority" />
-            <TableColumn fx:id="issueTime" minWidth="0.0" prefWidth="44.0" text="Time" />
-            <TableColumn fx:id="issueAssignee" prefWidth="84.0" text="Assignee" />
-            <TableColumn fx:id="issueCreatedBy" minWidth="7.0" prefWidth="109.0" text="Created By" />
+            <TableColumn fx:id="issueTitle" prefWidth="206.0" text="Title" />
+            <TableColumn fx:id="issueStatus" minWidth="0.0" prefWidth="105.0" text="Status" />
+            <TableColumn fx:id="issueTag" prefWidth="102.0" text="Tag" />
+            <TableColumn fx:id="issuePriority" minWidth="7.0" prefWidth="138.0" text="Priority" />
+            <TableColumn fx:id="issueTime" minWidth="0.0" prefWidth="182.0" text="Time" />
+            <TableColumn fx:id="issueAssignee" prefWidth="116.0" text="Assignee" />
+            <TableColumn fx:id="issueCreatedBy" minWidth="7.0" prefWidth="130.0" text="Created By" />
          </columns>
       </TableView>
    </children>

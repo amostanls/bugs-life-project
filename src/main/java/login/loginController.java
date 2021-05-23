@@ -1,5 +1,8 @@
 package login;
 
+import animatefx.animation.FadeIn;
+import animatefx.animation.FadeInRight;
+import animatefx.animation.SlideInRight;
 import bugs.MySQLOperation;
 import bugs.User;
 import home.Controller;
@@ -15,11 +18,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.*;
+
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -48,11 +49,11 @@ public class loginController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
-
+        //new FadeInRight(root).play();
     }
 
     @FXML
-    void setEnterBtn(ActionEvent event) throws InterruptedException {
+    void setEnterBtn(ActionEvent event) {
         String username=usernameField.getText();
 
         String password= passwordField.getText();
@@ -91,6 +92,7 @@ public class loginController implements Initializable {
                     stage.setResizable(false);
                     stage.setScene(new Scene(root));
                     stage.show();
+
                 }catch(IOException e){
                     Logger.getLogger(main.class.getName()).log(Level.SEVERE,null,e);
                 }

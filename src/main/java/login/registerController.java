@@ -1,7 +1,7 @@
 package login;
 
 import bugs.MySQLOperation;
-import bugs.User;
+
 import com.jfoenix.controls.JFXButton;
 import home.Controller;
 import home.main;
@@ -28,9 +28,9 @@ public class registerController implements Initializable {
     @FXML
     private ChoiceBox<String> userTypeSelection;
 
-    private String[] userType={"Regular User","Admin"};
+    private final String[] userType={"Regular User","Admin"};
     private boolean isAdmin=false;
-    private String secretCode="bugs";
+    private final String secretCode="bugs";
 
     @FXML
     private TextField usernameField;
@@ -73,7 +73,7 @@ public class registerController implements Initializable {
         String password= passwordField.getText();
         String confirmPassword=passwordConfirmField.getText();
         String secret=null;
-        if(isAdmin==true)secret=secretField.getText();
+        if(isAdmin)secret=secretField.getText();
 
         //String sha256hex = DigestUtils.sha256Hex(password);
 
@@ -95,14 +95,14 @@ public class registerController implements Initializable {
             alert.setContentText("Password must be the same");
             alert.showAndWait();
         }
-        else if(isAdmin==true && secret.isEmpty()){
+        else if(isAdmin && secret.isEmpty()){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please fill in the secret code");
             alert.showAndWait();
         }
-        else if((isAdmin==true && !secret.equals(secretCode))){
+        else if((isAdmin && !secret.equals(secretCode))){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Wrong secret code");

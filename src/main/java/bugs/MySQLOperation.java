@@ -136,9 +136,18 @@ CONSTRAINT pic_fk
 public class MySQLOperation {
 
     public static Connection getConnection() throws Exception {
+        //Local Database(Local Host)
+        /*final String user = "root";
+        final String pass = "";
+        final String path = "jdbc:mysql://localhost:3306/bugs-life?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
+
+
+        // Online Database
+
         final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
         final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
+
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
         Connection myConn = DriverManager.getConnection(path, user, pass);
