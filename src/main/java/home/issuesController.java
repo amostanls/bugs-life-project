@@ -8,6 +8,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,11 +19,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -36,7 +40,10 @@ import static home.Controller.getSelectedProjectId;
 
 
 public class issuesController implements Initializable {
-    //ObservableList<Issue> issueList = FXCollections.observableArrayList();
+    ObservableList<Issue> issueList = null;
+
+    @FXML
+    private TextField issueSearch;
 
     @FXML
     private TableView<Issue> issueTable;
@@ -71,7 +78,7 @@ public class issuesController implements Initializable {
     @FXML
     private JFXToggleButton isEditToggle;
 
-    private boolean isEditing=false;
+    private boolean isEditing = false;
 
     @FXML
     void getAddView(MouseEvent event) {
@@ -88,7 +95,7 @@ public class issuesController implements Initializable {
         }
     }
 
-    void getEditView(){
+    void getEditView() {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource("issue_edit.fxml"));
             Scene scene = new Scene(parent);
@@ -106,17 +113,17 @@ public class issuesController implements Initializable {
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
         Controller.updateTable();
-        JOptionPane.showMessageDialog(null,"Refresh Completed");
+        JOptionPane.showMessageDialog(null, "Refresh Completed");
         setIssueTable();
     }
 
 
     public void switchToComment(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
-            int selectedIssue=issueTable.getSelectionModel().getSelectedItem().getId();
+            int selectedIssue = issueTable.getSelectionModel().getSelectedItem().getId();
             //System.out.println(selectedIssue);
             Controller.setSelectedIssueId(selectedIssue);
-            if(isEditing==false) Controller.switchToComment();
+            if (isEditing == false) Controller.switchToComment();
             else getEditView();
 
 
@@ -126,10 +133,10 @@ public class issuesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isEditToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(isEditToggle.isSelected()==true){
-                isEditing=true;
-            }else{
-                isEditing=false;
+            if (isEditToggle.isSelected() == true) {
+                isEditing = true;
+            } else {
+                isEditing = false;
             }
         });
         issueId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -145,11 +152,60 @@ public class issuesController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        searchIssues();
     }
 
-    public void setIssueTable() throws Exception{
-        ObservableList<Issue> issueList = FXCollections.observableArrayList(getFinalProjectList().get(getSelectedProjectId()-1).getIssues());
+    public void setIssueTable() throws Exception {
+        issueList = FXCollections.observableArrayList(getFinalProjectList().get(getSelectedProjectId() - 1).getIssues());
         issueTable.setItems(issueList);
+    }
+
+    public void searchIssues() {
+        // Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Issue> filteredData = new FilteredList<>(issueList, b -> true);
+
+        // 2. Set the filter Predicate whenever the filter changes.
+        issueSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(issue -> {
+                // If filter text is empty, display all persons.
+
+                if (newValue == null || newValue.isEmpty()) return true;
+
+                // Compare first name and last name of every person with filter text.
+                String queryString = newValue.toString();
+
+                if (String.valueOf(issue.getId()).indexOf(queryString) != -1) {
+                    System.out.println();
+                    return true;
+                } else if (FuzzySearch.tokenSetPartialRatio(issue.getTitle(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getTitle(), queryString) > 60) {
+                    return true;
+                } else if (String.valueOf(issue.getPriority()).indexOf(queryString) != -1)
+                    return true;
+                else if (FuzzySearch.tokenSetPartialRatio(issue.getStatus(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getStatus(), queryString) > 60) {
+                    return true;
+                } else if (FuzzySearch.tokenSetPartialRatio(issue.getTags(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getTags(), queryString) > 60) {
+                    return true;
+                } else if (FuzzySearch.tokenSetPartialRatio(issue.getDescriptionText(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getDescriptionText(), queryString) > 60) {
+                    return true;
+                } else if (FuzzySearch.tokenSetPartialRatio(issue.getCreatedBy(), queryString) > 90 || FuzzySearch.tokenSortPartialRatio(issue.getCreatedBy(), queryString) > 90) {
+                    return true;
+                } else if (FuzzySearch.tokenSetPartialRatio(issue.getAssignee(), queryString) > 90 || FuzzySearch.tokenSortPartialRatio(issue.getAssignee(), queryString) > 90) {
+                    return true;
+                } else
+                    return false; // Does not match.
+            });
+        });
+
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<Issue> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        // 	  Otherwise, sorting the TableView would have no effect.
+        sortedData.comparatorProperty().bind(issueTable.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        issueTable.setItems(sortedData);
+
     }
 
 }

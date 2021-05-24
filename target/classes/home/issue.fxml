@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issuesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issuesController">
    <children>
       <Label layoutX="57.0" layoutY="38.0" prefHeight="40.0" prefWidth="152.0" text="Issues Page">
          <font>
@@ -54,10 +54,13 @@
                   <Insets left="20.0" />
                </HBox.margin>
             </ImageView>
-            <TextField prefHeight="61.0" prefWidth="246.0">
+            <TextField fx:id="issueSearch" prefHeight="61.0" prefWidth="246.0" promptText="Search here">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
             </TextField>
          </children>
       </HBox>

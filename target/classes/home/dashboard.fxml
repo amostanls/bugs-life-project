@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.projectController">
+<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.projectController">
    <children>
       <Label layoutX="63.0" layoutY="35.0" prefHeight="40.0" prefWidth="152.0" text="DashBoard">
          <font>
@@ -50,10 +50,13 @@
                   <Insets left="20.0" />
                </HBox.margin>
             </ImageView>
-            <TextField prefHeight="61.0" prefWidth="167.0">
+            <TextField fx:id="searchBox" prefHeight="61.0" prefWidth="167.0" promptText="Search here">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
             </TextField>
          </children>
       </HBox>
