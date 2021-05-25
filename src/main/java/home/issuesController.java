@@ -191,6 +191,8 @@ public class issuesController implements Initializable {
                     return true;
                 } else if (FuzzySearch.tokenSetPartialRatio(issue.getAssignee(), queryString) > 90 || FuzzySearch.tokenSortPartialRatio(issue.getAssignee(), queryString) > 90) {
                     return true;
+                } else if (FuzzySearch.tokenSetPartialRatio(issue.commentsAsString(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.commentsAsString(), queryString) > 60) {
+                    return true;
                 } else
                     return false; // Does not match.
             });

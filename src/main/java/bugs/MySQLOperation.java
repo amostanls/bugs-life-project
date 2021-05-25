@@ -124,7 +124,7 @@ public class MySQLOperation {
 
     public static Connection getConnection() throws Exception {
         //Local Database(Local Host)
-       /* final String user = "root";
+        /*final String user = "root";
         final String pass = "";
         final String path = "jdbc:mysql://localhost:3306/bugs-life?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
 
