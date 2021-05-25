@@ -1596,7 +1596,7 @@ public class MySQLOperation {
                 int version_id = myRs.getInt("version_id");
                 String name = myRs.getString("name");
                 Timestamp originalTime = myRs.getTimestamp("originalTime");
-                List<Issue_History> issue_histories = getIssueHistoryList(myConn, id);
+                ArrayList<Issue_History> issue_histories = getIssueHistoryList(myConn, id);
                 projectList.add(new Project_History(id, version_id, name, originalTime, issue_histories));
             }
 

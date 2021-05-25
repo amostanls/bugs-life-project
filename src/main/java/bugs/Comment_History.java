@@ -42,14 +42,6 @@ public class Comment_History {
         this.text = text;
     }
 
-    public ArrayList<React> getReact() {
-        return react;
-    }
-
-    public void setReact(ArrayList<React> react) {
-        this.react = react;
-    }
-
     public Timestamp getTimestamp() {
         return timestamp;
     }

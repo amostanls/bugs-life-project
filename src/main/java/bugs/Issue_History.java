@@ -87,14 +87,6 @@ public class Issue_History {
         this.tag = tag;
     }
 
-    public String getTagAsString() {
-        return tagAsString;
-    }
-
-    public void setTagAsString(String tagAsString) {
-        this.tagAsString = tagAsString;
-    }
-
     public String getDescriptionText() {
         return descriptionText;
     }
