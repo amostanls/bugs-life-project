@@ -599,8 +599,9 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            myRs.next();
-            return myRs.getInt("issue_id");
+            if (myRs.next()) {
+                return myRs.getInt("issue_id");
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -621,7 +622,7 @@ public class MySQLOperation {
             }
         }
 
-        return -1;
+        return 0;
     }
 
     //get particular issue using id
@@ -859,8 +860,9 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            myRs.next();
-            return myRs.getInt("userid");
+            if(myRs.next()) {
+                return myRs.getInt("userid");
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -881,7 +883,7 @@ public class MySQLOperation {
             }
         }
 
-        return -1;
+        return 0;
     }
 
     private static int getLastCommentID(Connection myConn, int project_id, int issue_id) {
@@ -896,8 +898,9 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            myRs.next();
-            return myRs.getInt("comment_id");
+            if(myRs.next()) {
+                return myRs.getInt("comment_id");
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -918,7 +921,7 @@ public class MySQLOperation {
             }
         }
 
-        return -1;
+        return 0;
     }
 
     public static ArrayList<React> getReactList(Connection myConn, int project_id, int issue_id, int comment_id) {
@@ -1308,6 +1311,8 @@ public class MySQLOperation {
 
         try {
             myConn = getConnection();
+
+            //create new comment row
             String SQL_CREATE_ISSUE = "INSERT INTO comments(project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?,?,?,?,?,?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_ISSUE);
             pstmt.setInt(1, project_id);
@@ -1317,6 +1322,27 @@ public class MySQLOperation {
             pstmt.setTimestamp(5, comment_timestamp);
             pstmt.setString(6, username);
             pstmt.execute();
+
+            //create new react angry row for the comment
+            String SQL_CREATE_REACT_ANGRY = "INSERT INTO react(project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)";
+            pstmt = myConn.prepareStatement(SQL_CREATE_REACT_ANGRY);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.setInt(3, comment_id);
+            pstmt.setString(4, "angry");
+            pstmt.setInt(5,0);
+            pstmt.execute();
+
+            //create new react happy row for the comment
+            String SQL_CREATE_REACT_HAPPY = "INSERT INTO react(project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)";
+            pstmt = myConn.prepareStatement(SQL_CREATE_REACT_HAPPY);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.setInt(3, comment_id);
+            pstmt.setString(4, "happy");
+            pstmt.setInt(5,0);
+            pstmt.execute();
+
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -1571,8 +1597,7 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            List<Project> projects = getProjectList(myConn);
-            exportJavaObjectAsJson(myConn, projects.get(0), "Projects");
+            createComment(myConn, 1, 1, "jhoe", "i love this !");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
