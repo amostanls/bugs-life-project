@@ -1587,7 +1587,7 @@ public class MySQLOperation {
         List<Project_History> projectList = new ArrayList<>();
 
         try {
-            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects_history ORDER BY originalTime DESC";
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects_history WHERE project_id = '\" + project_id + \"' ORDER BY originalTime DESC";
             stmt = myConn.createStatement();
             myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
             //get parameter for creating issue object
@@ -1596,8 +1596,7 @@ public class MySQLOperation {
                 int version_id = myRs.getInt("version_id");
                 String name = myRs.getString("name");
                 Timestamp originalTime = myRs.getTimestamp("originalTime");
-                ArrayList<Issue_History> issue_histories = getIssueHistoryList(myConn, id);
-                projectList.add(new Project_History(id, version_id, name, originalTime, issue_histories));
+                projectList.add(new Project_History(id, version_id, name, originalTime));
             }
 
         } catch (Exception ex) {
@@ -1621,19 +1620,19 @@ public class MySQLOperation {
         return projectList;
     }
 
-    public static ArrayList<Issue_History> getIssueHistoryList(Connection myConn, int project_id) {
+    public static ArrayList<Issue_History> getIssueHistoryList(Connection myConn, int project_id, int issue_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         ArrayList<Issue_History> issueList = new ArrayList<>();
 
         try {
-            String SQL_GET_ISSUE_HISTORY_LIST = "SELECT * FROM issues_history WHERE project_id = ? ORDER BY issue_timestamp DESC";
+            String SQL_GET_ISSUE_HISTORY_LIST = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY issue_timestamp DESC";
             pstmt = myConn.prepareStatement(SQL_GET_ISSUE_HISTORY_LIST);
             pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
             myRs = pstmt.executeQuery();
             //get parameter for creating issue object
             while (myRs.next()) {
-                int issue_id = myRs.getInt("issue_id");
                 int version_id = myRs.getInt("version_id");
                 String title = myRs.getString("title");
                 int priority = myRs.getInt("priority");
@@ -1643,8 +1642,7 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                ArrayList<Comment_History> comments = getCommentHistoryList(myConn, project_id, issue_id);
-                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
                 issueList.add(newIssueHistory);
             }
 
@@ -1670,20 +1668,20 @@ public class MySQLOperation {
         return issueList;
     }
 
-    public static ArrayList<Comment_History> getCommentHistoryList(Connection myConn, int project_id, int issue_id) {
+    public static ArrayList<Comment_History> getCommentHistoryList(Connection myConn, int project_id, int issue_id, int comment_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         ArrayList<Comment_History> commentList = new ArrayList<>();
 
         try {
-            String SQL_GET_COMMENT_HISTORY_LIST = "SELECT * FROM comments_history WHERE project_id = ? AND issue_id = ? ORDER BY comment_timestamp DESC";
+            String SQL_GET_COMMENT_HISTORY_LIST = "SELECT * FROM comments_history WHERE project_id = ? AND issue_id = ? AND comment_id = ? ORDER BY comment_timestamp DESC";
             pstmt = myConn.prepareStatement(SQL_GET_COMMENT_HISTORY_LIST);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
+            pstmt.setInt(3, comment_id);
             myRs = pstmt.executeQuery();
             //get parameter for creating issue object
             while (myRs.next()) {
-                int comment_id = myRs.getInt("comment_id");
                 int version_id = myRs.getInt("version_id");
                 String text = myRs.getString("text");
                 Timestamp timestamp = myRs.getTimestamp("comment_timestamp");
@@ -1731,7 +1729,11 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            createComment(myConn, 1, 1, "jhoe", "i love this !");
+            List<Project_History> ph = getProjectHistoryList(myConn, 2);
+            List<Issue_History> ih = getIssueHistoryList(myConn, 1,1);
+            System.out.println(ih.get(0).getDescriptionText());
+            System.out.println(ih.get(1).getDescriptionText());
+            System.out.println(ih.get(2).getDescriptionText());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -22,6 +22,7 @@ public class Project implements Serializable {
     private String name;
     private ArrayList<Issue> issues;
     private Timestamp project_timestamp;
+    private ArrayList<Project_History> project_histories;
     private int issuesNumber;
     private int len_id = 2;
     private int len_title = 5;

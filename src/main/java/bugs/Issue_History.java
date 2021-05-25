@@ -14,9 +14,8 @@ public class Issue_History {
     private String descriptionText;
     private String createdBy, assignee;
     private Timestamp timestamp;
-    private ArrayList<Comment_History> comment_historyArrayList;
 
-    public Issue_History(int project_id, int id, int version_id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, ArrayList<Comment_History> comment_historyArrayList) {
+    public Issue_History(int project_id, int id, int version_id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp) {
         this.project_id = project_id;
         this.id = id;
         this.version_id = version_id;
@@ -28,7 +27,6 @@ public class Issue_History {
         this.createdBy = createdBy;
         this.assignee = assignee;
         this.timestamp = timestamp;
-        this.comment_historyArrayList = comment_historyArrayList;
     }
 
     public int getProject_id() {
@@ -117,13 +115,5 @@ public class Issue_History {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public ArrayList<Comment_History> getComment_historyArrayList() {
-        return comment_historyArrayList;
-    }
-
-    public void setComment_historyArrayList(ArrayList<Comment_History> comment_historyArrayList) {
-        this.comment_historyArrayList = comment_historyArrayList;
     }
 }

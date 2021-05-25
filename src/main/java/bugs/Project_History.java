@@ -8,14 +8,12 @@ public class Project_History {
     private int version_id;
     private String name;
     private Timestamp originalTime;
-    private ArrayList<Issue_History> issue_histories;
 
-    public Project_History(int project_id, int version_id, String name, Timestamp originalTime, ArrayList<Issue_History> issue_histories) {
+    public Project_History(int project_id, int version_id, String name, Timestamp originalTime) {
         this.project_id = project_id;
         this.version_id = version_id;
         this.name = name;
         this.originalTime = originalTime;
-        this.issue_histories = issue_histories;
     }
 
     public int getProject_id() {
@@ -48,13 +46,5 @@ public class Project_History {
 
     public void setOriginalTime(Timestamp originalTime) {
         this.originalTime = originalTime;
-    }
-
-    public ArrayList<Issue_History> getIssue_histories() {
-        return issue_histories;
-    }
-
-    public void setIssue_histories(ArrayList<Issue_History> issue_histories) {
-        this.issue_histories = issue_histories;
     }
 }
