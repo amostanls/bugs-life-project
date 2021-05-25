@@ -1,11 +1,9 @@
 package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.concurrent.Task;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -139,6 +137,26 @@ public class MySQLOperation {
         Class.forName(driver);
         Connection myConn = DriverManager.getConnection(path, user, pass);
         return myConn;
+    }
+
+    public static void exportJavaObjectsAsJson(Connection myConn, List<?> objects, String fileName){
+        fileName += ".json";
+        ObjectMapper om = Json.getDefaultOM();
+        try {
+            om.writerWithDefaultPrettyPrinter().writeValue(new File(fileName), objects);
+        } catch (IOException ex) {
+            Logger.getLogger(Json.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void exportJavaObjectAsJson(Connection myConn, Object objects, String fileName){
+        fileName += ".json";
+        ObjectMapper om = Json.getDefaultOM();
+        try {
+            om.writerWithDefaultPrettyPrinter().writeValue(new File(fileName), objects);
+        } catch (IOException ex) {
+            Logger.getLogger(Json.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
@@ -1553,8 +1571,8 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            List<Issue> issues = searchIssue(myConn, 1, "this");
-            displayIssue(issues);
+            List<Project> projects = getProjectList(myConn);
+            exportJavaObjectAsJson(myConn, projects.get(0), "Projects");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

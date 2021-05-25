@@ -15,7 +15,7 @@ public class Json {
 
     private static ObjectMapper om = getDefaultOM();
 
-    private static ObjectMapper getDefaultOM() {
+    public static ObjectMapper getDefaultOM() {
         ObjectMapper defaultOM = new ObjectMapper();
         defaultOM.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return defaultOM;
