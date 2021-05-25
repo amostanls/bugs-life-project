@@ -139,7 +139,7 @@ public class MySQLOperation {
         return myConn;
     }
 
-    public static void exportJavaObjectsAsJson(Connection myConn, List<?> objects, String fileName){
+    public static void exportJavaObjectsAsJson(Connection myConn, List objects, String fileName){
         fileName += ".json";
         ObjectMapper om = Json.getDefaultOM();
         try {
