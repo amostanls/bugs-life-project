@@ -73,27 +73,6 @@ public class util {
         }
     }
 
-    private final String[] emojis={"happy", "sad", "angry"};
-//    public String reacting(String reacted){
-//        String res = null;
-//        ArrayList<String>tmp = new ArrayList<>();
-//        for(int i=0; i<emojis.length; i++)if(!emojis[i].equals(reacted))tmp.add(emojis[i]);
-//        tmp.add("0. Go Back");
-//        for(int i=0; i<tmp.size(); i++) {
-//            tmp.add(String.format("%d. %s", i+1, tmp.get(i)));
-//        }
-//        int ind = choice0(tmp.size());
-//        if(ind>0) {
-//            res = choices.get(choices.size()-1).get(ind);
-//        }
-//        choices.remove(choices.size()-1);
-//        return res;
-//    };
-
-    public void react() {
-
-    }
-
     public static int choice0(int len, boolean withchoices, boolean zero) {
         Scanner in = new Scanner(System.in);
         while(true){
@@ -197,10 +176,6 @@ public class util {
         return s.equals("*****");
     }
 
-    public String[] getEmojis() {
-        return emojis;
-    }
-
     public static void addChoices(String[] Choices) {
         ArrayList<String>tmp = new ArrayList<>();
         for(int i=0; i<Choices.length; i++)tmp.add(Choices[i]);
@@ -250,5 +225,14 @@ public class util {
         Scanner in = new Scanner(System.in);
         System.out.println("Press any key to continue.");
         in.nextLine();
+    }
+
+    public static boolean match(String x, String y) {
+        int lenx = x.length();
+        int leny = y.length();
+        for(int i=0; i<leny-lenx+1; i++) {
+            if(y.substring(i,i+lenx).equalsIgnoreCase(x))return true;
+        }
+        return false;
     }
 }
