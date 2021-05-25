@@ -1,9 +1,7 @@
 package bugs;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 import java.io.*;
 import static bugs.util.*;
 import static bugs.Page_comment.*;
@@ -15,7 +13,7 @@ public class Page_issue {
     public static void issue_page() {
         String c=null;
         do {
-            c = ask(0, "Enter\n'r' to react\nor 'c' to comment\nor '0' to go back.\nor 'help' for more commands: ", issue.toString(), false);
+            c = ask(0, "Enter 'c' to comment\nor 'r' to react\nor 's' to search\nor '0' to go back.\nor 'help' for more commands: ", issue.toString(), true);
             if(c.equals("r")) {
                 //react, select which comment to react first
                 if(issue.getComments().isEmpty()) {
@@ -28,13 +26,41 @@ public class Page_issue {
                 if(choice>0)Reacting(choice);
             }else if(c.equals("c")) {
                 createComment();
-            }else if(c.equals("help")){
+            }else if(c.equals("s")){
+                if(issue.getComments().isEmpty()) {
+                    System.out.println("There is no comments found in this issue.\nCreate one before searching.");
+                    prompt_any();
+                    continue;
+                }
+                System.out.print("Search Text: ");
+                String x = new Scanner(System.in).nextLine();
+                ArrayList<Integer> indices = search(x);
+                System.out.println(issue.commentstoString(indices));
+                prompt_any();
+            }else if(c.equals("help")) {
 
             }else {
                 //confirm this is 0
                 return;
             }
         }while(true);
+    }
+
+    public static ArrayList search(String word) {
+        ArrayList<Integer>indices = new ArrayList<>();
+        ArrayList<Comment>comments = issue.getComments();
+        for(int i=0; i<comments.size(); i++) {
+            Comment tmp = comments.get(i);
+            if(match(word,tmp.getText())) {
+                indices.add(i);
+                continue;
+            }
+            if(match(word,tmp.getUser())) {
+                indices.add(i);
+                continue;
+            }
+        }
+        return indices;
     }
 
     //priority from 1-9

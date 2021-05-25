@@ -94,6 +94,16 @@ public class Issue implements Serializable {
         return res;
     }
 
+    public String commentstoString(ArrayList<Integer>indices) {
+        String res = "";
+        res += String.format("%s\n%s\n", "Comments",
+                "---------");
+        for(int i=0; i<indices.size(); i++) {
+            res += String.format("%s%d \t\t\t %s\n", "#", indices.get(i)+1, comments.get(indices.get(i)));
+        }
+        return res;
+    }
+
     public String printHeader(){
         String res = "";
         res += String.format("%s %d \t\t\t %s %s\n", "Issue ID:", id, "Status:", status);
