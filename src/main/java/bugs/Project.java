@@ -124,6 +124,71 @@ public class Project implements Serializable {
         return res;
     }
 
+    public String issueBoardSearch(ArrayList<Integer>list) {
+
+        String res = "Issue board\n";
+        res += "+";
+        res += minus_plus(len_id+2);
+        res += minus_plus(len_title+2);
+        res += minus_plus(len_status+2);
+        res += minus_plus(len_tag+2);
+        res += minus_plus(len_priority+2);
+        res += minus_plus(len_time+2);
+        res += minus_plus(len_assignee+2);
+        res += minus_plus(len_createdby+2);
+        res += "\n";
+
+        res += "|";
+        res += centre(len_id,"ID");
+        res += centre(len_title,"Title");
+        res += centre(len_status,"Status");
+        res += centre(len_tag, "Tag");
+        res += centre(len_priority, "Priority");
+        res += centre(len_time, "Time");
+        res += centre(len_assignee, "Assignee");
+        res += centre(len_createdby, "CreatedBy");
+        res += "\n";
+
+        res += "+";
+        res += minus_plus(len_id+2);
+        res += minus_plus(len_title+2);
+        res += minus_plus(len_status+2);
+        res += minus_plus(len_tag+2);
+        res += minus_plus(len_priority+2);
+        res += minus_plus(len_time+2);
+        res += minus_plus(len_assignee+2);
+        res += minus_plus(len_createdby+2);
+        res += "\n";
+
+        for(int i=0; i<list.size(); i++) {
+            Issue cur = issues.get(list.get(i));
+            String tmp = "|";
+            tmp += right(len_id,i+1);
+            tmp += left(len_title,cur.getTitle());
+            tmp += left(len_status,cur.getStatus());
+            tmp += left(len_tag, cur.getTags());
+            tmp += right(len_priority, cur.getPriority());
+            tmp += centre(len_time, cur.getTime());
+            tmp += left(len_assignee, cur.getAssignee());
+            tmp += left(len_createdby,cur.getCreatedBy());
+            tmp += "\n";
+            res += tmp;
+        }
+
+        res += "+";
+        res += minus_plus(len_id+2);
+        res += minus_plus(len_title+2);
+        res += minus_plus(len_status+2);
+        res += minus_plus(len_tag+2);
+        res += minus_plus(len_priority+2);
+        res += minus_plus(len_time+2);
+        res += minus_plus(len_assignee+2);
+        res += minus_plus(len_createdby+2);
+        res += "\n";
+
+        return res;
+    }
+
     public int getIssuesNumber() {
         return issuesNumber;
     }

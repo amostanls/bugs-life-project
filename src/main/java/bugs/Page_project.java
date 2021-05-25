@@ -1,7 +1,9 @@
 package bugs;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -21,7 +23,19 @@ public class Page_project {
                     prompt_any();
                     continue;
                 }
-                System.out.println("search");
+                System.out.print("Search Text: ");
+                String x = new Scanner(System.in).nextLine();
+                ArrayList<Integer>indices = search(x);
+                System.out.println(project.issueBoardSearch(indices));
+                System.out.print("Enter selected issue ID to check issue\nor '0' to go back: ");
+                int choice = choice0(indices.size(), false, true);
+                if(choice==0) {
+                    continue;
+                }else {
+                    setIssueid(indices.get(choice-1));
+                    issue = (Issue) project.getIssues().get(issueid);
+                    Page_issue.issue_page();
+                }
             }else if(c.equals("c")) {
                 //create issue
                 createIssue();
@@ -59,6 +73,45 @@ public class Page_project {
         len_id=Math.max(len_id, Integer.toString(projects.size()).length());
         len_name=Math.max(len_name, tmp.getName().length());
         len_issues=Math.max(len_issues, Integer.toString(tmp.getIssues().size()).length());
+    }
+
+    //search function
+    public static ArrayList search(String word) {
+        ArrayList<Integer>indices = new ArrayList<>();
+        ArrayList<Issue>issues = project.getIssues();
+        for(int i=0; i<issues.size(); i++) {
+            Issue tmp = issues.get(i);
+            if(match(word, tmp.getTitle())) {
+                indices.add((Integer) i);
+                continue;
+            }
+
+            if(match(word, tmp.getStatus())) {
+                indices.add((Integer) i);
+                continue;
+            }
+
+            if(match(word, tmp.getCreatedBy())) {
+                indices.add((Integer) i);
+                continue;
+            }
+
+            if(match(word, tmp.getAssignee())) {
+                indices.add((Integer) i);
+                continue;
+            }
+
+            if(match(word, tmp.getTags())) {
+                indices.add((Integer) i);
+                continue;
+            }
+
+            if(match(word, tmp.getDescriptionText())) {
+                indices.add((Integer) i);
+                continue;
+            }
+        }
+        return indices;
     }
 
     private static int len_id = 2;

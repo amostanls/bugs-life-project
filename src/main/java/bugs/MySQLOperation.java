@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 SHOW DATABASES;
 USE 5peJ8pFLLQ;
 SHOW TABLES;
-
 SELECT * FROM projects;
 SELECT * FROM issues;
 SELECT * FROM comments;
@@ -35,7 +34,6 @@ SELECT * FROM users;
 SELECT * FROM projects_history;
 SELECT * FROM issues_history;
 SELECT * FROM comments_history;
-
 DROP TABLE projects_history;
 DROP TABLE issues_history;
 DROP TABLE comments_history;
@@ -44,12 +42,10 @@ DROP TABLE issues;
 DROP TABLE comments;
 DROP TABLE react;
 DROP TABLE users;
-
 CREATE TABLE projects (
 project_id INT PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(20) NOT NULL,
 project_timestamp TIMESTAMP NOT NULL);
-
 CREATE TABLE issues (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -62,7 +58,6 @@ descriptionText VARCHAR(500),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
 issue_timestamp TIMESTAMP);
-
 CREATE TABLE comments (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -71,7 +66,6 @@ PRIMARY KEY (project_id, issue_id, comment_id),
 text VARCHAR(250),
 comment_timestamp TIMESTAMP,
 user VARCHAR(25));
-
 CREATE TABLE react (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -79,17 +73,14 @@ comment_id INT NOT NULL,
 reaction VARCHAR(10),
 PRIMARY KEY (project_id, issue_id, comment_id, reaction),
 count INT);
-
 CREATE TABLE users (
 userid INT,
 username VARCHAR(25),
 password VARCHAR(25),
 admin boolean
 );
-
 ALTER TABLE users ADD UNIQUE(userid);
 ALTER TABLE users ADD UNIQUE(username);
-
 CREATE TABLE projects_history (
 project_id INT NOT NULL,
 version_id INT UNIQUE AUTO_INCREMENT,
@@ -100,7 +91,6 @@ CONSTRAINT project_id_fk
     FOREIGN KEY profile_id_fkx (project_id)
     REFERENCES projects(project_id)
 );
-
 CREATE TABLE issues_history (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -118,7 +108,6 @@ CONSTRAINT pi_fk
     FOREIGN KEY pi_fk (project_id, issue_id)
     REFERENCES issues (project_id, issue_id)
 );
-
 CREATE TABLE comments_history (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -136,9 +125,16 @@ CONSTRAINT pic_fk
 public class MySQLOperation {
 
     public static Connection getConnection() throws Exception {
+        //Local Database(Local Host)
+       /* final String user = "root";
+        final String pass = "";
+        final String path = "jdbc:mysql://localhost:3306/bugs-life?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
+
+        // Online Database
         final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
         final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
+
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
         Connection myConn = DriverManager.getConnection(path, user, pass);
@@ -1112,6 +1108,42 @@ public class MySQLOperation {
         }
     }
 
+    public static void updatePassword(Connection myConn, User user, String newPassword) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            String SQL_UPDATE_PROJECTS = "UPDATE users SET password = ? WHERE username = ? AND userid=?";
+
+            //update table users
+            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
+            pstmt.setString(1, newPassword);
+
+            pstmt.setString(2, user.getUsername());
+            pstmt.setInt(3, user.getUserid());
+            pstmt.execute();
+            System.out.println(newPassword+" "+user.getUsername()+" "+user.getUserid());
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static User showLoginPage(Connection myConn) {
         Scanner sc = new Scanner(System.in);
         User newUser = null;
@@ -1448,7 +1480,7 @@ public class MySQLOperation {
             }
         }
 
-        if (requiredComment.getUser().equals(user.getName())) {
+        if (requiredComment.getUser().equals(user.getUsername())) {
             isOwner = true;
         }
 
@@ -1521,7 +1553,7 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            List<Issue> issues = searchIssue(myConn,1,"this");
+            List<Issue> issues = searchIssue(myConn, 1, "this");
             displayIssue(issues);
         } catch (Exception e) {
             e.printStackTrace();
