@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -78,7 +79,15 @@ public class issuesController implements Initializable {
     @FXML
     private JFXToggleButton isEditToggle;
 
+    @FXML
+    private ToggleGroup tgIssue;
+
+    @FXML
+    private JFXToggleButton changeLogToggle;
+
+
     private boolean isEditing = false;
+    private boolean isChange = false;
 
     @FXML
     void getAddView(MouseEvent event) {
@@ -95,9 +104,24 @@ public class issuesController implements Initializable {
         }
     }
 
+    @FXML
     void getEditView() {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource("issue_edit.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void getChangeLogView() {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("issue_history.fxml"));
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
@@ -117,14 +141,15 @@ public class issuesController implements Initializable {
         setIssueTable();
     }
 
-
-    public void switchToComment(MouseEvent event) throws IOException {
+    @FXML
+    void switchToComment(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedIssue = issueTable.getSelectionModel().getSelectedItem().getId();
             //System.out.println(selectedIssue);
             Controller.setSelectedIssueId(selectedIssue);
-            if (isEditing == false) Controller.switchToComment();
-            else getEditView();
+            if (isEditing == true) getEditView();
+            else if (isChange == true) getChangeLogView();
+            else Controller.switchToComment();
 
 
         }
@@ -133,11 +158,13 @@ public class issuesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isEditToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (isEditToggle.isSelected() == true) {
-                isEditing = true;
-            } else {
-                isEditing = false;
-            }
+            if (isEditToggle.isSelected() == true) isEditing = true;
+            else isEditing = false;
+        });
+
+        changeLogToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (changeLogToggle.isSelected() == true) isChange = true;
+            else isChange = false;
         });
         issueId.setCellValueFactory(new PropertyValueFactory<>("id"));
         issueTitle.setCellValueFactory(new PropertyValueFactory<>("title"));

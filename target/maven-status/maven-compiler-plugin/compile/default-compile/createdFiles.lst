@@ -1,7 +1,9 @@
+home\commentHistoryController.class
 home\issueAddController.class
 bugs\User.class
 home\commentReactController.class
 bugs\React.class
+home\issueHistoryController.class
 bugs\Page_main.class
 bugs\Issue_History.class
 bugs\Tag.class
@@ -22,7 +24,6 @@ bugs\util.class
 home\commentController.class
 home\bufferController.class
 home\settingsController.class
-home\projectController$1.class
 home\searchController.class
 home\issuesController.class
 home\changeLogController.class
@@ -35,5 +36,6 @@ bugs\Page_react.class
 bugs\Comment.class
 bugs\Page_project.class
 bugs\Page_issue.class
+home\projectHistoryController.class
 home\projectAddController.class
 home\commentAddController.class

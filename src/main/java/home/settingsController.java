@@ -9,10 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -82,6 +80,30 @@ public class settingsController implements Initializable {
 
         }
 
+    }
+    @FXML
+    void importJSON(MouseEvent event) throws Exception {
+        //do stuff
+    }
+
+    @FXML
+    void exportJSON(MouseEvent event) throws Exception {
+        //do stuff
+    }
+
+    @FXML
+    void initializeDatabase(MouseEvent event) throws Exception {
+        //do stuff
+        Alert alert =new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Initialize Database");
+        alert.setHeaderText("You will lose all data, this cannot be undone!");
+        alert.setContentText("After finished initialize database, you will be automatically logged out!");
+
+        if(alert.showAndWait().get()== ButtonType.OK){
+            //do stuff
+            //MySQLOperation.resetDatabase(MySQLOperation.connectionToDatabase());
+            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+        }
     }
 
     @Override

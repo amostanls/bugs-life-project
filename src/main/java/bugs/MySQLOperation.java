@@ -124,14 +124,14 @@ public class MySQLOperation {
 
     public static Connection getConnection() throws Exception {
         //Local Database(Local Host)
-        /*final String user = "root";
+        final String user = "root";
         final String pass = "";
-        final String path = "jdbc:mysql://localhost:3306/bugs-life?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
+        final String path = "jdbc:mysql://localhost:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
 
         // Online Database
-        final String user = "5peJ8pFLLQ";
+        /*final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
-        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
+        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
 
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
@@ -139,7 +139,7 @@ public class MySQLOperation {
         return myConn;
     }
 
-    public static void exportJavaObjectsAsJson(Connection myConn, List objects, String fileName){
+    public static void exportJavaObjectsAsJson(Connection myConn, List objects, String fileName) {
         fileName += ".json";
         ObjectMapper om = Json.getDefaultOM();
         try {
@@ -149,7 +149,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void exportJavaObjectAsJson(Connection myConn, Object objects, String fileName){
+    public static void exportJavaObjectAsJson(Connection myConn, Object objects, String fileName) {
         fileName += ".json";
         ObjectMapper om = Json.getDefaultOM();
         try {
@@ -860,7 +860,7 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            if(myRs.next()) {
+            if (myRs.next()) {
                 return myRs.getInt("userid");
             }
 
@@ -898,7 +898,7 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            if(myRs.next()) {
+            if (myRs.next()) {
                 return myRs.getInt("comment_id");
             }
 
@@ -1143,7 +1143,7 @@ public class MySQLOperation {
             pstmt.setString(2, user.getUsername());
             pstmt.setInt(3, user.getUserid());
             pstmt.execute();
-            System.out.println(newPassword+" "+user.getUsername()+" "+user.getUserid());
+            System.out.println(newPassword + " " + user.getUsername() + " " + user.getUserid());
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -1330,7 +1330,7 @@ public class MySQLOperation {
             pstmt.setInt(2, issue_id);
             pstmt.setInt(3, comment_id);
             pstmt.setString(4, "angry");
-            pstmt.setInt(5,0);
+            pstmt.setInt(5, 0);
             pstmt.execute();
 
             //create new react happy row for the comment
@@ -1340,7 +1340,7 @@ public class MySQLOperation {
             pstmt.setInt(2, issue_id);
             pstmt.setInt(3, comment_id);
             pstmt.setString(4, "happy");
-            pstmt.setInt(5,0);
+            pstmt.setInt(5, 0);
             pstmt.execute();
 
         } catch (Exception ex) {
@@ -1582,14 +1582,16 @@ public class MySQLOperation {
     }
 
     public static List<Project_History> getProjectHistoryList(Connection myConn, int project_id) {
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         ResultSet myRs = null;
         List<Project_History> projectList = new ArrayList<>();
 
         try {
-            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects_history WHERE project_id = '\" + project_id + \"' ORDER BY originalTime DESC";
-            stmt = myConn.createStatement();
-            myRs = stmt.executeQuery(SQL_GET_PROJECT_LIST);
+            String SQL_GET_PROJECT_LIST = "SELECT * FROM projects_history WHERE project_id = ? ORDER BY originalTime DESC";
+            pstmt = myConn.prepareStatement(SQL_GET_PROJECT_LIST);
+            pstmt.setInt(1, project_id);
+            //stmt = myConn.createStatement();
+            myRs = pstmt.executeQuery();
             //get parameter for creating issue object
             while (myRs.next()) {
                 int id = myRs.getInt("project_id");
@@ -1609,9 +1611,9 @@ public class MySQLOperation {
                     e.printStackTrace();
                 }
             }
-            if (stmt != null) {
+            if (pstmt != null) {
                 try {
-                    stmt.close();
+                    pstmt.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -1723,14 +1725,139 @@ public class MySQLOperation {
         return myConnection;
     }
 
+    public static void resetDatabase(Connection myConn) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        String query = "SHOW DATABASES;\n" +
+                "USE bugs_life;\n" +
+                "SHOW TABLES;\n" +
+                "SELECT * FROM projects;\n" +
+                "SELECT * FROM issues;\n" +
+                "SELECT * FROM comments;\n" +
+                "SELECT * FROM react;\n" +
+                "SELECT * FROM users;\n" +
+                "SELECT * FROM projects_history;\n" +
+                "SELECT * FROM issues_history;\n" +
+                "SELECT * FROM comments_history;\n" +
+                "DROP TABLE projects_history;\n" +
+                "DROP TABLE issues_history;\n" +
+                "DROP TABLE comments_history;\n" +
+                "DROP TABLE projects;\n" +
+                "DROP TABLE issues;\n" +
+                "DROP TABLE comments;\n" +
+                "DROP TABLE react;\n" +
+                "DROP TABLE users;\n" +
+                "CREATE TABLE projects (\n" +
+                "project_id INT PRIMARY KEY AUTO_INCREMENT,\n" +
+                "name VARCHAR(20) NOT NULL,\n" +
+                "project_timestamp TIMESTAMP NOT NULL);\n" +
+                "CREATE TABLE issues (\n" +
+                "project_id INT NOT NULL,\n" +
+                "issue_id INT NOT NULL,\n" +
+                "PRIMARY KEY (project_id, issue_id),\n" +
+                "title VARCHAR(50),\n" +
+                "priority INT,\n" +
+                "status VARCHAR(20),\n" +
+                "tag VARCHAR(20),\n" +
+                "descriptionText VARCHAR(500),\n" +
+                "createdBy VARCHAR(20),\n" +
+                "assignee VARCHAR(20),\n" +
+                "issue_timestamp TIMESTAMP);\n" +
+                "CREATE TABLE comments (\n" +
+                "project_id INT NOT NULL,\n" +
+                "issue_id INT NOT NULL,\n" +
+                "comment_id INT NOT NULL,\n" +
+                "PRIMARY KEY (project_id, issue_id, comment_id),\n" +
+                "text VARCHAR(250),\n" +
+                "comment_timestamp TIMESTAMP,\n" +
+                "user VARCHAR(25));\n" +
+                "CREATE TABLE react (\n" +
+                "project_id INT NOT NULL,\n" +
+                "issue_id INT NOT NULL,\n" +
+                "comment_id INT NOT NULL,\n" +
+                "reaction VARCHAR(10),\n" +
+                "PRIMARY KEY (project_id, issue_id, comment_id, reaction),\n" +
+                "count INT);\n" +
+                "CREATE TABLE users (\n" +
+                "userid INT,\n" +
+                "username VARCHAR(25),\n" +
+                "password VARCHAR(25),\n" +
+                "admin boolean\n" +
+                ");\n" +
+                "ALTER TABLE users ADD UNIQUE(userid);\n" +
+                "ALTER TABLE users ADD UNIQUE(username);\n" +
+                "CREATE TABLE projects_history (\n" +
+                "project_id INT NOT NULL,\n" +
+                "version_id INT UNIQUE AUTO_INCREMENT,\n" +
+                "name VARCHAR(20) NOT NULL,\n" +
+                "originalTime TIMESTAMP NOT NULL,\n" +
+                "PRIMARY KEY (project_id, originalTime),\n" +
+                "CONSTRAINT project_id_fk\n" +
+                "    FOREIGN KEY profile_id_fkx (project_id)\n" +
+                "    REFERENCES projects(project_id)\n" +
+                ");\n" +
+                "CREATE TABLE issues_history (\n" +
+                "project_id INT NOT NULL,\n" +
+                "issue_id INT NOT NULL,\n" +
+                "version_id INT UNIQUE AUTO_INCREMENT,\n" +
+                "title VARCHAR(50),\n" +
+                "priority INT,\n" +
+                "status VARCHAR(20),\n" +
+                "tag VARCHAR(20),\n" +
+                "descriptionText VARCHAR(500),\n" +
+                "createdBy VARCHAR(20),\n" +
+                "assignee VARCHAR(20),\n" +
+                "issue_timestamp TIMESTAMP,\n" +
+                "PRIMARY KEY (project_id, issue_id, issue_timestamp),\n" +
+                "CONSTRAINT pi_fk\n" +
+                "    FOREIGN KEY pi_fk (project_id, issue_id)\n" +
+                "    REFERENCES issues (project_id, issue_id)\n" +
+                ");\n" +
+                "CREATE TABLE comments_history (\n" +
+                "project_id INT NOT NULL,\n" +
+                "issue_id INT NOT NULL,\n" +
+                "comment_id INT NOT NULL,\n" +
+                "version_id INT UNIQUE AUTO_INCREMENT,\n" +
+                "text VARCHAR(250),\n" +
+                "comment_timestamp TIMESTAMP,\n" +
+                "user VARCHAR(25),\n" +
+                "PRIMARY KEY (project_id, issue_id, comment_id, comment_timestamp),\n" +
+                "CONSTRAINT pic_fk\n" +
+                "    FOREIGN KEY pic_fkx (project_id, issue_id, comment_id)\n" +
+                "    REFERENCES comments (project_id, issue_id, comment_id)\n" +
+                ");";
+
+        try {
+            pstmt = myConn.prepareStatement(query);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
-//        initializedDatabase();
+        //initializedDatabase();
 
         Connection myConn = null;
         try {
             myConn = getConnection();
             List<Project_History> ph = getProjectHistoryList(myConn, 2);
-            List<Issue_History> ih = getIssueHistoryList(myConn, 1,1);
+            List<Issue_History> ih = getIssueHistoryList(myConn, 1, 1);
             System.out.println(ih.get(0).getDescriptionText());
             System.out.println(ih.get(1).getDescriptionText());
             System.out.println(ih.get(2).getDescriptionText());

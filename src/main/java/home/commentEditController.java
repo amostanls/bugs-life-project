@@ -4,6 +4,7 @@ import bugs.Comment;
 import bugs.Issue;
 import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
+import home.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

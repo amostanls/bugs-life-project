@@ -48,7 +48,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView fitHeight="66.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="66.0" fitWidth="66.0" onMouseClicked="#changeLogForComment" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets left="15.0" />
                      </HBox.margin>

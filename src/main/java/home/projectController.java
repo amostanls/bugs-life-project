@@ -19,10 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -43,6 +40,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static home.Controller.getFinalProjectList;
+import static home.Controller.getSelectedProjectId;
 
 //import static bugs.MySQLOperation.myConn;
 
@@ -50,6 +48,7 @@ import static home.Controller.getFinalProjectList;
 public class projectController implements Initializable {
 
     private boolean isEditing = false;
+    private boolean isChange = false;
 
     @FXML
     private TableView<Project> projectTable;
@@ -64,7 +63,13 @@ public class projectController implements Initializable {
     private TableColumn<Project, Integer> project_issues;
 
     @FXML
+    private ToggleGroup tgProject;
+
+    @FXML
     private JFXToggleButton isEditToggle;
+
+    @FXML
+    private JFXToggleButton changeLogToggle;
 
     @FXML
     private TextField searchBox;
@@ -101,6 +106,20 @@ public class projectController implements Initializable {
         }
     }
 
+    void getChangeLogView() {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("project_history.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
         Controller.updateTable();
@@ -117,24 +136,25 @@ public class projectController implements Initializable {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedID = projectTable.getSelectionModel().getSelectedItem().getId();
             Controller.setSelectedProjectId(selectedID);
-            if (isEditing == false) Controller.switchToIssues();
-            else getEditView();
+            if (isEditing == true) getEditView();
+            else if (isChange == true) getChangeLogView();
+            else Controller.switchToIssues();
 
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        isEditToggle.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (isEditToggle.isSelected() == true) {
-                    isEditing = true;
-                } else {
-                    isEditing = false;
-                }
-            }
+        isEditToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (isEditToggle.isSelected() == true) isEditing = true;
+            else isEditing = false;
         });
+
+        changeLogToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (changeLogToggle.isSelected() == true) isChange = true;
+            else isChange = false;
+        });
+
         project_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         project_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         project_issues.setCellValueFactory(new PropertyValueFactory<>("issuesNumber"));
@@ -156,8 +176,6 @@ public class projectController implements Initializable {
             ObservableList<Project> projectList = FXCollections.observableList(getFinalProjectList());
             projectTable.setItems(projectList);
         }
-
-        //System.out.println(projectList.get(0).getIssues());
     }
 
     public static void setInitialise(boolean initialise) {

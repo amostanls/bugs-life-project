@@ -3,6 +3,8 @@ package home;
 import bugs.Issue;
 import com.jfoenix.controls.JFXButton;
 
+import home.Controller;
+import home.projectController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -102,7 +104,7 @@ public class commentController implements Initializable {
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            alert.setContentText("You do not have any previous comment(s)");
+            alert.setContentText("You do not have any previous comment(s)\nYou can only edit comment(s) written by you");
             alert.showAndWait();
         }
 
@@ -121,6 +123,28 @@ public class commentController implements Initializable {
         if (haveComment()) {
             try {
                 Parent parent = FXMLLoader.load(getClass().getResource("comment_react.fxml"));
+                Scene scene = new Scene(parent);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.UTILITY);
+                //stage.initStyle(StageStyle.UNDECORATED);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Currently no comment existed");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    void changeLogForComment(MouseEvent event) throws Exception {
+        if (haveComment()) {
+            try {
+                Parent parent = FXMLLoader.load(getClass().getResource("comment_history.fxml"));
                 Scene scene = new Scene(parent);
                 Stage stage = new Stage();
                 stage.setScene(scene);
