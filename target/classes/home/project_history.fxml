@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.projectHistoryController">
+   <children>
+      <TableView fx:id="projectTable" layoutX="50.0" layoutY="162.0" onMouseClicked="#changeToVersion" prefHeight="528.0" prefWidth="1030.0" stylesheets="@tablestyle.css">
+         <columns>
+            <TableColumn fx:id="project_id" prefWidth="233.0" text="ID" />
+            <TableColumn fx:id="project_name" prefWidth="193.0" text="Project Name" />
+            <TableColumn fx:id="project_version" prefWidth="360.0" text="Version" />
+            <TableColumn fx:id="project_timestamp" prefWidth="243.0" text="TimeStamp" />
+         </columns>
+      </TableView>
+      <Label layoutX="445.0" layoutY="32.0" prefHeight="66.0" prefWidth="241.0" text="Project History">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

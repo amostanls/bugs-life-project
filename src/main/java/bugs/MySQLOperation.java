@@ -1613,7 +1613,7 @@ public class MySQLOperation {
                 pstmt.setInt(2, issue_id);
                 pstmt.setInt(3, requiredComment.getComment_id());
                 pstmt.setInt(4,version_id);
-                pstmt.setString(5, newText);
+                pstmt.setString(5, requiredComment.getText());
                 pstmt.setTimestamp(6, requiredComment.getTimestamp());
                 pstmt.setString(7, requiredComment.getUser());
                 pstmt.execute();
