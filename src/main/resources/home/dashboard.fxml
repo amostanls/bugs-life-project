@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -38,8 +39,16 @@
                   </ImageView>
                   <JFXToggleButton fx:id="isEditToggle" text="Edit">
                      <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font></JFXToggleButton>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="tgProject" />
+                     </toggleGroup></JFXToggleButton>
+                  <JFXToggleButton fx:id="changeLogToggle" text="Change Log" toggleGroup="$tgProject">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXToggleButton>
                </children>
             </HBox>
             <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#search" pickOnBounds="true" preserveRatio="true">

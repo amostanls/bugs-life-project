@@ -36,9 +36,9 @@ public class React implements Serializable, Comparable<React> {
     }
 
     @Override
-    public String toString() {
-        return String.format("%d %s %s", count, "people react with",  reaction);
-    }
+    public String toString() {return String.format("%d %s %s", count, "people react with",  reaction);}
+
+    //public String toString() {return String.format("%d %s", count,  reaction);}
 
     public String getReaction() {
         return reaction;

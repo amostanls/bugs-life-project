@@ -56,8 +56,8 @@ public class Comment implements Serializable {
         res += String.format("%s %s \t\t\t %s %s\n", "Created On:", sdf.format(timestamp), "By:", user);
         res += String.format("%s\n", text);
         for(int i=0; i<react.size(); i++)
-            res += String.format("$$ %s\n", react.get(i).toString());// this line no output
-        res += "$$\n";
+            res += String.format("$$ %s\n", react.get(i).toString());
+        res += "\n";
         return res;
     }
 

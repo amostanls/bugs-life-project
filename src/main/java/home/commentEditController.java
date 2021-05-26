@@ -4,6 +4,7 @@ import bugs.Comment;
 import bugs.Issue;
 import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
+import home.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,6 +59,7 @@ public class commentEditController implements Initializable {
             if (comment.equals(possible_comments.get(selection_id).getText())) {//no change
 
             } else {
+                //System.out.println(getSelectedCommentId());
                 MySQLOperation.updateComment(MySQLOperation.connectionToDatabase(), getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), comment);
 
             }
@@ -75,6 +77,7 @@ public class commentEditController implements Initializable {
         commentSelection.getItems().addAll(comment_list);
         commentSelection.setValue(comment_list.get(0));
         commentField.setText(possible_comments.get(0).getText());
+        setSelectedCommentId(issue_temp.getComments().get(0).getComment_id());
         commentSelection.setOnAction(this::getCommentSelection);
 
 
@@ -82,7 +85,8 @@ public class commentEditController implements Initializable {
 
     private void getCommentSelection(ActionEvent actionEvent) {
         selection_id = commentSelection.getSelectionModel().getSelectedIndex();
-        setSelectedCommentId(selection_id);
+        setSelectedCommentId(issue_temp.getComments().get(selection_id).getComment_id());
+        System.out.println(getSelectedCommentId());
         commentField.setText(possible_comments.get(selection_id).getText());
     }
 

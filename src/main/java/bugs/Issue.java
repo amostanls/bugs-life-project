@@ -104,28 +104,6 @@ public class Issue implements Serializable {
         return res;
     }
 
-    public String printHeader(){
-        String res = "";
-        res += String.format("%s %d \t\t\t %s %s\n", "Issue ID:", id, "Status:", status);
-        res += String.format("%s ","Tag:");
-        for(int i=0; i<tag.length; i++) {
-            if(i>0)res+=", ";
-            res += tag[i];
-        }
-        res += String.format("\t\t\t %s %d \t\t\t %s %s\n","Priority:", priority, "Created On:", getTime());
-        res += String.format("%s\n", title);
-        res += String.format("%s %s \t\t\t\t\t\t\t\t %s %s\n\n", "Assigned to:", assignee, "Created By:", createdBy);
-        return res;
-    }
-
-    public String printIssue(){
-        String res="";
-        res += String.format("%s\n%s\n", "Issue Description",
-                "-----------------");
-        res += String.format("%s\n\n",descriptionText);
-        return res;
-    }
-
     public String printComment(){
         String res="";
         //res += String.format("%s\n%s\n", "Comments", "---------");
@@ -241,5 +219,13 @@ public class Issue implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public String commentsAsString(){
+        String s="";
+        for(int i=0;i<comments.size();i++){
+            s+=comments.get(i).getText()+" ";
+        }
+        return s;
     }
 }

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.settingsController">
+<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.settingsController">
    <children>
       <Label layoutX="65.0" layoutY="37.0" text="Settings">
          <font>
@@ -96,17 +96,17 @@
             </TextField>
          </children>
       </HBox>
-      <JFXButton fx:id="importJsonBtn" layoutX="204.0" layoutY="595.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #5bc0de; -fx-background-radius: 20; -fx-text-fill: white;" text="Import JSON">
+      <JFXButton fx:id="importJsonBtn" layoutX="204.0" layoutY="595.0" onMouseClicked="#importJSON" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #5bc0de; -fx-background-radius: 20; -fx-text-fill: white;" text="Import JSON">
          <font>
             <Font size="18.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="exportJsonBtn" layoutX="463.0" layoutY="595.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #f0ad4e; -fx-background-radius: 20; -fx-text-fill: white;" text="Export JSON">
+      <JFXButton fx:id="exportJsonBtn" layoutX="463.0" layoutY="595.0" onMouseClicked="#exportJSON" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #f0ad4e; -fx-background-radius: 20; -fx-text-fill: white;" text="Export JSON">
          <font>
             <Font size="18.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="initializeDatabaseBtn" layoutX="747.0" layoutY="595.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d9534f; -fx-background-radius: 20; -fx-text-fill: white;" text="Initialize Database">
+      <JFXButton fx:id="initializeDatabaseBtn" layoutX="747.0" layoutY="595.0" onMouseClicked="#initializeDatabase" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d9534f; -fx-background-radius: 20; -fx-text-fill: white;" text="Initialize Database">
          <font>
             <Font size="18.0" />
          </font>
