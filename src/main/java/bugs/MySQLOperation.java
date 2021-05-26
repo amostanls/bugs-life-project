@@ -478,7 +478,8 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
-                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                String url = myRs.getString("url");
+                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments, url);
                 issueList.add(newIssue);
             }
         } catch (Exception ex) {
@@ -525,7 +526,8 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 ArrayList<Comment> comments = getCommentList(myConn, project_id, issue_id);
-                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                String url = myRs.getString("url");
+                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments, url);
                 issueList.add(newIssue);
             }
 
@@ -573,7 +575,8 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
-                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                String url = myRs.getString("url");
+                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments, url);
                 issueList.add(newIssue);
             }
 
@@ -659,8 +662,9 @@ public class MySQLOperation {
             String assignee = myRs.getString("assignee");
             Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
             ArrayList<Comment> comments = getCommentList(myConn, project_id, issue_id);
+            String url = myRs.getString("url");
 
-            return new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, comments);
+            return new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, comments, url);
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -726,7 +730,8 @@ public class MySQLOperation {
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 ArrayList<Comment> comments = (ArrayList<Comment>) getCommentList(myConn, project_id, issue_id);
-                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments);
+                String url = myRs.getString("url");
+                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments, url);
                 issueList.add(newIssue);
             }
 
@@ -1925,25 +1930,25 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-//        initializedDatabase();
+        initializedDatabase();
 
-        Connection myConn = null;
-        try {
-            myConn = getConnection();
-            User user = new User(1,"ang","!23123",false);
-            updateComment(myConn, user, 1,1,2,"new correct user");
-//            updateIssue(myConn, 1,1, "descriptionText", "new text");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (myConn != null) {
-                try {
-                    myConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+//        Connection myConn = null;
+//        try {
+//            myConn = getConnection();
+//            User user = new User(1,"ang","!23123",false);
+//            updateComment(myConn, user, 1,1,2,"new correct user");
+////            updateIssue(myConn, 1,1, "descriptionText", "new text");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (myConn != null) {
+//                try {
+//                    myConn.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 //        showIssueDashboard(1,"priority","jhoe");
     }
 }

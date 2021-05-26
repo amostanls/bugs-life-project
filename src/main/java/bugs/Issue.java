@@ -49,7 +49,7 @@ public class Issue implements Serializable {
         this.comments = new ArrayList<>();
     }
 
-    public Issue(int project_id,int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, ArrayList<Comment> comments) {
+    public Issue(int project_id,int id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, ArrayList<Comment> comments, String url) {
         this.project_id=project_id;
         this.id = id;
         this.title = title;
@@ -61,6 +61,7 @@ public class Issue implements Serializable {
         this.assignee = assignee;
         this.timestamp = timestamp;
         this.comments = comments;
+        this.url = url;
     }
 
     public void addComment(Comment comment) {
