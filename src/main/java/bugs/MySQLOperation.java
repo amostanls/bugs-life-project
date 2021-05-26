@@ -1181,6 +1181,42 @@ public class MySQLOperation {
         }
     }
 
+    public static void updateUserUrl(Connection myConn, User user, String newUrl) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+
+        try {
+            String SQL_UPDATE_PROJECTS = "UPDATE users SET url = ? WHERE username = ? AND userid=?";
+
+            //update table users
+            pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS);
+            pstmt.setString(1, newUrl);
+
+            pstmt.setString(2, user.getUsername());
+            pstmt.setInt(3, user.getUserid());
+            pstmt.execute();
+            System.out.println(newUrl + " " + user.getUsername() + " " + user.getUserid());
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static User showLoginPage(Connection myConn) {
         Scanner sc = new Scanner(System.in);
         User newUser = null;
