@@ -1,6 +1,7 @@
 package home;
 
 import animatefx.animation.FadeIn;
+import bugs.reportGeneration;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,10 +21,14 @@ import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class main extends Application {
     public static void main(String[] args) {
         launch(args);
+
     }
 
     @Override

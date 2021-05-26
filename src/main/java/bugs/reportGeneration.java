@@ -1,95 +1,109 @@
 package bugs;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class reportGeneration {
+   private List<Project> projectlist;
+    private List<Issue> issue;
+    private List<Comment> comment;
+    private Timestamp startTime;
+    private Timestamp endTime;
 
-    public reportGeneration() {
+    public reportGeneration(Timestamp time) {    // make sure the date is sunday
+        startTime = new Timestamp(Calendar.getInstance().get(
+                Calendar.YEAR) , Calendar.getInstance().get(
+                Calendar.MONTH), Calendar.getInstance().get(
+                Calendar.DATE)-7, Calendar.getInstance().get(
+                Calendar.HOUR), Calendar.getInstance().get(
+                Calendar.MINUTE), Calendar.getInstance().get(
+                Calendar.SECOND), 0);// 7 days before as start date
+        endTime=time;
+
     }
-    public List<Project> getProject(){ //get project list
+
+    public List<Project> getProjectlist() {  //base on the date to get the projects list
         List<Project> projectList=MySQLOperation.getProjectList(MySQLOperation.connectionToDatabase());
-        return projectList;
+        List<Project> newProjectList=new ArrayList<>();
+        for (int i = 0; i < projectList.size(); i++) {
+            if (projectList.get(i).getProject_timestamp().compareTo(startTime)>=0||projectList.get(i).getProject_timestamp().compareTo(endTime)<=0){
+                newProjectList.add(projectList.get(i));
+            }
+        }
+        this.projectlist=newProjectList;
+        return newProjectList;
     }
 
-    /**
-     * key : project id
-     * value : issues list
-     * @return
-     */
-    public Map<Integer, ArrayList<Issue>> getIssue(){
-        List<Project> projectList=getProject();
-        Map<Integer, ArrayList<Issue>> map=new HashMap<>();
+
+    public List<Issue> getIssue() {
+        List<Project> projectList=MySQLOperation.getProjectList(MySQLOperation.connectionToDatabase());
+        List<Issue> newIssue=new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
-            map.put(projectList.get(i).getId(),projectList.get(0).getIssues());
+           List<Issue> list=projectList.get(i).getIssues();
+            for (int j = 0; j < list.size(); j++) {
+               if(list.get(j).getTimestamp().compareTo(startTime)>=0||list.get(j).getTimestamp().compareTo(endTime)<=0){
+                   newIssue.add(list.get(j));
+               }
+            }
         }
-        return map;
+        this.issue=newIssue;
+        return newIssue;
     }
-    public void showIssue(Map<Integer, ArrayList<Issue>>map){
+
+
+    public String toString(){
+        List<Issue>issue=getIssue();
+        List<Project>projects=getProjectlist();
         int resovled=0;
         int unresovled=0;
         int inProgress=0;
         int other=0;
-        for (Map.Entry<Integer, ArrayList<Issue>> entry : map.entrySet()) {//遍历map
-            ArrayList<Issue>list=entry.getValue();
-            for (Issue issue:list) {
-                if (issue.getStatus().equals("Closed"))resovled++;
-                else if (issue.getStatus().equals("Open")||issue.getStatus().equals("Whatever"))unresovled++;
-                else if (issue.getStatus().equals("InProgress"))inProgress++;
-                else other++;
+        String str="";
+        str+="\t\t\t\t\t"+"weekly report"+"\t\t\t\t\t"+"\n"; //title
+        String performance=showTopTeamPerformer();
+        str+=performance+"\n";
+        str+="this week has "+projectlist.size()+" in Process";
+        for (int i = 0; i < projectlist.size(); i++) {
+            str+=projectlist.get(i).getName()+"\n";
+        }
+        for (int i = 0; i < issue.size(); i++) { //issue comment react
+            if (issue.get(i).getStatus().equals("Closed"))resovled++;
+            else if(issue.get(i).getStatus().equals("Whatever"))unresovled++;
+            else if (issue.get(i).getStatus().equals("InProgress")||issue.get(i).getStatus().equals("Open"))inProgress++;
+            else other++;
+        }
+        str+="The issues resolved in this week is: "+resovled+"\n";
+        str+="The issues unresolved in this week is: "+unresovled+"\n";
+        str+="The issues resolved in this week is: "+inProgress+"\n";
+        str+="Other: "+other+"\n";
+        str+="the List of issues are below"+"\n";
+        for (int i = 0; i < issue.size(); i++) {
+            str+=issue.get(i).getTitle()+" "+issue.get(i).getStatus();
+             comment=issue.get(i).getComments();
+            for (int j = 0; j < comment.size(); j++) {
+                str+=comment.get(j).getComment_id()+" with ";
+               List<React> reactlist= comment.get(j).getReact();
+                for (int k = 0; k < reactlist.size(); k++) {
+                    str+=reactlist.get(k).getCount()+"people reacting with this comment"+"\n";
+                }
             }
         }
-        System.out.println("The issues resolved in this week is: "+resovled);
-        System.out.println("The issues unresolved in this week is: "+unresovled);
-        System.out.println("The issues resolved in this week is: "+inProgress);
-        System.out.println("Ohter: "+other);
+        return str;
     }
-
-    public List<String> TeamPerformer(){ // get assignee and store in list
-        List<String> list = null;
-        Map<Integer, ArrayList<Issue>> map=getIssue();
-        for (Map.Entry<Integer, ArrayList<Issue>> entry : map.entrySet()) {//遍历map
-            ArrayList<Issue> issue=entry.getValue();
-            for (Issue issue1:issue) {
-                list.add(issue1.getAssignee());
-            }
-        }
-        return list;
+    public List<String> getTopPerformance(){
+        List<Issue>issue=getIssue();
+        List<String> checkList = null;
+        for (int i = 0; i < issue.size(); i++) {
+            checkList.add(issue.get(i).getAssignee());
+            checkList.add(issue.get(i).getCreatedBy());
+        }return checkList;
     }
-    public void showTopTeamPerformer(List<String> list){  //show top assignee
-       HashMap<String, Integer> hashMap = new HashMap<String, Integer>(); //key : assignee name, value:issue number
-       for (String string : list) {
-           if (hashMap.get(string) != null) {
-               Integer value = hashMap.get(string);
-               hashMap.put(string, value+1);
-           } else {
-               hashMap.put(string, 1);
-           }
-       }
-
-       String maxKey = "";
-       int maxNo= 0;
-       Set<String> keySet = hashMap.keySet();
-       for(String key:keySet){
-           int valueNo = (Integer)hashMap.get(key);
-           if(valueNo>maxNo){
-               maxNo = valueNo;
-               maxKey = key;
-           }
-       }
-       System.out.println("The top performer in this week is:"+maxKey+" the issues he(she) participate are:"+maxNo);
-   }
-   public List<String> frequentTag(){
-       List<String> list = null;
-       Map<Integer, ArrayList<Issue>> map=getIssue();
-       for (Map.Entry<Integer, ArrayList<Issue>> entry : map.entrySet()) {//遍历map
-           ArrayList<Issue> issue=entry.getValue();
-           for (Issue issue1:issue) {
-               list.add(issue1.getTagAsString());
-           }
-       }
-       return list;
-   }
-    public void showfrequentTag(List<String> list){  //show top assignee
+    public String showTopTeamPerformer(){  //show top assignee
+        List<String> list=getTopPerformance();
+        String str="";
         HashMap<String, Integer> hashMap = new HashMap<String, Integer>(); //key : assignee name, value:issue number
         for (String string : list) {
             if (hashMap.get(string) != null) {
@@ -99,7 +113,7 @@ public class reportGeneration {
                 hashMap.put(string, 1);
             }
         }
-
+    //   show who appearences the moximum times in the list
         String maxKey = "";
         int maxNo= 0;
         Set<String> keySet = hashMap.keySet();
@@ -110,9 +124,26 @@ public class reportGeneration {
                 maxKey = key;
             }
         }
-        System.out.println("The frequent label in this week is:"+maxKey+" which shows: "+maxNo+"times");
+        return str="The top performer in this week is:"+maxKey;
     }
-    public void showInPDF(){
 
+    public void showComment(Comment comment){
+
+     }
+    public Timestamp getStartTime() {
+        return startTime;
     }
+
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+    }
+
 }
