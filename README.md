@@ -33,17 +33,23 @@ For local database, follow the steps below.
    ![image](https://user-images.githubusercontent.com/18496769/119681848-f2233280-be31-11eb-880a-d4503f2ccc08.png)
 
 2. Open XAMPP and start Apache web service and MySQL
+
    ![image](https://user-images.githubusercontent.com/18496769/119682309-51814280-be32-11eb-8080-217147b639ad.png)
 
 3. Go to http://localhost/phpmyadmin/index.php?route=/server/databases
+
 ![image](https://user-images.githubusercontent.com/18496769/119682707-a02edc80-be32-11eb-99fc-c2a2d7b3cadb.png)
 
 4. Create Database with name ***"bugs_life"***, click create
+ 
 ![image](https://user-images.githubusercontent.com/18496769/119682957-d1a7a800-be32-11eb-8e65-d4300867fefb.png)
 
 5. Select bugs_life database and choose import
    Then, select **"bugs_life.sql"**
-   ![image](https://user-images.githubusercontent.com/18496769/119683304-10d5f900-be33-11eb-9231-2cbb7ee869bf.png)
+   
+   This file can be found in this github page.
+   
+    ![image](https://user-images.githubusercontent.com/18496769/119683304-10d5f900-be33-11eb-9231-2cbb7ee869bf.png)
    
 6. Click Go (At the bottom right of the screen)
 
