@@ -31,6 +31,7 @@ public class Issue implements Serializable {
     private String createdBy, assignee;
     private Timestamp timestamp;
     private ArrayList<Comment> comments;
+    private String url;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -227,5 +228,13 @@ public class Issue implements Serializable {
             s+=comments.get(i).getText()+" ";
         }
         return s;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

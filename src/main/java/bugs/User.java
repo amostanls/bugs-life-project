@@ -19,6 +19,7 @@ public class User implements Serializable {
     private String password;
     private String name;
     private boolean admin;
+    private String url;
     private HashMap<Integer,String> comment_reacted = new HashMap<>();
     
     public User(int userid, String username, String password, String name, boolean admin) {
@@ -88,4 +89,12 @@ public class User implements Serializable {
     public boolean isAdmin() { return admin; }
 
     public void setAdmin(boolean admin) { this.admin = admin; }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

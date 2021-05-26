@@ -57,7 +57,8 @@ tag VARCHAR(20),
 descriptionText VARCHAR(500),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
-issue_timestamp TIMESTAMP);
+issue_timestamp TIMESTAMP,
+url VARCHAR(2083));
 
 CREATE TABLE comments (
 project_id INT NOT NULL,
@@ -80,7 +81,8 @@ CREATE TABLE users (
 userid INT,
 username VARCHAR(25),
 password VARCHAR(25),
-admin boolean
+admin boolean,
+url VARCHAR(2083)
 );
 
 ALTER TABLE users ADD UNIQUE(userid);
@@ -1928,9 +1930,9 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-//            User user = new User(1,"ang","!23123",false);
-//            updateComment(myConn, user, 1,1,2,"new correct user");
-            updateIssue(myConn, 1,1, "descriptionText", "new text");
+            User user = new User(1,"ang","!23123",false);
+            updateComment(myConn, user, 1,1,2,"new correct user");
+//            updateIssue(myConn, 1,1, "descriptionText", "new text");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
