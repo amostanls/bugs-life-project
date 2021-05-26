@@ -103,7 +103,7 @@ public class commentController implements Initializable {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
+            alert.setHeaderText("Edit Comment");
             alert.setContentText("You do not have any previous comment(s)\nYou can only edit comment(s) written by you");
             alert.showAndWait();
         }
@@ -134,7 +134,7 @@ public class commentController implements Initializable {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
+            alert.setHeaderText("React to comment");
             alert.setContentText("Currently no comment existed");
             alert.showAndWait();
         }
@@ -156,7 +156,7 @@ public class commentController implements Initializable {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
+            alert.setHeaderText("Change Log");
             alert.setContentText("Currently no comment existed");
             alert.showAndWait();
         }
@@ -247,7 +247,7 @@ public class commentController implements Initializable {
         for (int i = 0; i < issueList.size(); i++) {
             if (issueList.get(i).getId() == getSelectedIssueId()) issue_temp = issueList.get(i);
         }
-        if(issue_temp!=null) return true;
+        if(issue_temp.getComments().size()>0) return true;
         return false;
     }
 }
