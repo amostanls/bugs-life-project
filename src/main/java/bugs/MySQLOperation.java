@@ -1083,7 +1083,8 @@ public class MySQLOperation {
             if (myRs.next()) {
                 int userid = myRs.getInt("userid");
                 boolean admin = myRs.getBoolean("admin");
-                User newUser = new User(userid, username, password, admin);
+                String url=myRs.getString("url");
+                User newUser = new User(userid, username, password, admin,url);
                 return newUser;
             }
 
@@ -1330,6 +1331,7 @@ public class MySQLOperation {
             pstmt.setString(8, createdBy);
             pstmt.setString(9, assignee);
             pstmt.setTimestamp(10, issue_timestamp);
+
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);

@@ -17,7 +17,7 @@
          <left>
             <VBox prefHeight="768.0" prefWidth="240.0" style="-fx-background-color: #EBE8F9;" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="userImage" fitHeight="174.0" fitWidth="237.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="userImage" fitHeight="180.0" fitWidth="190.0" onMouseClicked="#changeImage" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/jimmy-fallon.png" />
                      </image>

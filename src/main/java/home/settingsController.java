@@ -84,6 +84,7 @@ public class settingsController implements Initializable {
     @FXML
     void importJSON(MouseEvent event) throws Exception {
         //do stuff
+        //MySQLOperation.initializedDatabase();
     }
 
     @FXML

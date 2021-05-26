@@ -30,11 +30,12 @@ public class User implements Serializable {
         this.admin = admin;
     }
 
-    public User(int userid, String username, String password, boolean admin) {
+    public User(int userid, String username, String password, boolean admin, String url) {
         this.userid = userid;
         this.username = username;
         this.password = password;
         this.admin = admin;
+        this.url=url;
     }
 
     public void addReaction(int commentid, String reaction) {

@@ -10,15 +10,13 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -31,6 +29,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +43,7 @@ public class Controller implements Initializable {
     private static List<Project> finalProjectList;
     private static User currentUser;
     private static String username = "";
+    private static String urlImage = null;
 
     @FXML
     private Label usernameDisplay;
@@ -55,6 +55,40 @@ public class Controller implements Initializable {
     private ImageView userImage;
 
     public static BorderPane staticBorderPane;
+
+    @FXML
+    void changeImage(MouseEvent event) throws IOException {
+        if (event.getClickCount() == 2) {//Checking double click
+            TextInputDialog td = new TextInputDialog();
+            td.setTitle("Change user image");
+            td.getDialogPane().setHeaderText("Make sure the URL is accessible through the Internet");
+            td.getDialogPane().setContentText("Enter the URL of your image : ");
+            td.showAndWait();
+            TextField input= td.getEditor();
+            if(input.getText()!=null && input.getText().toString().length()!=0){
+                if(isValidURL(input.getText().toString())){
+                    setUrlImage(input.getText().toString());
+                    MySQLOperation.updateUserUrl(MySQLOperation.connectionToDatabase(),Controller.getCurrentUser(),input.getText().toString());
+                }
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Not a valid URL");
+                    alert.showAndWait();
+                }
+            }
+        }
+
+        if (urlImage != null) {
+            Image image = new Image(urlImage);
+            if (!image.isError()) {
+                userImage.setImage(image);
+            }
+        } else {
+            Image localImage = new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
+            userImage.setImage(localImage);
+        }
+    }
 
 
     @FXML
@@ -89,12 +123,12 @@ public class Controller implements Initializable {
     @FXML
     void signOut(MouseEvent event) throws IOException {
 
-        Alert alert =new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Logout");
         alert.setHeaderText("You're about to logout!");
         alert.setContentText("Are you sure you want to logout?");
 
-        if(alert.showAndWait().get()== ButtonType.OK){
+        if (alert.showAndWait().get() == ButtonType.OK) {
             resetID();
             /*Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
             Stage stage = new Stage();
@@ -126,14 +160,18 @@ public class Controller implements Initializable {
         staticBorderPane = mainPane;
         Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
-        String urlImage="https://i.guim.co.uk/img/media/99e1d9cd17c07db550e430f7924612624b700ec0/1446_402_4737_2843/master/4737.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=cfb061b028932b2e0a5b818983f3c7d2";
-        Image image=new Image(urlImage);
-        if(image.isError()) {
-            Image localImage=new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
+        userImage.setFitWidth(190);
+        userImage.setFitHeight(180);
+        userImage.setPreserveRatio(true);
+        urlImage=Controller.getCurrentUser().getUrl();
+        if (urlImage != null) {
+            Image image = new Image(urlImage);
+            if (!image.isError()) {
+                userImage.setImage(image);
+            }
+        } else {
+            Image localImage = new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
             userImage.setImage(localImage);
-        }
-        else{
-            userImage.setImage(image);
         }
 
     }
@@ -193,6 +231,14 @@ public class Controller implements Initializable {
         Controller.currentUser = currentUser;
     }
 
+    public static String getUrlImage() {
+        return urlImage;
+    }
+
+    public static void setUrlImage(String urlImage) {
+        Controller.urlImage = urlImage;
+    }
+
     public static void resetID() {
         setFinalProjectList(null);
         setCurrentUser(null);
@@ -202,5 +248,21 @@ public class Controller implements Initializable {
         setSelectedIssueId(0);
         setSelectedCommentId(0);
     }
+
+    public static boolean isValidURL(String url)
+    {
+        /* Try creating a valid URL */
+        try {
+            new URL(url).toURI();
+            return true;
+        }
+
+        // If there was an Exception
+        // while creating URL object
+        catch (Exception e) {
+            return false;
+        }
+    }
+
 
 }
