@@ -40,10 +40,12 @@ DROP TABLE issues;
 DROP TABLE comments;
 DROP TABLE react;
 DROP TABLE users;
+
 CREATE TABLE projects (
 project_id INT PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(20) NOT NULL,
 project_timestamp TIMESTAMP NOT NULL);
+
 CREATE TABLE issues (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -56,6 +58,7 @@ descriptionText VARCHAR(500),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
 issue_timestamp TIMESTAMP);
+
 CREATE TABLE comments (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -64,6 +67,7 @@ PRIMARY KEY (project_id, issue_id, comment_id),
 text VARCHAR(250),
 comment_timestamp TIMESTAMP,
 user VARCHAR(25));
+
 CREATE TABLE react (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
@@ -71,17 +75,20 @@ comment_id INT NOT NULL,
 reaction VARCHAR(10),
 PRIMARY KEY (project_id, issue_id, comment_id, reaction),
 count INT);
+
 CREATE TABLE users (
 userid INT,
 username VARCHAR(25),
 password VARCHAR(25),
 admin boolean
 );
+
 ALTER TABLE users ADD UNIQUE(userid);
 ALTER TABLE users ADD UNIQUE(username);
+
 CREATE TABLE projects_history (
 project_id INT NOT NULL,
-version_id INT UNIQUE AUTO_INCREMENT,
+version_id INT NOT NULL,
 name VARCHAR(20) NOT NULL,
 originalTime TIMESTAMP NOT NULL,
 PRIMARY KEY (project_id, originalTime),
@@ -89,10 +96,11 @@ CONSTRAINT project_id_fk
     FOREIGN KEY profile_id_fkx (project_id)
     REFERENCES projects(project_id)
 );
+
 CREATE TABLE issues_history (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
-version_id INT UNIQUE AUTO_INCREMENT,
+version_id INT,
 title VARCHAR(50),
 priority INT,
 status VARCHAR(20),
@@ -106,11 +114,12 @@ CONSTRAINT pi_fk
     FOREIGN KEY pi_fk (project_id, issue_id)
     REFERENCES issues (project_id, issue_id)
 );
+
 CREATE TABLE comments_history (
 project_id INT NOT NULL,
 issue_id INT NOT NULL,
 comment_id INT NOT NULL,
-version_id INT UNIQUE AUTO_INCREMENT,
+version_id INT NOT NULL,
 text VARCHAR(250),
 comment_timestamp TIMESTAMP,
 user VARCHAR(25),
@@ -124,14 +133,14 @@ public class MySQLOperation {
 
     public static Connection getConnection() throws Exception {
         //Local Database(Local Host)
-        final String user = "root";
-        final String pass = "";
-        final String path = "jdbc:mysql://localhost:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
+//        final String user = "root";
+//        final String pass = "";
+//        final String path = "jdbc:mysql://localhost:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
 
         // Online Database
-        /*final String user = "5peJ8pFLLQ";
+        final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
-        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
+        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
 
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
@@ -1375,14 +1384,26 @@ public class MySQLOperation {
         Project requiredProject = getProject(myConn, project_id);
 
         try {
-            String SQL_UPDATE_PROJECTS_HISTORY = "INSERT INTO projects_history(project_id, name, originalTime) VALUES (?, ?, ?)";
+            String SQL_UPDATE_PROJECTS_HISTORY = "INSERT INTO projects_history(project_id, version_id, name, originalTime) VALUES (? , ?,  ?, ?)";
             String SQL_UPDATE_PROJECTS = "UPDATE projects SET name = ?, project_timestamp = ? WHERE project_id = ?";
+            String SQL_GET_LAST_VERSION_ID = "SELECT * FROM projects_history WHERE project_id = ? ORDER BY version_id DESC";
+
+            //get last version id
+            int version_id = 1;
+            pstmt = myConn.prepareStatement(SQL_GET_LAST_VERSION_ID);
+            pstmt.setInt(1, project_id);
+            myRs = pstmt.executeQuery();
+
+            if (myRs.next()) {
+                version_id = myRs.getInt("version_id") + 1;
+            }
 
             //update table project history
             pstmt = myConn.prepareStatement(SQL_UPDATE_PROJECTS_HISTORY);
             pstmt.setInt(1, project_id);
-            pstmt.setString(2, requiredProject.getName());
-            pstmt.setTimestamp(3, requiredProject.getProject_timestamp());
+            pstmt.setInt(2, version_id);
+            pstmt.setString(3, requiredProject.getName());
+            pstmt.setTimestamp(4, requiredProject.getProject_timestamp());
             pstmt.execute();
 
             //update table projects
@@ -1424,11 +1445,30 @@ public class MySQLOperation {
                     "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
                     "WHERE project_id = ? AND issue_id = ?";
             String SQL_UPDATE_ISSUES = "UPDATE issues SET " + columnName + " = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+            String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC";
+
+            //get last version id
+            int version_id = 1;
+            pstmt = myConn.prepareStatement(SQL_GET_LAST_VERSION_ID);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            myRs = pstmt.executeQuery();
+
+            if (myRs.next()) {
+                version_id = myRs.getInt("version_id") + 1;
+            }
 
             //update table issues history
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
+            pstmt.execute();
+
+            //update table issues history version id
+            pstmt = myConn.prepareStatement("UPDATE issues_history SET version_id = ? where project_id = ? AND issue_id = ?");
+            pstmt.setInt(1, version_id);
+            pstmt.setInt(2, project_id);
+            pstmt.setInt(3, issue_id);
             pstmt.execute();
 
             //update table issues
@@ -1471,12 +1511,30 @@ public class MySQLOperation {
                     "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
                     "WHERE project_id = ? AND issue_id = ?";
             String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+            String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC";
+
+            //get last version id
+            int version_id = 1;
+            pstmt = myConn.prepareStatement(SQL_GET_LAST_VERSION_ID);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            myRs = pstmt.executeQuery();
+
+            if (myRs.next()) {
+                version_id = myRs.getInt("version_id") + 1;
+            }
 
             //update table issues history
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
             pstmt.execute();
+
+            //update table issues history version id
+            pstmt = myConn.prepareStatement("UPDATE issues_history SET version_id = ? where project_id = ? AND issue_id = ?");
+            pstmt.setInt(1, version_id);
+            pstmt.setInt(2, project_id);
+            pstmt.setInt(3, issue_id);
 
             //update table issues
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES);
@@ -1533,17 +1591,31 @@ public class MySQLOperation {
 
         if (isOwner) {
             try {
-                String SQL_UPDATE_COMMENTS_HISTORY = "INSERT INTO comments_history(project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";
+                String SQL_UPDATE_COMMENTS_HISTORY = "INSERT INTO comments_history(project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 String SQL_UPDATE_COMMNETS = "UPDATE comments SET text = ?, comment_timestamp = ? WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
+                String SQL_GET_LAST_VERSION_ID = "SELECT * FROM comments_history WHERE project_id = ? AND issue_id = ? AND comment_id = ? ORDER BY version_id DESC";
+
+                //get last version id
+                int version_id = 1;
+                pstmt = myConn.prepareStatement(SQL_GET_LAST_VERSION_ID);
+                pstmt.setInt(1, project_id);
+                pstmt.setInt(2, issue_id);
+                pstmt.setInt(3, comment_id);
+                myRs = pstmt.executeQuery();
+
+                if (myRs.next()) {
+                    version_id = myRs.getInt("version_id") + 1;
+                }
 
                 //update table project history
                 pstmt = myConn.prepareStatement(SQL_UPDATE_COMMENTS_HISTORY);
                 pstmt.setInt(1, project_id);
                 pstmt.setInt(2, issue_id);
                 pstmt.setInt(3, requiredComment.getComment_id());
-                pstmt.setString(4, newText);
-                pstmt.setTimestamp(5, requiredComment.getTimestamp());
-                pstmt.setString(6, requiredComment.getUser());
+                pstmt.setInt(4,version_id);
+                pstmt.setString(5, requiredComment.getText());
+                pstmt.setTimestamp(6, requiredComment.getTimestamp());
+                pstmt.setString(7, requiredComment.getUser());
                 pstmt.execute();
 
                 //update table projects
@@ -1851,16 +1923,14 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-        //initializedDatabase();
+//        initializedDatabase();
 
         Connection myConn = null;
         try {
             myConn = getConnection();
-            List<Project_History> ph = getProjectHistoryList(myConn, 2);
-            List<Issue_History> ih = getIssueHistoryList(myConn, 1, 1);
-            System.out.println(ih.get(0).getDescriptionText());
-            System.out.println(ih.get(1).getDescriptionText());
-            System.out.println(ih.get(2).getDescriptionText());
+//            User user = new User(1,"ang","!23123",false);
+//            updateComment(myConn, user, 1,1,2,"new correct user");
+            updateIssue(myConn, 1,1, "descriptionText", "new text");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
