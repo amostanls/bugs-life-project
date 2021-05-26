@@ -15,7 +15,6 @@ D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectController.j
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Tag.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\login\loginController.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issuesController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\changeLogController.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueHistoryController.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Comment_History.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_react.java
@@ -35,6 +34,7 @@ D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\settingsController.
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\Controller.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\reportGeneration.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueEditController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\reportGenerationController.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentController.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\searchController.java
 D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectAddController.java

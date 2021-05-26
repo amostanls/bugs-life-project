@@ -26,9 +26,9 @@ home\bufferController.class
 home\settingsController.class
 home\searchController.class
 home\issuesController.class
-home\changeLogController.class
 home\main.class
 bugs\Database.class
+home\reportGenerationController.class
 login\registerController.class
 home\projectController.class
 login\loginController.class

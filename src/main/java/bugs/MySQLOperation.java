@@ -2,6 +2,8 @@ package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.protocol.Resultset;
+import javafx.scene.control.Alert;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,14 +137,14 @@ public class MySQLOperation {
 
     public static Connection getConnection() throws Exception {
         //Local Database(Local Host)
-//        final String user = "root";
-//        final String pass = "";
-//        final String path = "jdbc:mysql://localhost:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
+        final String user = "root";
+        final String pass = "";
+        final String path = "jdbc:mysql://localhost:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
 
         // Online Database
-        final String user = "5peJ8pFLLQ";
+        /*final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
-        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";
+        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
 
         final String driver = "com.mysql.cj.jdbc.Driver";
         Class.forName(driver);
@@ -170,7 +172,7 @@ public class MySQLOperation {
         }
     }
 
-    private static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
+    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parse(jsonUrl);
 
@@ -1083,8 +1085,8 @@ public class MySQLOperation {
             if (myRs.next()) {
                 int userid = myRs.getInt("userid");
                 boolean admin = myRs.getBoolean("admin");
-                String url=myRs.getString("url");
-                User newUser = new User(userid, username, password, admin,url);
+                String url = myRs.getString("url");
+                User newUser = new User(userid, username, password, admin, url);
                 return newUser;
             }
 
@@ -1657,7 +1659,7 @@ public class MySQLOperation {
                 pstmt.setInt(1, project_id);
                 pstmt.setInt(2, issue_id);
                 pstmt.setInt(3, requiredComment.getComment_id());
-                pstmt.setInt(4,version_id);
+                pstmt.setInt(4, version_id);
                 pstmt.setString(5, requiredComment.getText());
                 pstmt.setTimestamp(6, requiredComment.getTimestamp());
                 pstmt.setString(7, requiredComment.getUser());
@@ -1842,11 +1844,11 @@ public class MySQLOperation {
         return myConnection;
     }
 
-    public static void resetDatabase(Connection myConn) {
+    public static void resetDatabase(Connection myConn,String database_name) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         String query = "SHOW DATABASES;\n" +
-                "USE bugs_life;\n" +
+                "USE "+database_name+";\n" +
                 "SHOW TABLES;\n" +
                 "SELECT * FROM projects;\n" +
                 "SELECT * FROM issues;\n" +
@@ -1864,10 +1866,12 @@ public class MySQLOperation {
                 "DROP TABLE comments;\n" +
                 "DROP TABLE react;\n" +
                 "DROP TABLE users;\n" +
+                "\n" +
                 "CREATE TABLE projects (\n" +
                 "project_id INT PRIMARY KEY AUTO_INCREMENT,\n" +
                 "name VARCHAR(20) NOT NULL,\n" +
                 "project_timestamp TIMESTAMP NOT NULL);\n" +
+                "\n" +
                 "CREATE TABLE issues (\n" +
                 "project_id INT NOT NULL,\n" +
                 "issue_id INT NOT NULL,\n" +
@@ -1879,7 +1883,9 @@ public class MySQLOperation {
                 "descriptionText VARCHAR(500),\n" +
                 "createdBy VARCHAR(20),\n" +
                 "assignee VARCHAR(20),\n" +
-                "issue_timestamp TIMESTAMP);\n" +
+                "issue_timestamp TIMESTAMP,\n" +
+                "url VARCHAR(2083));\n" +
+                "\n" +
                 "CREATE TABLE comments (\n" +
                 "project_id INT NOT NULL,\n" +
                 "issue_id INT NOT NULL,\n" +
@@ -1888,6 +1894,7 @@ public class MySQLOperation {
                 "text VARCHAR(250),\n" +
                 "comment_timestamp TIMESTAMP,\n" +
                 "user VARCHAR(25));\n" +
+                "\n" +
                 "CREATE TABLE react (\n" +
                 "project_id INT NOT NULL,\n" +
                 "issue_id INT NOT NULL,\n" +
@@ -1895,17 +1902,21 @@ public class MySQLOperation {
                 "reaction VARCHAR(10),\n" +
                 "PRIMARY KEY (project_id, issue_id, comment_id, reaction),\n" +
                 "count INT);\n" +
+                "\n" +
                 "CREATE TABLE users (\n" +
                 "userid INT,\n" +
                 "username VARCHAR(25),\n" +
                 "password VARCHAR(25),\n" +
-                "admin boolean\n" +
+                "admin boolean,\n" +
+                "url VARCHAR(2083)\n" +
                 ");\n" +
+                "\n" +
                 "ALTER TABLE users ADD UNIQUE(userid);\n" +
                 "ALTER TABLE users ADD UNIQUE(username);\n" +
+                "\n" +
                 "CREATE TABLE projects_history (\n" +
                 "project_id INT NOT NULL,\n" +
-                "version_id INT UNIQUE AUTO_INCREMENT,\n" +
+                "version_id INT NOT NULL,\n" +
                 "name VARCHAR(20) NOT NULL,\n" +
                 "originalTime TIMESTAMP NOT NULL,\n" +
                 "PRIMARY KEY (project_id, originalTime),\n" +
@@ -1913,10 +1924,11 @@ public class MySQLOperation {
                 "    FOREIGN KEY profile_id_fkx (project_id)\n" +
                 "    REFERENCES projects(project_id)\n" +
                 ");\n" +
+                "\n" +
                 "CREATE TABLE issues_history (\n" +
                 "project_id INT NOT NULL,\n" +
                 "issue_id INT NOT NULL,\n" +
-                "version_id INT UNIQUE AUTO_INCREMENT,\n" +
+                "version_id INT,\n" +
                 "title VARCHAR(50),\n" +
                 "priority INT,\n" +
                 "status VARCHAR(20),\n" +
@@ -1930,11 +1942,12 @@ public class MySQLOperation {
                 "    FOREIGN KEY pi_fk (project_id, issue_id)\n" +
                 "    REFERENCES issues (project_id, issue_id)\n" +
                 ");\n" +
+                "\n" +
                 "CREATE TABLE comments_history (\n" +
                 "project_id INT NOT NULL,\n" +
                 "issue_id INT NOT NULL,\n" +
                 "comment_id INT NOT NULL,\n" +
-                "version_id INT UNIQUE AUTO_INCREMENT,\n" +
+                "version_id INT NOT NULL,\n" +
                 "text VARCHAR(250),\n" +
                 "comment_timestamp TIMESTAMP,\n" +
                 "user VARCHAR(25),\n" +
@@ -1947,8 +1960,15 @@ public class MySQLOperation {
         try {
             pstmt = myConn.prepareStatement(query);
 
+            System.out.println(database_name);
+            myRs = pstmt.executeQuery();
+            initializedDatabase();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("SQL Error!");
+            alert.showAndWait();
         } finally {
             if (myRs != null) {
                 try {

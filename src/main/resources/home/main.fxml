@@ -52,21 +52,6 @@
                         <Insets left="60.0" />
                      </padding>
                   </JFXButton>
-                  <JFXButton alignment="BASELINE_LEFT" layoutX="10.0" layoutY="404.0" onMouseClicked="#search" prefHeight="63.0" prefWidth="248.0" text="Search">
-                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons8_Search_52px.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="60.0" />
-                     </padding>
-                  </JFXButton>
                   <JFXButton alignment="BASELINE_LEFT" layoutX="10.0" layoutY="467.0" onMouseClicked="#changeLog" prefHeight="63.0" prefWidth="248.0" text="Report Generation">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">

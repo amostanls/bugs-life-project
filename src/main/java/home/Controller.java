@@ -107,7 +107,7 @@ public class Controller implements Initializable {
 
     @FXML
     void changeLog(MouseEvent event) {
-        Pane view = new FxmlLoader().getPage("changeLog");
+        Pane view = new FxmlLoader().getPage("reportGeneration");
         mainPane.setCenter(view);
         new FadeInRight(view).play();
     }

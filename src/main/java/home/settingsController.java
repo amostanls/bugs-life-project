@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,62 +50,91 @@ public class settingsController implements Initializable {
     void setUpdaterBtn(ActionEvent event) {
 
 
-        String password= newPasswordField.getText();
-        String confirmPassword=confirmPasswordField.getText();
+        String password = newPasswordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
         //String sha256hex = DigestUtils.sha256Hex(password);
 
-        if(password.isEmpty()||confirmPassword.isEmpty()){
+        if (password.isEmpty() || confirmPassword.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please Fill All DATA");
             alert.showAndWait();
-        }
-        else if(password.length()<8){
+        } else if (password.length() < 8) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Password must be at least 8 characters long");
             alert.showAndWait();
-        }
-        else if(!password.equals(confirmPassword)){
+        } else if (!password.equals(confirmPassword)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Password must be the same");
             alert.showAndWait();
-        }
-        else{
+        } else {
             //connect to database
-            MySQLOperation.updatePassword(MySQLOperation.connectionToDatabase(),Controller.getCurrentUser(),password);
-            JOptionPane.showMessageDialog(null,"Update Successful");
+            MySQLOperation.updatePassword(MySQLOperation.connectionToDatabase(), Controller.getCurrentUser(), password);
+            JOptionPane.showMessageDialog(null, "Update Successful");
             newPasswordField.clear();
             confirmPasswordField.clear();
 
         }
 
     }
+
     @FXML
     void importJSON(MouseEvent event) throws Exception {
-        //do stuff
-        //MySQLOperation.initializedDatabase();
+        TextInputDialog td = new TextInputDialog();
+        td.setTitle("Import JSON");
+        td.getDialogPane().setHeaderText("Make sure the values inside JSON file does not conflict with existing data\n\n" +
+                "Instead, you may consider to reset the Database, use Initialise database button");
+        td.getDialogPane().setContentText("Enter your file URL : ");
+        td.showAndWait();
+        TextField input = td.getEditor();
+        if (input.getText() != null && input.getText().toString().length() != 0) {
+            MySQLOperation.updateDatabaseFromUrl(MySQLOperation.connectionToDatabase(), input.getText());
+
+        }
     }
 
     @FXML
     void exportJSON(MouseEvent event) throws Exception {
         //do stuff
+        Controller.updateTable();
+        TextInputDialog td = new TextInputDialog();
+        td.setTitle("Export JSON");
+        td.getDialogPane().setHeaderText("Make sure the file name is unique");
+        td.getDialogPane().setContentText("Enter your file name : ");
+        td.showAndWait();
+        TextField input = td.getEditor();
+        if (input.getText() != null && input.getText().toString().length() != 0) {
+            MySQLOperation.exportJavaObjectsAsJson(MySQLOperation.connectionToDatabase(), Controller.getFinalProjectList(), input.getText().toString());
+
+        }
+
     }
 
     @FXML
     void initializeDatabase(MouseEvent event) throws Exception {
         //do stuff
-        Alert alert =new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Initialize Database");
         alert.setHeaderText("You will lose all data, this cannot be undone!");
-        alert.setContentText("After finished initialize database, you will be automatically logged out!");
+        alert.setContentText("After finished initializing database, you will be automatically logged out!\n" +
+                "This function will reset the database using values from : https://jiuntian.com/data.json");
 
-        if(alert.showAndWait().get()== ButtonType.OK){
+        if (alert.showAndWait().get() == ButtonType.OK) {
             //do stuff
-            //MySQLOperation.resetDatabase(MySQLOperation.connectionToDatabase());
-            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+            TextInputDialog td = new TextInputDialog();
+            td.setTitle("Reset Database");
+            td.getDialogPane().setHeaderText("Make sure to enter the correct name for the database (Case-sensitive)");
+            td.getDialogPane().setContentText("Enter the name of the database : ");
+            td.showAndWait();
+            TextField input = td.getEditor();
+            if (input.getText() != null && input.getText().toString().length() != 0) {
+                MySQLOperation.resetDatabase(MySQLOperation.connectionToDatabase(), input.getText());
+                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+            }
+
         }
     }
 
