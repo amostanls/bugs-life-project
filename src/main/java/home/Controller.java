@@ -19,6 +19,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -48,6 +50,9 @@ public class Controller implements Initializable {
 
     @FXML
     private BorderPane mainPane;
+
+    @FXML
+    private ImageView userImage;
 
     public static BorderPane staticBorderPane;
 
@@ -121,6 +126,16 @@ public class Controller implements Initializable {
         staticBorderPane = mainPane;
         Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
+        String urlImage="https://i.guim.co.uk/img/media/99e1d9cd17c07db550e430f7924612624b700ec0/1446_402_4737_2843/master/4737.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=cfb061b028932b2e0a5b818983f3c7d2";
+        Image image=new Image(urlImage);
+        if(image.isError()) {
+            Image localImage=new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
+            userImage.setImage(localImage);
+        }
+        else{
+            userImage.setImage(image);
+        }
+
     }
 
 
