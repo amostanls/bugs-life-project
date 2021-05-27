@@ -98,12 +98,12 @@ public class Controller implements Initializable {
         new FadeInRight(view).play();
     }
 
-    @FXML
+    /*@FXML
     void search(MouseEvent event) {
         Pane view = new FxmlLoader().getPage("search");
         mainPane.setCenter(view);
         new FadeInRight(view).play();
-    }
+    }*/
 
     @FXML
     void changeLog(MouseEvent event) {

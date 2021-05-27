@@ -13,6 +13,9 @@ public class reportGeneration {
     private Timestamp startTime;
     private Timestamp endTime;
 
+    public reportGeneration() {
+    }
+
     public reportGeneration(Timestamp time) {    // make sure the date is sunday
         startTime = new Timestamp(Calendar.getInstance().get(
                 Calendar.YEAR) , Calendar.getInstance().get(
@@ -144,6 +147,12 @@ public class reportGeneration {
 
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
+    }
+
+
+    public static void main(String[] args) {
+        reportGeneration report=new reportGeneration();
+        System.out.println(report.toString());
     }
 
 }

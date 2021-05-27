@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.protocol.Resultset;
 import javafx.scene.control.Alert;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
@@ -135,7 +137,7 @@ CONSTRAINT pic_fk
  */
 public class MySQLOperation {
 
-    public static Connection getConnection() throws Exception {
+    public static Connection getConnection() {
         //Local Database(Local Host)
         final String user = "root";
         final String pass = "";
@@ -144,11 +146,18 @@ public class MySQLOperation {
         // Online Database
         /*final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
-        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL";*/
+        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";*/
 
         final String driver = "com.mysql.cj.jdbc.Driver";
-        Class.forName(driver);
-        Connection myConn = DriverManager.getConnection(path, user, pass);
+        Connection myConn=null;
+        try{
+            Class.forName(driver);
+            myConn = DriverManager.getConnection(path, user, pass);
+        }catch (ClassNotFoundException | SQLException e){
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Connection refused!!!");
+        }
+
         return myConn;
     }
 
@@ -1844,11 +1853,11 @@ public class MySQLOperation {
         return myConnection;
     }
 
-    public static void resetDatabase(Connection myConn,String database_name) {
+    public static void resetDatabase(Connection myConn, String database_name) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         String query = "SHOW DATABASES;\n" +
-                "USE "+database_name+";\n" +
+                "USE " + database_name + ";\n" +
                 "SHOW TABLES;\n" +
                 "SELECT * FROM projects;\n" +
                 "SELECT * FROM issues;\n" +
