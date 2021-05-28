@@ -139,14 +139,14 @@ public class MySQLOperation {
 
     public static Connection getConnection() {
         //Local Database(Local Host)
-        final String user = "root";
-        final String pass = "";
-        final String path = "jdbc:mysql://localhost:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
+//        final String user = "root";
+//        final String pass = "";
+//        final String path = "jdbc:mysql://localhost:3306/bugs_life?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
 
         // Online Database
-        /*final String user = "5peJ8pFLLQ";
+        final String user = "5peJ8pFLLQ";
         final String pass = "h6Tpwh3kYW";
-        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";*/
+        final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
 
         final String driver = "com.mysql.cj.jdbc.Driver";
         Connection myConn=null;
