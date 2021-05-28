@@ -3,39 +3,58 @@ package bugs;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.util.List;
+
+import static bugs.MySQLOperation.*;
 
 public class Server {
+    private static Socket s = null;
+    private static DataInputStream input = null;
+    private static DataOutputStream out = null;
 
     //all process including data storage, data processing, data retrieval, data query, and so on should be done by server
     public static void main(String[] args) throws IOException {
+
+        //Establish connection to mysql and socket
+        Connection myConn = getConnection();
         ServerSocket ss = new ServerSocket(3308);
         Socket s = ss.accept();
         System.out.println("Connection Successful\n");
 
-        String command = getCommandFromClient(s);
-        while(!command.equalsIgnoreCase("exit")) {
-            sendOutputToClient(s, "Enter anything u want to print: ");
-            System.out.println(getInputFromClient(s));
-            command = getCommandFromClient(s);
+        //program
+
+        //close
+        System.out.println("Closing connection");
+        s.close();
+        input.close();
+    }
+
+    public static String getInputFromClient(Socket s) throws IOException {
+        input = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+        String line = "";
+        StringBuilder sb = new StringBuilder();
+
+        // reads message from client until "Over" is sent
+        while (!line.equals("Over")) {
+            try {
+                line = input.readUTF();
+                if (line.equals("Over")) {
+                    break;
+                }else {
+                    sb.append(line + "\n");
+                }
+            }
+            catch(IOException i) {
+                System.out.println(i);
+            }
         }
+        return sb.toString();
     }
 
-    private static String getInputFromClient(Socket s) throws IOException {
-        InputStreamReader in = new InputStreamReader(s.getInputStream());
-        BufferedReader br = new BufferedReader(in);
-
-        String str = br.readLine();
-        return str;
-    }
-
-    private static void sendOutputToClient(Socket s, String output) throws IOException {
-        PrintWriter pr = new PrintWriter(s.getOutputStream());
-        pr.println(output);
-        pr.flush();
-    }
-
-    private static String getCommandFromClient(Socket s) throws IOException {
-        sendOutputToClient(s,"Enter command: ");
-        return getInputFromClient(s);
+    public static void sendInstructionToClient(Socket s, String instruction) throws IOException {
+        out = new DataOutputStream(s.getOutputStream());
+        out.writeUTF(instruction);
+        out.writeUTF("Over");
     }
 }
