@@ -22,7 +22,20 @@ public class Server {
         Socket s = ss.accept();
         System.out.println("Connection Successful\n");
 
+        //Declare variable need for operation
+        String command = "";
+
         //program
+        command = getInputFromClient(s);
+        while(!command.equalsIgnoreCase("exit")) {
+            switch(command) {
+                case "print issue":
+                    List<Issue> list = getIssueListByPriority(myConn,1);
+                    sendInstructionToClient(s, displayIssue(list));
+                    break;
+            }
+            command = getInputFromClient(s);
+        }
 
         //close
         System.out.println("Closing connection");
@@ -34,21 +47,32 @@ public class Server {
         input = new DataInputStream(new BufferedInputStream(s.getInputStream()));
         String line = "";
         StringBuilder sb = new StringBuilder();
+        line = input.readUTF();
+        sb.append(line);
 
-        // reads message from client until "Over" is sent
-        while (!line.equals("Over")) {
-            try {
-                line = input.readUTF();
-                if (line.equals("Over")) {
-                    break;
-                }else {
-                    sb.append(line + "\n");
-                }
-            }
-            catch(IOException i) {
-                System.out.println(i);
-            }
-        }
+//        boolean moreThanOneLine = false;
+//
+//        // reads message from client until "Over" is sent
+//        while (!line.equals("Over")) {
+//            try {
+//                line = input.readUTF();
+//                if (moreThanOneLine == true) {
+//                    if (line.equals("Over")) {
+//                        break;
+//                    } else {
+//                        sb.append(line + "\n");
+//                    }
+//                }
+//                else {
+//                    sb.append(line);
+//                }
+//
+//                moreThanOneLine = true;
+//            }
+//            catch(IOException i) {
+//                System.out.println(i);
+//            }
+//        }
         return sb.toString();
     }
 
