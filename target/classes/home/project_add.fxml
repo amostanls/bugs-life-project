@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.projectAddController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="116.0" prefWidth="602.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Project" wrappingWidth="188.875">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Project Name" wrappingWidth="157.13671875">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin></Text>
+            <TextField fx:id="projectNameField" prefHeight="46.0" prefWidth="333.0" promptText="Enter project name here" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <JFXButton fx:id="saveBtn" onAction="#setSaveBtn" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #00E676;" text="Save">
+               <font>
+                  <Font name="Century Gothic" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="cancelBtn" layoutX="241.0" layoutY="37.0" onAction="#setCancelBtn" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #d9534f;" text="Cancel">
+               <font>
+                  <Font name="Century Gothic" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+      </HBox>
+   </children>
+</VBox>
