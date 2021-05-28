@@ -5,24 +5,40 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
+    public static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) throws IOException {
         Socket s = new Socket("localhost", 3308);
 
-        //sending data to server
-        PrintWriter pr = new PrintWriter(s.getOutputStream());
-        pr.println("sending data to server");
-        pr.flush();
+        String command = sendCommandToServer(s);
+        while(!command.equalsIgnoreCase("exit")) {
+            getInputFromServer(s);
+            sendOutputToServer(s);
+            command = sendCommandToServer(s);
+        }
+    }
 
-        //getting data from server
+    private static String sendOutputToServer(Socket s) throws IOException {
+        PrintWriter pr = new PrintWriter(s.getOutputStream());
+        String output = sc.nextLine();
+        pr.println(output);
+        pr.flush();
+        return output;
+    }
+
+    private static String getInputFromServer(Socket s) throws IOException {
         InputStreamReader in = new InputStreamReader(s.getInputStream());
         BufferedReader br = new BufferedReader(in);
 
         String str = br.readLine();
-        System.out.println("Server: " + str);
+        System.out.print("Server: " + str);
+        return str;
+    }
 
-        pr.close();
-        s.close();
+    private static String sendCommandToServer(Socket s) throws IOException {
+        getInputFromServer(s);
+        return sendOutputToServer(s);
     }
 }
