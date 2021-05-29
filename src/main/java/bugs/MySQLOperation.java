@@ -1331,7 +1331,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText) {
+    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText,String url) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -1346,7 +1346,7 @@ public class MySQLOperation {
         Issue newIssue = null;
 
         try {
-            String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_ISSUE);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
@@ -1358,6 +1358,7 @@ public class MySQLOperation {
             pstmt.setString(8, createdBy);
             pstmt.setString(9, assignee);
             pstmt.setTimestamp(10, issue_timestamp);
+            pstmt.setString(11,url);
 
             pstmt.execute();
         } catch (Exception ex) {
@@ -1574,7 +1575,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText) {
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText,String url) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -1788,7 +1789,8 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
+                String url=myRs.getString("url");
+                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp,url);
                 issueList.add(newIssueHistory);
             }
 

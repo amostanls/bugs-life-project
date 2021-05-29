@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -12,8 +13,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.commentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.commentController">
    <children>
       <Label layoutX="63.0" layoutY="31.0" prefHeight="40.0" prefWidth="123.0" text="Comment">
          <font>
@@ -138,9 +140,13 @@
                      </children>
                   </HBox>
                   <Label prefHeight="17.0" prefWidth="123.0" text="Issue Description" />
-                  <TextArea fx:id="issueDesc" prefHeight="178.0" prefWidth="1030.0" />
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <TextFlow fx:id="issueDesc" prefHeight="198.0" prefWidth="1028.0" style="-fx-background-color: white;" />
+                     </content>
+                  </ScrollPane>
                   <Label prefHeight="17.0" prefWidth="87.0" text="Comments" />
-                  <TextArea fx:id="issueComment" prefHeight="230.0" prefWidth="1030.0" />
+                  <TextArea fx:id="issueComment" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </VBox>
          </children>

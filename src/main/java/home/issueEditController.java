@@ -34,6 +34,9 @@ public class issueEditController implements Initializable {
     private TextField issueStatus;
 
     @FXML
+    private TextField issueImageURL;
+
+    @FXML
     private JFXButton saveBtn;
 
     @FXML
@@ -49,8 +52,20 @@ public class issueEditController implements Initializable {
         if(!priorityString.isEmpty()) priority=Integer.valueOf(priorityString);
 
         String title=issueTitle.getText();
-
         String issueDescription=issueDesc.getText();
+        String url="";
+
+        if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
+            if (Controller.isValidURL(issueImageURL.getText())) {
+                url=issueImageURL.getText();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setContentText("Not a valid URL");
+                alert.showAndWait();
+            }
+        }
+
         if(tag.isEmpty() ||title.isEmpty() ||issueDescription.isEmpty() || priorityString.isEmpty()||status.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
@@ -67,10 +82,10 @@ public class issueEditController implements Initializable {
             //connect to database
             if(tag.equals(issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus())&& priority==issue_temp.getPriority()){
                 //same,no change in data
-                System.out.println("SAME");
+                System.out.println("SAME,no change");
             }
             else{
-                updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),title,priority,status,tag,issueDescription);
+                updateIssue(connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),title,priority,status,tag,issueDescription,url);
             }
 
             clean();
@@ -112,6 +127,12 @@ public class issueEditController implements Initializable {
         issuePriority.setText(issue_temp.getPriority()+"");
 
         issueTitle.setText(issue_temp.getTitle()+"");
+        if(issue_temp.getUrl()==null){
+            issueImageURL.setText("");
+        }
+        else{
+            issueImageURL.setText(issue_temp.getUrl());
+        }
 
 
         issueDesc.setText(issue_temp.getDescriptionText()+"");

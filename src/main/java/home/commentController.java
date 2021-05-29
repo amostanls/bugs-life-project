@@ -68,7 +68,7 @@ public class commentController implements Initializable {
     private TextField issueCreatedBy;
 
     @FXML
-    private TextArea issueDesc;
+    private TextFlow issueDesc;
 
     @FXML
     private TextArea issueComment;
@@ -190,7 +190,7 @@ public class commentController implements Initializable {
         issueTitle.setEditable(b);
         issueAssignedTo.setEditable(b);
         issueCreatedBy.setEditable(b);
-        issueDesc.setEditable(b);
+        //issueDesc.setEditable(b);
         issueComment.setEditable(b);
     }
 
@@ -211,8 +211,20 @@ public class commentController implements Initializable {
         issueTitle.setText(issue_temp.getTitle() + "");
         issueAssignedTo.setText(issue_temp.getAssignee() + "");
         issueCreatedBy.setText(issue_temp.getCreatedBy() + "");
-        issueDesc.setText(issue_temp.getDescriptionText() + "");
+
+        Text text=new Text(issue_temp.getDescriptionText());
+        if(issue_temp.getUrl()==null){
+            issueDesc.getChildren().addAll(text);
+        }
+        else{
+            ImageView imageView = new ImageView(issue_temp.getUrl());
+            issueDesc.getChildren().addAll(text, imageView);
+        }
+
+        //issueDesc.setText(issue_temp.getDescriptionText() + "");
+
         issueComment.setText(issue_temp.printComment());
+
 
 
     }

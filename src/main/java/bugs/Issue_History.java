@@ -14,8 +14,9 @@ public class Issue_History {
     private String descriptionText;
     private String createdBy, assignee;
     private Timestamp timestamp;
+    private String url;
 
-    public Issue_History(int project_id, int id, int version_id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp) {
+    public Issue_History(int project_id, int id, int version_id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, String url) {
         this.project_id = project_id;
         this.id = id;
         this.version_id = version_id;
@@ -27,6 +28,7 @@ public class Issue_History {
         this.createdBy = createdBy;
         this.assignee = assignee;
         this.timestamp = timestamp;
+        this.url = url;
     }
 
     public int getProject_id() {
@@ -115,5 +117,13 @@ public class Issue_History {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
