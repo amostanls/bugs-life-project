@@ -1874,23 +1874,6 @@ public class MySQLOperation {
         ResultSet myRs = null;
         String query = "SHOW DATABASES;\n" +
                 "USE " + database_name + ";\n" +
-                "SHOW TABLES;\n" +
-                "SELECT * FROM projects;\n" +
-                "SELECT * FROM issues;\n" +
-                "SELECT * FROM comments;\n" +
-                "SELECT * FROM react;\n" +
-                "SELECT * FROM users;\n" +
-                "SELECT * FROM projects_history;\n" +
-                "SELECT * FROM issues_history;\n" +
-                "SELECT * FROM comments_history;\n" +
-                "DROP TABLE projects_history;\n" +
-                "DROP TABLE issues_history;\n" +
-                "DROP TABLE comments_history;\n" +
-                "DROP TABLE projects;\n" +
-                "DROP TABLE issues;\n" +
-                "DROP TABLE comments;\n" +
-                "DROP TABLE react;\n" +
-                "DROP TABLE users;\n" +
                 "\n" +
                 "CREATE TABLE projects (\n" +
                 "project_id INT PRIMARY KEY AUTO_INCREMENT,\n" +
@@ -1931,9 +1914,10 @@ public class MySQLOperation {
                 "CREATE TABLE users (\n" +
                 "userid INT,\n" +
                 "username VARCHAR(25),\n" +
-                "password VARCHAR(25),\n" +
+                "password VARCHAR(64),\n" +
                 "admin boolean,\n" +
-                "url VARCHAR(2083)\n" +
+                "url VARCHAR(2083),\n" +
+                "email VARCHAR(40)\n" +
                 ");\n" +
                 "\n" +
                 "ALTER TABLE users ADD UNIQUE(userid);\n" +
