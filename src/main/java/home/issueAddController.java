@@ -54,16 +54,7 @@ public class issueAddController implements Initializable {
         String issueDescription=issueDesc.getText();
         String url="";
 
-        if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
-            if (Controller.isValidURL(issueImageURL.getText())) {
-                url=issueImageURL.getText();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.setContentText("Not a valid URL");
-                alert.showAndWait();
-            }
-        }
+
 
         if(tag.isEmpty() ||title.isEmpty() ||assignee.isEmpty() ||issueDescription.isEmpty() || priorityString.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -78,7 +69,21 @@ public class issueAddController implements Initializable {
             alert.showAndWait();
         }
         else{
-            MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+            if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
+                if (Controller.isValidURL(issueImageURL.getText())) {
+                    url=issueImageURL.getText();
+                    MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Not a valid URL");
+                    alert.showAndWait();
+                }
+            }
+            else{
+                MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+            }
+
             clean();
             ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
         }

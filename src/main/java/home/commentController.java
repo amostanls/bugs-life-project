@@ -68,7 +68,7 @@ public class commentController implements Initializable {
     private TextField issueCreatedBy;
 
     @FXML
-    private TextFlow issueDesc;
+    private TextArea issueDesc;
 
     @FXML
     private TextArea issueComment;
@@ -171,7 +171,20 @@ public class commentController implements Initializable {
             alert.showAndWait();
         }
     }
-
+    @FXML
+    void imageView(MouseEvent event) throws Exception {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("issueImageView.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -190,7 +203,7 @@ public class commentController implements Initializable {
         issueTitle.setEditable(b);
         issueAssignedTo.setEditable(b);
         issueCreatedBy.setEditable(b);
-        //issueDesc.setEditable(b);
+        issueDesc.setEditable(b);
         issueComment.setEditable(b);
     }
 
@@ -212,16 +225,8 @@ public class commentController implements Initializable {
         issueAssignedTo.setText(issue_temp.getAssignee() + "");
         issueCreatedBy.setText(issue_temp.getCreatedBy() + "");
 
-        Text text=new Text(issue_temp.getDescriptionText());
-        if(issue_temp.getUrl()==null){
-            issueDesc.getChildren().addAll(text);
-        }
-        else{
-            ImageView imageView = new ImageView(issue_temp.getUrl());
-            issueDesc.getChildren().addAll(text, imageView);
-        }
 
-        //issueDesc.setText(issue_temp.getDescriptionText() + "");
+        issueDesc.setText(issue_temp.getDescriptionText() + "");
 
         issueComment.setText(issue_temp.printComment());
 
