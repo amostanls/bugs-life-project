@@ -25,9 +25,9 @@ public class reportGenerationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Timestamp ts = Timestamp.valueOf("2019-08-07 23:44:00.0");
+        /*Timestamp ts = Timestamp.valueOf("2019-08-07 23:44:00.0");
         reportGeneration report = new reportGeneration(ts);
-        reportDisplay.setText(report.toString());
+        reportDisplay.setText(report.toString());*/
     }
 
    /* private void projectTableBackGroundTask() {
