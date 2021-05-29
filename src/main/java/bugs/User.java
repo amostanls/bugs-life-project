@@ -20,6 +20,7 @@ public class User implements Serializable {
     private String name;
     private boolean admin;
     private String url;
+    private String email;
     private HashMap<Integer,String> comment_reacted = new HashMap<>();
     
     public User(int userid, String username, String password, String name, boolean admin) {
@@ -30,12 +31,13 @@ public class User implements Serializable {
         this.admin = admin;
     }
 
-    public User(int userid, String username, String password, boolean admin, String url) {
+    public User(int userid, String username, String password, boolean admin, String url, String email) {
         this.userid = userid;
         this.username = username;
         this.password = password;
         this.admin = admin;
         this.url=url;
+        this.email = email;
     }
 
     public void addReaction(int commentid, String reaction) {
