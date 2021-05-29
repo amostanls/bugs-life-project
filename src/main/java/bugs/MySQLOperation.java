@@ -361,7 +361,8 @@ public class MySQLOperation {
                 int id = myRs.getInt("project_id");
                 String name = myRs.getString("name");
                 List<Issue> issues = getIssueListByPriority(myConn, id);
-                projectList.add(new Project(id, name, issues));
+                Timestamp ts = myRs.getTimestamp("project_timestamp");
+                projectList.add(new Project(id, name, issues, ts));
             }
 
         } catch (Exception ex) {
@@ -2005,25 +2006,24 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-        initializedDatabase();
+//        initializedDatabase();
 
-//        Connection myConn = null;
-//        try {
-//            myConn = getConnection();
-//            User user = new User(1,"ang","!23123",false);
-//            updateComment(myConn, user, 1,1,2,"new correct user");
-////            updateIssue(myConn, 1,1, "descriptionText", "new text");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (myConn != null) {
-//                try {
-//                    myConn.close();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
+        Connection myConn = null;
+        try {
+            myConn = getConnection();
+            List<Issue> i = getIssueListByTimestamp(myConn,1);
+            System.out.println(i.get(0).getTimestamp());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (myConn != null) {
+                try {
+                    myConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 //        showIssueDashboard(1,"priority","jhoe");
     }
 }
