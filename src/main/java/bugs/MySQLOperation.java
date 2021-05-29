@@ -117,6 +117,7 @@ descriptionText VARCHAR(500),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
 issue_timestamp TIMESTAMP,
+url VARCHAR(2083),
 PRIMARY KEY (project_id, issue_id, issue_timestamp),
 CONSTRAINT pi_fk
     FOREIGN KEY pi_fk (project_id, issue_id)
@@ -1331,7 +1332,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText,String url) {
+    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -1346,7 +1347,7 @@ public class MySQLOperation {
         Issue newIssue = null;
 
         try {
-            String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+            String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_ISSUE);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
@@ -1358,7 +1359,6 @@ public class MySQLOperation {
             pstmt.setString(8, createdBy);
             pstmt.setString(9, assignee);
             pstmt.setTimestamp(10, issue_timestamp);
-            pstmt.setString(11,url);
 
             pstmt.execute();
         } catch (Exception ex) {
@@ -1575,7 +1575,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText,String url) {
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -1789,8 +1789,8 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                String url=myRs.getString("url");
-                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp,url);
+                String url = myRs.getString("url");
+                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, url);
                 issueList.add(newIssueHistory);
             }
 
@@ -1876,15 +1876,7 @@ public class MySQLOperation {
         ResultSet myRs = null;
         String query = "SHOW DATABASES;\n" +
                 "USE " + database_name + ";\n" +
-                "SHOW TABLES;\n" +
-                "SELECT * FROM projects;\n" +
-                "SELECT * FROM issues;\n" +
-                "SELECT * FROM comments;\n" +
-                "SELECT * FROM react;\n" +
-                "SELECT * FROM users;\n" +
-                "SELECT * FROM projects_history;\n" +
-                "SELECT * FROM issues_history;\n" +
-                "SELECT * FROM comments_history;\n" +
+                "\n" +
                 "DROP TABLE projects_history;\n" +
                 "DROP TABLE issues_history;\n" +
                 "DROP TABLE comments_history;\n" +
@@ -1933,9 +1925,10 @@ public class MySQLOperation {
                 "CREATE TABLE users (\n" +
                 "userid INT,\n" +
                 "username VARCHAR(25),\n" +
-                "password VARCHAR(25),\n" +
+                "password VARCHAR(64),\n" +
                 "admin boolean,\n" +
-                "url VARCHAR(2083)\n" +
+                "url VARCHAR(2083),\n" +
+                "email VARCHAR(40)\n" +
                 ");\n" +
                 "\n" +
                 "ALTER TABLE users ADD UNIQUE(userid);\n" +
@@ -1964,6 +1957,7 @@ public class MySQLOperation {
                 "createdBy VARCHAR(20),\n" +
                 "assignee VARCHAR(20),\n" +
                 "issue_timestamp TIMESTAMP,\n" +
+                "url VARCHAR(2083),\n" +
                 "PRIMARY KEY (project_id, issue_id, issue_timestamp),\n" +
                 "CONSTRAINT pi_fk\n" +
                 "    FOREIGN KEY pi_fk (project_id, issue_id)\n" +
@@ -2015,7 +2009,8 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-        initializedDatabase();
+        Connection myConn = getConnection();
+        resetDatabase(myConn,"5peJ8pFLLQ");
 
 //        Connection myConn = null;
 //        try {
