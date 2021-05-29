@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -168,7 +170,7 @@ public class MySQLOperation {
         return myConn;
     }
 
-    public static void exportJavaObjectsAsJson(Connection myConn, List objects, String fileName) {
+    public static String exportJavaObjectsAsJson(Connection myConn, List objects, String fileName) {
         fileName += ".json";
         ObjectMapper om = Json.getDefaultOM();
         try {
@@ -176,6 +178,8 @@ public class MySQLOperation {
         } catch (IOException ex) {
             Logger.getLogger(Json.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Path pathOfResultFile = Paths.get(fileName);
+        return pathOfResultFile.toAbsolutePath().toString();
     }
 
     public static void exportJavaObjectAsJson(Connection myConn, Object objects, String fileName) {
@@ -2012,8 +2016,6 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-        Connection myConn = getConnection();
-        resetDatabase(myConn,"5peJ8pFLLQ");
 
 //        Connection myConn = null;
 //        try {
