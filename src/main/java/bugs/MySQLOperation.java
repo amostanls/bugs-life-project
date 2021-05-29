@@ -86,7 +86,8 @@ userid INT,
 username VARCHAR(25),
 password VARCHAR(25),
 admin boolean,
-url VARCHAR(2083)
+url VARCHAR(2083),
+email VARCHAR(40)
 );
 
 ALTER TABLE users ADD UNIQUE(userid);
@@ -1104,7 +1105,8 @@ public class MySQLOperation {
                 int userid = myRs.getInt("userid");
                 boolean admin = myRs.getBoolean("admin");
                 String url = myRs.getString("url");
-                User newUser = new User(userid, username, password, admin, url);
+                String email = myRs.getString("email");
+                User newUser = new User(userid, username, password, admin, url, email);
                 return newUser;
             }
 
@@ -2006,24 +2008,24 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-//        initializedDatabase();
+        initializedDatabase();
 
-        Connection myConn = null;
-        try {
-            myConn = getConnection();
-            List<Issue> i = getIssueListByTimestamp(myConn,1);
-            System.out.println(i.get(0).getTimestamp());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (myConn != null) {
-                try {
-                    myConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+//        Connection myConn = null;
+//        try {
+//            myConn = getConnection();
+//            List<Issue> i = getIssueListByTimestamp(myConn,1);
+//            System.out.println(i.get(0).getTimestamp());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (myConn != null) {
+//                try {
+//                    myConn.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 //        showIssueDashboard(1,"priority","jhoe");
     }
 }
