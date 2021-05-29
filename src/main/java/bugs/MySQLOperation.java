@@ -157,11 +157,7 @@ public class MySQLOperation {
             myConn = DriverManager.getConnection(path, user, pass);
         }catch (ClassNotFoundException | SQLException e){
             System.out.println(e.getMessage());
-            //JOptionPane.showMessageDialog(null, "Connection refused!!!");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText(null);
-            alert.setContentText("Connection refused!!!");
-            alert.showAndWait();
+            JOptionPane.showMessageDialog(null, "Connection refused!!!");
         }
 
         return myConn;
@@ -1874,6 +1870,15 @@ public class MySQLOperation {
         ResultSet myRs = null;
         String query = "SHOW DATABASES;\n" +
                 "USE " + database_name + ";\n" +
+                "SHOW TABLES;\n" +
+                "DROP TABLE projects_history;\n" +
+                "DROP TABLE issues_history;\n" +
+                "DROP TABLE comments_history;\n" +
+                "DROP TABLE projects;\n" +
+                "DROP TABLE issues;\n" +
+                "DROP TABLE comments;\n" +
+                "DROP TABLE react;\n" +
+                "DROP TABLE users;\n" +
                 "\n" +
                 "CREATE TABLE projects (\n" +
                 "project_id INT PRIMARY KEY AUTO_INCREMENT,\n" +
@@ -1997,7 +2002,8 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-        initializedDatabase();
+        Connection myConn = getConnection();
+        resetDatabase(myConn, "5peJ8pFLLQ");
 
 //        Connection myConn = null;
 //        try {
