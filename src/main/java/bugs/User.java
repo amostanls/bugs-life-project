@@ -100,4 +100,12 @@ public class User implements Serializable {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
