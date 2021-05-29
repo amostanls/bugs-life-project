@@ -130,12 +130,12 @@ public class Mail {
         return code;
     }
 
-    public static void sendReport(String recipientMail, String fileSource, String fileName){
+    public static void sendReport(String recipientMail, String reportSouce, String reportName){
         String title = "Bugs Life Report";
         String text = "Thank you for using Bugs Life. Report is attached at the end of this email.\n\n" +
-                "If you have not requested a report, someone else may be trying to access the Bugs Life account at "+recipientMail+". Kindly double check is there any unauthorised access to your account and change your password if it is necessary\n";
+                "If you have not requested a report, someone else may be trying to access the Bugs Life account at "+recipientMail+". Kindly double check is there any unauthorised access to your account and change your password if it is necessary.\n";
         try {
-            sendMailWithFile(recipientMail, title, text, fileSource, fileName);
+            sendMailWithFile(recipientMail, title, text, reportSouce, reportName);
         } catch (Exception e) {
             e.printStackTrace();
         }
