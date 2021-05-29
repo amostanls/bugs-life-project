@@ -32,10 +32,15 @@ public class issueAddController implements Initializable {
     private TextArea issueDesc;
 
     @FXML
+    private TextField issueImageURL;
+
+    @FXML
     private JFXButton saveBtn;
 
     @FXML
     private JFXButton cancelBtn;
+
+
 
     @FXML
     public void setSaveBtn(ActionEvent event) {
@@ -47,6 +52,10 @@ public class issueAddController implements Initializable {
         String title=issueTitle.getText();
         String assignee=issueAssignedTo.getText();
         String issueDescription=issueDesc.getText();
+        String url="";
+
+
+
         if(tag.isEmpty() ||title.isEmpty() ||assignee.isEmpty() ||issueDescription.isEmpty() || priorityString.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
@@ -60,7 +69,21 @@ public class issueAddController implements Initializable {
             alert.showAndWait();
         }
         else{
-            MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription);
+            if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
+                if (Controller.isValidURL(issueImageURL.getText())) {
+                    url=issueImageURL.getText();
+                    MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Not a valid URL");
+                    alert.showAndWait();
+                }
+            }
+            else{
+                MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+            }
+
             clean();
             ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
         }
@@ -84,4 +107,6 @@ public class issueAddController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
+
 }

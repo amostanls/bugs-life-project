@@ -1332,7 +1332,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText) {
+    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText,String url) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -1347,7 +1347,7 @@ public class MySQLOperation {
         Issue newIssue = null;
 
         try {
-            String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_ISSUE);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
@@ -1359,6 +1359,7 @@ public class MySQLOperation {
             pstmt.setString(8, createdBy);
             pstmt.setString(9, assignee);
             pstmt.setTimestamp(10, issue_timestamp);
+            pstmt.setString(11,url);
 
             pstmt.execute();
         } catch (Exception ex) {
@@ -1575,15 +1576,15 @@ public class MySQLOperation {
         }
     }
 
-    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText) {
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText,String url) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
         try {
-            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) " +
-                    "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp FROM issues " +
+            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url) " +
+                    "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url FROM issues " +
                     "WHERE project_id = ? AND issue_id = ?";
-            String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, issue_timestamp = ? WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, issue_timestamp = ? ,url=? WHERE project_id = ? AND issue_id = ?";
             String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC";
 
             //get last version id
@@ -1601,6 +1602,7 @@ public class MySQLOperation {
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
+
             pstmt.execute();
 
             //update table issues history version id
@@ -1619,9 +1621,10 @@ public class MySQLOperation {
 
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
             pstmt.setTimestamp(6, currentTimestamp);
+            pstmt.setString(7,url);
 
-            pstmt.setInt(7, project_id);
-            pstmt.setInt(8, issue_id);
+            pstmt.setInt(8, project_id);
+            pstmt.setInt(9, issue_id);
             pstmt.execute();
 
         } catch (Exception ex) {

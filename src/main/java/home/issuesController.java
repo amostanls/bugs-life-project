@@ -167,12 +167,12 @@ public class issuesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isEditToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (isEditToggle.isSelected() == true) isEditing = true;
+            if (isEditToggle.isSelected()) isEditing = true;
             else isEditing = false;
         });
 
         changeLogToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (changeLogToggle.isSelected() == true) isChange = true;
+            if (changeLogToggle.isSelected()) isChange = true;
             else isChange = false;
         });
         issueId.setCellValueFactory(new PropertyValueFactory<>("id"));

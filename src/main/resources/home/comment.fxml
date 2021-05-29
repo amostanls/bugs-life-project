@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.commentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.commentController">
    <children>
       <Label layoutX="63.0" layoutY="31.0" prefHeight="40.0" prefWidth="123.0" text="Comment">
          <font>
@@ -135,12 +135,24 @@
                               <Insets left="40.0" />
                            </padding>
                         </Label>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="562.0">
+                           <children>
+                              <JFXButton onMouseClicked="#imageView" prefHeight="55.0" prefWidth="117.0" style="-fx-background-color: #5cb85c; -fx-text-fill: white;" text="Issue Image">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
                   <Label prefHeight="17.0" prefWidth="123.0" text="Issue Description" />
-                  <TextArea fx:id="issueDesc" prefHeight="178.0" prefWidth="1030.0" />
+                  <TextArea fx:id="issueDesc" layoutX="10.0" layoutY="384.0" prefHeight="179.0" prefWidth="1030.0" />
                   <Label prefHeight="17.0" prefWidth="87.0" text="Comments" />
-                  <TextArea fx:id="issueComment" prefHeight="230.0" prefWidth="1030.0" />
+                  <TextArea fx:id="issueComment" prefHeight="236.0" prefWidth="1030.0" />
                </children>
             </VBox>
          </children>

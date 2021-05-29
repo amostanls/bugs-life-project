@@ -54,12 +54,16 @@ public class issueHistoryController implements Initializable {
     @FXML
     private TableColumn<Issue_History, String> issueCreatedBy;
 
+
+    @FXML
+    private TableColumn<Issue_History, String> issueImageURL;
+
     @FXML
     void changeToVersion(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
             Issue_History issue = issueTable.getSelectionModel().getSelectedItem();
 
-            MySQLOperation.updateIssue(MySQLOperation.connectionToDatabase(), issue.getProject_id(), issue.getId(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText());
+            MySQLOperation.updateIssue(MySQLOperation.connectionToDatabase(), issue.getProject_id(), issue.getId(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getUrl());
             ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
 
 
@@ -85,6 +89,7 @@ public class issueHistoryController implements Initializable {
         issueTime.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
         issueAssignee.setCellValueFactory(new PropertyValueFactory<>("assignee"));
         issueCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        issueImageURL.setCellValueFactory(new PropertyValueFactory<>("url"));
         setIssueTable();
 
     }

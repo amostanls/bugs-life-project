@@ -171,7 +171,20 @@ public class commentController implements Initializable {
             alert.showAndWait();
         }
     }
-
+    @FXML
+    void imageView(MouseEvent event) throws Exception {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("issueImageView.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -211,8 +224,12 @@ public class commentController implements Initializable {
         issueTitle.setText(issue_temp.getTitle() + "");
         issueAssignedTo.setText(issue_temp.getAssignee() + "");
         issueCreatedBy.setText(issue_temp.getCreatedBy() + "");
+
+
         issueDesc.setText(issue_temp.getDescriptionText() + "");
+
         issueComment.setText(issue_temp.printComment());
+
 
 
     }

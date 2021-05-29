@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issueAddController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issueAddController">
    <children>
       <Label layoutX="51.0" layoutY="35.0" prefHeight="40.0" prefWidth="152.0" text="Add Issue">
          <font>
@@ -24,8 +24,10 @@
       <TextField fx:id="issueTitle" layoutX="98.0" layoutY="128.0" prefHeight="25.0" prefWidth="406.0" promptText="Enter Title" />
       <Label layoutX="52.0" layoutY="166.0" text="Assigned To" />
       <TextField fx:id="issueAssignedTo" layoutX="128.0" layoutY="162.0" promptText="Enter Assignee" />
-      <Label layoutX="52.0" layoutY="204.0" prefHeight="17.0" prefWidth="123.0" text="Issue Description" />
-      <TextArea fx:id="issueDesc" layoutX="52.0" layoutY="221.0" prefHeight="176.0" prefWidth="725.0" promptText="Enter your problem" />
+      <Label layoutX="52.0" layoutY="204.0" prefHeight="17.0" prefWidth="123.0" text="Image URL" />
+      <TextField fx:id="issueImageURL" layoutX="128.0" layoutY="200.0" prefHeight="25.0" prefWidth="406.0" promptText="Enter URL of your image (Not mandatory)" />
+      <Label layoutX="52.0" layoutY="225.0" prefHeight="17.0" prefWidth="123.0" text="Issue Description" />
+      <TextArea fx:id="issueDesc" layoutX="52.0" layoutY="248.0" prefHeight="149.0" prefWidth="725.0" promptText="Enter your problem" />
       <HBox alignment="CENTER" layoutX="52.0" layoutY="397.0" prefHeight="96.0" prefWidth="725.0">
          <children>
             <JFXButton fx:id="saveBtn" onAction="#setSaveBtn" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #00E676;" text="Save">
