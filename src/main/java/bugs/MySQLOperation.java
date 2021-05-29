@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.protocol.Resultset;
 import javafx.scene.control.Alert;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.swing.*;
 import java.io.File;
@@ -84,7 +85,7 @@ count INT);
 CREATE TABLE users (
 userid INT,
 username VARCHAR(25),
-password VARCHAR(25),
+password VARCHAR(64),
 admin boolean,
 url VARCHAR(2083),
 email VARCHAR(40)
@@ -260,7 +261,7 @@ public class MySQLOperation {
         for (int i = 0; i < node.get("users").size(); i++) {
             updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
             updateUser.setString(2, node.get("users").get(i).get("username").asText());
-            updateUser.setString(3, node.get("users").get(i).get("password").asText());
+            updateUser.setString(3, DigestUtils.sha256Hex(node.get("users").get(i).get("password").asText()));
             updateUser.setBoolean(4, false);
             updateUser.addBatch();
 
