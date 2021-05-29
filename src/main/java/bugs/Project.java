@@ -39,10 +39,11 @@ public class Project implements Serializable {
         this.project_timestamp = project_timestamp;
     }
 
-    public Project(int id, String name, List<Issue> issues) {
+    public Project(int id, String name, List<Issue> issues, Timestamp project_timestamp) {
         this.id = id;
         this.name = name;
         this.issues = (ArrayList<Issue>) issues;
+        this.project_timestamp = project_timestamp;
         this.issuesNumber=issues.size();
     }
 

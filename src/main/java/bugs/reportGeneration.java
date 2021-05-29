@@ -98,7 +98,7 @@ public class reportGeneration {
     }
     public List<String> getTopPerformance(){
         List<Issue>issue=getIssue();
-        List<String> checkList = null;
+        List<String> checkList = new ArrayList<>();
         for (int i = 0; i < issue.size(); i++) {
             checkList.add(issue.get(i).getAssignee());
             checkList.add(issue.get(i).getCreatedBy());
@@ -151,7 +151,8 @@ public class reportGeneration {
 
 
     public static void main(String[] args) {
-        reportGeneration report=new reportGeneration();
+        Timestamp ts = Timestamp.valueOf("2019-08-07 23:44:00.0");
+        reportGeneration report=new reportGeneration(ts);
         System.out.println(report.toString());
     }
 
