@@ -73,7 +73,11 @@ public class settingsController implements Initializable {
         } else {
             //connect to database
             MySQLOperation.updatePassword(MySQLOperation.connectionToDatabase(), Controller.getCurrentUser(), password);
-            JOptionPane.showMessageDialog(null, "Update Successful");
+            //JOptionPane.showMessageDialog(null, "Update Successful");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Update Successful");
+            alert.showAndWait();
             newPasswordField.clear();
             confirmPasswordField.clear();
 

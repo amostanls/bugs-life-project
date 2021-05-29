@@ -149,7 +149,11 @@ public class issuesController implements Initializable {
     @FXML
     void switchToComment(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
-            int selectedIssue = issueTable.getSelectionModel().getSelectedItem().getId();
+            int selectedIssue=0;
+            try{
+                selectedIssue = issueTable.getSelectionModel().getSelectedItem().getId();
+            }catch (NullPointerException e){}
+
             //System.out.println(selectedIssue);
             Controller.setSelectedIssueId(selectedIssue);
             if (isEditing == true) getEditView();
