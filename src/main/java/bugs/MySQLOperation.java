@@ -117,6 +117,7 @@ descriptionText VARCHAR(500),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
 issue_timestamp TIMESTAMP,
+url VARCHAR(2083),
 PRIMARY KEY (project_id, issue_id, issue_timestamp),
 CONSTRAINT pi_fk
     FOREIGN KEY pi_fk (project_id, issue_id)
@@ -1875,6 +1876,15 @@ public class MySQLOperation {
         String query = "SHOW DATABASES;\n" +
                 "USE " + database_name + ";\n" +
                 "\n" +
+                "DROP TABLE projects_history;\n" +
+                "DROP TABLE issues_history;\n" +
+                "DROP TABLE comments_history;\n" +
+                "DROP TABLE projects;\n" +
+                "DROP TABLE issues;\n" +
+                "DROP TABLE comments;\n" +
+                "DROP TABLE react;\n" +
+                "DROP TABLE users;\n" +
+                "\n" +
                 "CREATE TABLE projects (\n" +
                 "project_id INT PRIMARY KEY AUTO_INCREMENT,\n" +
                 "name VARCHAR(20) NOT NULL,\n" +
@@ -1946,6 +1956,7 @@ public class MySQLOperation {
                 "createdBy VARCHAR(20),\n" +
                 "assignee VARCHAR(20),\n" +
                 "issue_timestamp TIMESTAMP,\n" +
+                "url VARCHAR(2083),\n" +
                 "PRIMARY KEY (project_id, issue_id, issue_timestamp),\n" +
                 "CONSTRAINT pi_fk\n" +
                 "    FOREIGN KEY pi_fk (project_id, issue_id)\n" +
@@ -1997,7 +2008,8 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) {
-        initializedDatabase();
+        Connection myConn = getConnection();
+        resetDatabase(myConn,"5peJ8pFLLQ");
 
 //        Connection myConn = null;
 //        try {
