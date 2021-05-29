@@ -1789,7 +1789,8 @@ public class MySQLOperation {
                 String createdBy = myRs.getString("createdBy");
                 String asignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
-                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp);
+                String url = myRs.getString("url");
+                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, url);
                 issueList.add(newIssueHistory);
             }
 
