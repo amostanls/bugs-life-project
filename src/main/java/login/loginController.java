@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
 
@@ -59,8 +60,8 @@ public class loginController implements Initializable {
 
         String password= passwordField.getText();
 
-        //String sha256hex = DigestUtils.sha256Hex(password);
-
+        String sha256hex = DigestUtils.sha256Hex(password);
+        System.out.println(sha256hex);
         if(username.isEmpty()||password.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);

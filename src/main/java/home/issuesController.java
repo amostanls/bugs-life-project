@@ -10,20 +10,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
@@ -42,6 +45,14 @@ import static home.Controller.getSelectedProjectId;
 
 public class issuesController implements Initializable {
     ObservableList<Issue> issueList = null;
+
+    private boolean isEditing = false;
+    private boolean isChange = false;
+    private static Service<Void> backGroundThread;
+
+    @FXML
+    private StackPane stackPane;
+
 
     @FXML
     private TextField issueSearch;
@@ -84,10 +95,6 @@ public class issuesController implements Initializable {
 
     @FXML
     private JFXToggleButton changeLogToggle;
-
-
-    private boolean isEditing = false;
-    private boolean isChange = false;
 
     @FXML
     void getAddView(MouseEvent event) {
@@ -136,9 +143,7 @@ public class issuesController implements Initializable {
 
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
-        Controller.updateTable();
-        JOptionPane.showMessageDialog(null, "Refresh Completed");
-        setIssueTable();
+        issueTableBackGroundTask();
     }
 
     @FXML
@@ -235,6 +240,47 @@ public class issuesController implements Initializable {
         // 5. Add sorted (and filtered) data to the table.
         issueTable.setItems(sortedData);
 
+    }
+
+    private void issueTableBackGroundTask(){
+        backGroundThread = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        Controller.updateTable();
+                        return null;
+                    }
+                };
+            }
+        };
+        backGroundThread.setOnSucceeded(workerStateEvent -> {
+            try {
+                setIssueTable();
+                searchIssues();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //searchProject();
+            //JOptionPane.showMessageDialog(null, "Refresh Completed");
+
+        });
+
+        Region veil=new Region();
+        veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4); -fx-background-radius: 30 30 0 0;");
+        //veil.setStyle("-fx-background-radius: 30 30 0 0");
+        veil.setPrefSize(1030,530);
+
+        ProgressIndicator p =new ProgressIndicator();
+        p.setMaxSize(100,100);
+
+        p.progressProperty().bind(backGroundThread.progressProperty());
+        veil.visibleProperty().bind(backGroundThread.runningProperty());
+        p.visibleProperty().bind(backGroundThread.runningProperty());
+
+        stackPane.getChildren().addAll(veil,p);
+        backGroundThread.start();
     }
 
 }

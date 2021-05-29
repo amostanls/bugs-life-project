@@ -1,38 +1,28 @@
 package home;
 
-import animatefx.animation.FadeIn;
-import animatefx.animation.FadeInLeft;
 import animatefx.animation.FadeInRight;
 import bugs.MySQLOperation;
 import bugs.Project;
 import bugs.User;
-import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class Controller implements Initializable {
@@ -45,6 +35,9 @@ public class Controller implements Initializable {
     private static String username = "";
     private static String urlImage = null;
 
+
+
+
     @FXML
     private Label usernameDisplay;
 
@@ -53,6 +46,7 @@ public class Controller implements Initializable {
 
     @FXML
     private ImageView userImage;
+
 
     public static BorderPane staticBorderPane;
 
@@ -64,13 +58,12 @@ public class Controller implements Initializable {
             td.getDialogPane().setHeaderText("Make sure the URL is accessible through the Internet");
             td.getDialogPane().setContentText("Enter the URL of your image : ");
             td.showAndWait();
-            TextField input= td.getEditor();
-            if(input.getText()!=null && input.getText().toString().length()!=0){
-                if(isValidURL(input.getText().toString())){
+            TextField input = td.getEditor();
+            if (input.getText() != null && input.getText().toString().length() != 0) {
+                if (isValidURL(input.getText().toString())) {
                     setUrlImage(input.getText().toString());
-                    MySQLOperation.updateUserUrl(MySQLOperation.connectionToDatabase(),Controller.getCurrentUser(),input.getText().toString());
-                }
-                else{
+                    MySQLOperation.updateUserUrl(MySQLOperation.connectionToDatabase(), Controller.getCurrentUser(), input.getText().toString());
+                } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
                     alert.setContentText("Not a valid URL");
@@ -158,12 +151,13 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         usernameDisplay.setText(getUsername().toUpperCase());
         staticBorderPane = mainPane;
+
         Pane view = new FxmlLoader().getPage("dashboard");
         mainPane.setCenter(view);
         userImage.setFitWidth(190);
         userImage.setFitHeight(180);
         userImage.setPreserveRatio(true);
-        urlImage=Controller.getCurrentUser().getUrl();
+        urlImage = Controller.getCurrentUser().getUrl();
         if (urlImage != null) {
             Image image = new Image(urlImage);
             if (!image.isError()) {
@@ -249,8 +243,7 @@ public class Controller implements Initializable {
         setSelectedCommentId(0);
     }
 
-    public static boolean isValidURL(String url)
-    {
+    public static boolean isValidURL(String url) {
         /* Try creating a valid URL */
         try {
             new URL(url).toURI();
