@@ -157,7 +157,11 @@ public class MySQLOperation {
             myConn = DriverManager.getConnection(path, user, pass);
         }catch (ClassNotFoundException | SQLException e){
             System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(null, "Connection refused!!!");
+            //JOptionPane.showMessageDialog(null, "Connection refused!!!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Connection refused!!!");
+            alert.showAndWait();
         }
 
         return myConn;

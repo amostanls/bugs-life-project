@@ -141,7 +141,11 @@ public class projectController implements Initializable {
 
     public void switchToIssues(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
-            int selectedID = projectTable.getSelectionModel().getSelectedItem().getId();
+            int selectedID = 0;
+            try{
+                selectedID = projectTable.getSelectionModel().getSelectedItem().getId();
+            }catch (NullPointerException e){}
+
             Controller.setSelectedProjectId(selectedID);
             if (isEditing == true) getEditView();
             else if (isChange == true) getChangeLogView();

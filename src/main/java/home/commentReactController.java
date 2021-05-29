@@ -6,6 +6,7 @@ import bugs.MySQLOperation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
@@ -39,7 +40,11 @@ public class commentReactController implements Initializable {
         //
         MySQLOperation.reactHappy(getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId());
         ((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
-        JOptionPane.showMessageDialog(null, "Reacted Happy to comment "+getSelectedCommentId());
+        //JOptionPane.showMessageDialog(null, "Reacted Happy to comment "+getSelectedCommentId());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("Reacted Happy to comment "+getSelectedCommentId());
+        alert.showAndWait();
 
     }
 
@@ -48,8 +53,11 @@ public class commentReactController implements Initializable {
         //
         MySQLOperation.reactAngry(getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId());
         ((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
-        JOptionPane.showMessageDialog(null, "Reacted Angry to comment "+getSelectedCommentId());
-
+        //JOptionPane.showMessageDialog(null, "Reacted Angry to comment "+getSelectedCommentId());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("Reacted Happy to comment "+getSelectedCommentId());
+        alert.showAndWait();
     }
 
     @Override

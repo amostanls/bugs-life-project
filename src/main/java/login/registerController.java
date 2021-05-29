@@ -24,6 +24,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static home.Controller.getSelectedCommentId;
+
 public class registerController implements Initializable {
 
     @FXML
@@ -114,7 +116,11 @@ public class registerController implements Initializable {
             //connect to database
             String sha256hex = DigestUtils.sha256Hex(password);
             MySQLOperation.registerUser(MySQLOperation.connectionToDatabase(),username,sha256hex,isAdmin);
-            JOptionPane.showMessageDialog(null,"Register Successful");
+            //JOptionPane.showMessageDialog(null,"Register Successful");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Register successful");
+            alert.showAndWait();
             System.out.println("Register successful");
             Controller.setUsername(username);
 
