@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -111,7 +112,8 @@ public class registerController implements Initializable {
 
         else{
             //connect to database
-            MySQLOperation.registerUser(MySQLOperation.connectionToDatabase(),username,password,isAdmin);
+            String sha256hex = DigestUtils.sha256Hex(password);
+            MySQLOperation.registerUser(MySQLOperation.connectionToDatabase(),username,sha256hex,isAdmin);
             JOptionPane.showMessageDialog(null,"Register Successful");
             System.out.println("Register successful");
             Controller.setUsername(username);

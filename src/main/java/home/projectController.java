@@ -2,6 +2,7 @@ package home;
 
 import bugs.MySQLOperation;
 import bugs.Project;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
@@ -258,6 +259,8 @@ public class projectController implements Initializable {
         //veil.setStyle("-fx-background-radius: 30 30 0 0");
         veil.setPrefSize(1030, 530);
 
+        //JFXSpinner p =new JFXSpinner();
+        //p.setRadius(10);
         ProgressIndicator p = new ProgressIndicator();
         p.setMaxSize(100, 100);
 
