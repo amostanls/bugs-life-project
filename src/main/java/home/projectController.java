@@ -12,7 +12,9 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,6 +24,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -49,6 +53,10 @@ public class projectController implements Initializable {
 
     private boolean isEditing = false;
     private boolean isChange = false;
+    private static Service<Void> backGroundThread;
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     private TableView<Project> projectTable;
@@ -122,9 +130,7 @@ public class projectController implements Initializable {
 
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
-        Controller.updateTable();
-        JOptionPane.showMessageDialog(null, "Refresh Completed");
-        setProjectTable();
+        projectTableBackGroundTask();
     }
 
     @FXML
@@ -158,17 +164,23 @@ public class projectController implements Initializable {
         project_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         project_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         project_issues.setCellValueFactory(new PropertyValueFactory<>("issuesNumber"));
-
-        try {
-            if (initialise) {
-                Controller.updateTable();
+        projectTableBackGroundTask();
+        /*try {
+            if (!initialise) {
+                System.out.println("ASAAS");
+                searchProject();
+            }
+            if (initialise) {//only load table on start of program
+                projectTableBackGroundTask();
+                //Controller.updateTable();
                 initialise = false;
             }
             setProjectTable();
+
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        searchProject();
+        }*/
+
     }
 
     public void setProjectTable() {
@@ -197,14 +209,15 @@ public class projectController implements Initializable {
                 String lowerCaseFilter = newValue.toLowerCase();
 
                 if (String.valueOf(project.getId()).indexOf(lowerCaseFilter) != -1) {
-                    System.out.println();
                     return true;
                 } else if (FuzzySearch.tokenSetPartialRatio(project.getName(), lowerCaseFilter) > 60 || FuzzySearch.tokenSortPartialRatio(project.getName(), lowerCaseFilter) > 60) {
                     return true;
-                } else if (String.valueOf(project.getIssues().size()).indexOf(lowerCaseFilter) != -1)
+                } else if (String.valueOf(project.getIssues().size()).indexOf(lowerCaseFilter) != -1) {
                     return true;
-                else
+                } else {
                     return false; // Does not match.
+                }
+
             });
         });
 
@@ -218,5 +231,41 @@ public class projectController implements Initializable {
         // 5. Add sorted (and filtered) data to the table.
         projectTable.setItems(sortedData);
 
+    }
+
+    private void projectTableBackGroundTask() {
+        backGroundThread = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        Controller.updateTable();
+                        return null;
+                    }
+                };
+            }
+        };
+        backGroundThread.setOnSucceeded(workerStateEvent -> {
+            setProjectTable();
+            searchProject();
+            //JOptionPane.showMessageDialog(null, "Refresh Completed");
+
+        });
+
+        Region veil = new Region();
+        veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4); -fx-background-radius: 30 30 0 0;");
+        //veil.setStyle("-fx-background-radius: 30 30 0 0");
+        veil.setPrefSize(1030, 530);
+
+        ProgressIndicator p = new ProgressIndicator();
+        p.setMaxSize(100, 100);
+
+        p.progressProperty().bind(backGroundThread.progressProperty());
+        veil.visibleProperty().bind(backGroundThread.runningProperty());
+        p.visibleProperty().bind(backGroundThread.runningProperty());
+
+        stackPane.getChildren().addAll(veil, p);
+        backGroundThread.start();
     }
 }

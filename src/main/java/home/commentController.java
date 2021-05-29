@@ -5,6 +5,10 @@ import com.jfoenix.controls.JFXButton;
 
 import home.Controller;
 import home.projectController;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,10 +17,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -33,6 +40,11 @@ import java.util.logging.Logger;
 import static home.Controller.*;
 
 public class commentController implements Initializable {
+
+    private static Service<Void> backGroundThread;
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     private TextField issueID;
@@ -113,9 +125,7 @@ public class commentController implements Initializable {
 
     @FXML
     void refreshTable(MouseEvent event) throws Exception {
-        Controller.updateTable();
-        JOptionPane.showMessageDialog(null, "Refresh Completed");
-        setTextField();
+        commentBackGroundTask();
     }
 
     @FXML
@@ -205,28 +215,6 @@ public class commentController implements Initializable {
         issueComment.setText(issue_temp.printComment());
 
 
-       /*issueComment.setLineSpacing(10);
-       String res="";
-       for(int i=0;i<issue_temp.getComments().size();i++){
-           res += String.format("\n%s%d \t\t\t %s\n", "#", i+1, issue_temp.getComments().get(i));
-           for(int j=0;j<issue_temp.getComments().get(i).getReact().size();j++){
-               res += issue_temp.getComments().get(i).getReact().get(j).getCount()+" ";
-               ImageView imageView;
-               if(issue_temp.getComments().get(i).getReact().get(j).getReaction().equals("happy")){
-                   imageView = new ImageView("/images/happyEmoji.png");
-               }
-               else{
-                   imageView = new ImageView("/images/angryEmoji.png");
-               }
-               imageView.setFitHeight(15);
-               imageView.setFitWidth(15);
-               Text text=new Text();
-               text.setText(res);
-               issueComment.getChildren().addAll(text, imageView);
-           }
-
-       }*/
-
     }
 
     public boolean havePreviousComment() {
@@ -249,5 +237,42 @@ public class commentController implements Initializable {
         }
         if(issue_temp.getComments().size()>0) return true;
         return false;
+    }
+
+    private void commentBackGroundTask(){
+        backGroundThread = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        Controller.updateTable();
+                        return null;
+                    }
+                };
+            }
+        };
+        backGroundThread.setOnSucceeded(workerStateEvent -> {
+            try {
+                setTextField();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        Region veil=new Region();
+        veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4);");
+        //veil.setStyle("-fx-background-radius: 30 30 0 0");
+        veil.setPrefSize(1030,590);
+
+        ProgressIndicator p =new ProgressIndicator();
+        p.setMaxSize(100,100);
+
+        p.progressProperty().bind(backGroundThread.progressProperty());
+        veil.visibleProperty().bind(backGroundThread.runningProperty());
+        p.visibleProperty().bind(backGroundThread.runningProperty());
+
+        stackPane.getChildren().addAll(veil,p);
+        backGroundThread.start();
     }
 }
