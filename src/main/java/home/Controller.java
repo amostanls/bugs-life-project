@@ -48,6 +48,7 @@ public class Controller implements Initializable {
     private ImageView userImage;
 
 
+
     public static BorderPane staticBorderPane;
 
     @FXML
