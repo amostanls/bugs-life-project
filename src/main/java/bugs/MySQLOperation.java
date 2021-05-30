@@ -53,7 +53,7 @@ PRIMARY KEY (project_id, issue_id),
 title VARCHAR(50),
 priority INT,
 status VARCHAR(20),
-tag VARCHAR(20),
+tag VARCHAR(100),
 descriptionText VARCHAR(500),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
@@ -107,7 +107,7 @@ version_id INT,
 title VARCHAR(50),
 priority INT,
 status VARCHAR(20),
-tag VARCHAR(20),
+tag VARCHAR(100),
 descriptionText VARCHAR(500),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
@@ -1386,10 +1386,10 @@ public class MySQLOperation {
         }
     }
 
-    public static List<Project_History> getProjectHistoryList(Connection myConn, int project_id) {
+    public static ArrayList<Project_History> getProjectHistoryList(Connection myConn, int project_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        List<Project_History> projectList = new ArrayList<>();
+        ArrayList<Project_History> projectList = new ArrayList<>();
 
         try {
             String SQL_GET_PROJECT_LIST = "SELECT * FROM projects_history WHERE project_id = ? ORDER BY originalTime DESC";
@@ -1613,16 +1613,6 @@ public class MySQLOperation {
         return db;
     }
 
-    public static Connection connectionToDatabase() {
-        Connection myConnection = null;
-        try {
-            myConnection = getConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return myConnection;
-    }
-
     public static void resetDatabase(Connection myConn, String database_name) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -1650,7 +1640,7 @@ public class MySQLOperation {
                 "title VARCHAR(50),\n" +
                 "priority INT,\n" +
                 "status VARCHAR(20),\n" +
-                "tag VARCHAR(20),\n" +
+                "tag VARCHAR(100),\n" +
                 "descriptionText VARCHAR(500),\n" +
                 "createdBy VARCHAR(20),\n" +
                 "assignee VARCHAR(20),\n" +
@@ -1704,7 +1694,7 @@ public class MySQLOperation {
                 "title VARCHAR(50),\n" +
                 "priority INT,\n" +
                 "status VARCHAR(20),\n" +
-                "tag VARCHAR(20),\n" +
+                "tag VARCHAR(100),\n" +
                 "descriptionText VARCHAR(500),\n" +
                 "createdBy VARCHAR(20),\n" +
                 "assignee VARCHAR(20),\n" +
@@ -1873,8 +1863,9 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            ArrayList<Project> projects = getProjectList(myConn);
-            System.out.println(projects.get(0).getIssues().get(0).getTitle());
+            resetDatabase(myConn, "5peJ8pFLLQ");
+//            ArrayList<Project> projects = getProjectList(myConn);
+//            System.out.println(projects.get(0).getIssues().get(0).getTitle());
 //            List<Project> projectList = getProjectList(myConn);
 //            System.out.println(projectList.get(0).getName());
 //            initializedDatabase();

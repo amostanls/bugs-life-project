@@ -42,7 +42,7 @@ public class commentAddController implements Initializable {
         }
         else{
             //System.out.println(Controller.getSelectedProjectId()+" "+name);
-            MySQLOperation.createComment(MySQLOperation.connectionToDatabase(),getSelectedProjectId(),getSelectedIssueId(),getUsername(),comment);
+            MySQLOperation.createComment(MySQLOperation.getConnection(),getSelectedProjectId(),getSelectedIssueId(),getUsername(),comment);
             clean();
             ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
         }

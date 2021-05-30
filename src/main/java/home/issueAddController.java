@@ -73,7 +73,7 @@ public class issueAddController implements Initializable {
                 if (Controller.isValidURL(issueImageURL.getText())) {
                     url=issueImageURL.getText();
                     System.out.println(url);
-                    MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+                    MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
@@ -82,7 +82,7 @@ public class issueAddController implements Initializable {
                 }
             }
             else{
-                MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+                MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
             }
 
             clean();

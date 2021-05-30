@@ -59,7 +59,7 @@ public class commentEditController implements Initializable {
 
             } else {
                 //System.out.println(getSelectedCommentId());
-                MySQLOperation.updateComment(MySQLOperation.connectionToDatabase(), getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), comment);
+                MySQLOperation.updateComment(MySQLOperation.getConnection(), getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), comment);
 
             }
             clean();

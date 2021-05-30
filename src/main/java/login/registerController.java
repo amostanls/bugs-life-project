@@ -17,14 +17,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static home.Controller.getSelectedCommentId;
 
 public class registerController implements Initializable {
 
@@ -115,7 +112,7 @@ public class registerController implements Initializable {
         else{
             //connect to database
             String sha256hex = DigestUtils.sha256Hex(password);
-            MySQLOperation.registerUser(MySQLOperation.connectionToDatabase(),username,sha256hex,isAdmin);
+            MySQLOperation.registerUser(MySQLOperation.getConnection(),username,sha256hex,isAdmin);
             //JOptionPane.showMessageDialog(null,"Register Successful");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);

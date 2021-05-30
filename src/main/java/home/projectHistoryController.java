@@ -1,13 +1,11 @@
 package home;
 
 import bugs.MySQLOperation;
-import bugs.Project;
 import bugs.Project_History;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,7 +14,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static home.Controller.*;
@@ -44,7 +41,7 @@ public class projectHistoryController implements Initializable {
 
             //update project history
 
-            MySQLOperation.updateProject(MySQLOperation.connectionToDatabase(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
+            MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
             ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
 
         }
@@ -52,7 +49,7 @@ public class projectHistoryController implements Initializable {
 
     public void setProjectTable() {
 
-        ObservableList<Project_History> projectHistory = FXCollections.observableList(MySQLOperation.getProjectHistoryList(MySQLOperation.connectionToDatabase(), getSelectedProjectId()));
+        ObservableList<Project_History> projectHistory = FXCollections.observableList(MySQLOperation.getProjectHistoryList(MySQLOperation.getConnection(), getSelectedProjectId()));
         projectTable.setItems(projectHistory);
 
     }

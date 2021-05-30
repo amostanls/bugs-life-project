@@ -4,8 +4,6 @@ import animatefx.animation.FadeInRight;
 import bugs.MySQLOperation;
 import bugs.Project;
 import bugs.User;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,8 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -63,7 +59,7 @@ public class Controller implements Initializable {
             if (input.getText() != null && input.getText().toString().length() != 0) {
                 if (isValidURL(input.getText().toString())) {
                     setUrlImage(input.getText().toString());
-                    MySQLOperation.updateUserUrl(MySQLOperation.connectionToDatabase(), Controller.getCurrentUser(), input.getText().toString());
+                    MySQLOperation.updateUserUrl(MySQLOperation.getConnection(), Controller.getCurrentUser(), input.getText().toString());
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
@@ -174,7 +170,7 @@ public class Controller implements Initializable {
 
     public static void updateTable() throws Exception {
 
-        setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.connectionToDatabase()));
+        setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.getConnection()));
 
     }
 

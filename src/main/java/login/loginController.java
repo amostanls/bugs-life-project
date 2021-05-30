@@ -1,8 +1,5 @@
 package login;
 
-import animatefx.animation.FadeIn;
-import animatefx.animation.FadeInRight;
-import animatefx.animation.SlideInRight;
 import bugs.MySQLOperation;
 import bugs.User;
 import home.Controller;
@@ -78,7 +75,7 @@ public class loginController implements Initializable {
             //Controller.callBuffer();
 
             //connect to database
-            User currentUser_temp= MySQLOperation.login(MySQLOperation.connectionToDatabase(),username,sha256hex);
+            User currentUser_temp= MySQLOperation.login(MySQLOperation.getConnection(),username,sha256hex);
             if(currentUser_temp!=null){
                 System.out.println("LOGIN successful");
                 System.out.println("Initialising main dashboard");

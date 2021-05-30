@@ -77,7 +77,7 @@ public class issueEditController implements Initializable {
                     if (Controller.isValidURL(issueImageURL.getText())) {//url is valid
 
                         url = issueImageURL.getText();
-                        updateIssue(connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
+                        updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
                         System.out.println("HAVE URL");
                         clean();
                         ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
@@ -90,7 +90,7 @@ public class issueEditController implements Initializable {
                 } else {//url is empty
 
                     url = null;
-                    updateIssue(connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
+                    updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
                     System.out.println("NO URL");
                     clean();
                     ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
