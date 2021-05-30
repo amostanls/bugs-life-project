@@ -2,25 +2,33 @@ package home;
 
 import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.controlsfx.control.CheckComboBox;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class issueAddController implements Initializable {
 
     @FXML
-    private TextField issueTag;
+    private ComboBox<String> issuePriority;
 
     @FXML
-    private TextField issuePriority;
+    private CheckComboBox<String> issueTag;
+
+//    @FXML
+//    private TextField issueTag;
+//
+//    @FXML
+//    private TextField issuePriority;
 
     @FXML
     private TextField issueTitle;
@@ -40,12 +48,35 @@ public class issueAddController implements Initializable {
     @FXML
     private JFXButton cancelBtn;
 
+    private ArrayList<String> list=new ArrayList<>();
 
 
     @FXML
+    void setAddTag(MouseEvent event) {
+        TextInputDialog td = new TextInputDialog();
+        td.setTitle("Add Tag");
+        td.getDialogPane().setHeaderText(null);
+        td.getDialogPane().setContentText("Enter your new tag : ");
+        td.showAndWait();
+        TextField input = td.getEditor();
+        if (input.getText() != null && input.getText().toString().length() != 0) {
+            list.add(input.getText());
+            issueTag.getItems().clear();
+            issueTag.getItems().addAll(list);
+
+        }
+    }
+
+    @FXML
     public void setSaveBtn(ActionEvent event) {
-        String tag=issueTag.getText();
-        String priorityString=issuePriority.getText();
+        //String tag=issueTag.getText();
+        List list=issueTag.getCheckModel().getCheckedItems();
+        String tag="";
+        for(Object obj:list){
+            tag+="-"+obj.toString().replaceAll("\\s+","")+"- ";//removes all white spaces character
+        }
+
+        String priorityString=issuePriority.getValue();
         int priority=0;
         if(!priorityString.isEmpty()) priority=Integer.valueOf(priorityString);
 
@@ -73,7 +104,7 @@ public class issueAddController implements Initializable {
                 if (Controller.isValidURL(issueImageURL.getText())) {
                     url=issueImageURL.getText();
                     System.out.println(url);
-                    MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+                    MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
@@ -82,7 +113,7 @@ public class issueAddController implements Initializable {
                 }
             }
             else{
-                MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+                MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
             }
 
             clean();
@@ -91,8 +122,6 @@ public class issueAddController implements Initializable {
     }
 
     private void clean(){
-        issueTag.clear();
-        issuePriority.clear();
         issueTitle.clear();
         issueAssignedTo.clear();
         issueDesc.clear();
@@ -104,8 +133,22 @@ public class issueAddController implements Initializable {
         stage.close();
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        list.add("Frontend");
+        list.add("Backend");
+        list.add("Java");
+        list.add("Windows");
+
+        issueTag.getItems().addAll(list);
+
+
+        issuePriority.getItems().addAll("1","2","3","4","5","6","7","8","9");
+        issuePriority.setPromptText("Select priority");
+
+
+
 
     }
 

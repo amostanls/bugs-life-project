@@ -61,7 +61,7 @@ public class issueHistoryController implements Initializable {
         if (event.getClickCount() == 2) {//Checking double click
             Issue_History issue = issueTable.getSelectionModel().getSelectedItem();
 
-            MySQLOperation.updateIssue(MySQLOperation.connectionToDatabase(), issue.getProject_id(), issue.getIssue_id(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getUrl());
+            MySQLOperation.updateIssue(MySQLOperation.getConnection(), issue.getProject_id(), issue.getIssue_id(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getUrl());
             ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
 
 
@@ -70,7 +70,7 @@ public class issueHistoryController implements Initializable {
 
     public void setIssueHistoryTable() {
 
-        ObservableList<Issue_History> issueHistory = FXCollections.observableArrayList(MySQLOperation.getIssueHistoryList(MySQLOperation.connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId()));
+        ObservableList<Issue_History> issueHistory = FXCollections.observableArrayList(MySQLOperation.getIssueHistoryList(MySQLOperation.getConnection(), getSelectedProjectId(), getSelectedIssueId()));
         issueTable.setItems(issueHistory);
 
     }

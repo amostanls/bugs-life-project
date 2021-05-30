@@ -39,9 +39,10 @@ public class projectEditController implements Initializable {
         }
         else{
             //System.out.println(Controller.getSelectedProjectId()+" "+name);
-            MySQLOperation.updateProject(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),name);
+            MySQLOperation.updateProject(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),name);
             clean();
             ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+
         }
     }
 

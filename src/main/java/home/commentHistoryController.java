@@ -46,7 +46,7 @@ public class commentHistoryController implements Initializable {
         if (event.getClickCount() == 2) {//Checking double click
             Comment_History comment = commentTable.getSelectionModel().getSelectedItem();
             if(comment!=null){
-                MySQLOperation.updateComment(MySQLOperation.connectionToDatabase(), Controller.getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), comment.getComment_id(), comment.getText());
+                MySQLOperation.updateComment(MySQLOperation.getConnection(), Controller.getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), comment.getComment_id(), comment.getText());
                 ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
             }
 
@@ -57,7 +57,7 @@ public class commentHistoryController implements Initializable {
 
     public void setCommentTable() {
 
-        ObservableList<Comment_History> commentHistory = FXCollections.observableArrayList(MySQLOperation.getCommentHistoryList(MySQLOperation.connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId()));
+        ObservableList<Comment_History> commentHistory = FXCollections.observableArrayList(MySQLOperation.getCommentHistoryList(MySQLOperation.getConnection(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId()));
         ObservableList<Comment_History> commentHistoryForSpecificUser = FXCollections.observableArrayList();
         for (int i = 0; i < commentHistory.size(); i++) {
             if (commentHistory.get(i).getUser().equals(Controller.getUsername())) {

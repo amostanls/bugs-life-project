@@ -44,7 +44,7 @@ public class projectHistoryController implements Initializable {
 
             //update project history
 
-            MySQLOperation.updateProject(MySQLOperation.connectionToDatabase(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
+            MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
             ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
 
         }
@@ -52,7 +52,7 @@ public class projectHistoryController implements Initializable {
 
     public void setProjectTable() {
 
-        ObservableList<Project_History> projectHistory = FXCollections.observableList(MySQLOperation.getProjectHistoryList(MySQLOperation.connectionToDatabase(), getSelectedProjectId()));
+        ObservableList<Project_History> projectHistory = FXCollections.observableList(MySQLOperation.getProjectHistoryList(MySQLOperation.getConnection(), getSelectedProjectId()));
         projectTable.setItems(projectHistory);
 
     }

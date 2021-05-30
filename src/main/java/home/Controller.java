@@ -63,7 +63,7 @@ public class Controller implements Initializable {
             if (input.getText() != null && input.getText().toString().length() != 0) {
                 if (isValidURL(input.getText().toString())) {
                     setUrlImage(input.getText().toString());
-                    MySQLOperation.updateUserUrl(MySQLOperation.connectionToDatabase(), Controller.getCurrentUser(), input.getText().toString());
+                    MySQLOperation.updateUserUrl(MySQLOperation.getConnection(), Controller.getCurrentUser(), input.getText().toString());
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
@@ -159,22 +159,22 @@ public class Controller implements Initializable {
         userImage.setFitHeight(180);
         userImage.setPreserveRatio(true);
         urlImage = Controller.getCurrentUser().getUrl();
-//        if (urlImage != null) {
-//            Image image = new Image(urlImage);
-//            if (!image.isError()) {
-//                userImage.setImage(image);
-//            }
-//        } else {
-//            Image localImage = new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
-//            userImage.setImage(localImage);
-//        }
+        if (urlImage != null ) {
+            Image image = new Image(urlImage);
+            if (!image.isError()) {
+                userImage.setImage(image);
+            }
+        } else {
+            Image localImage = new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
+            userImage.setImage(localImage);
+        }
 
     }
 
 
     public static void updateTable() throws Exception {
 
-        setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.connectionToDatabase()));
+        setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.getConnection()));
 
     }
 

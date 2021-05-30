@@ -115,7 +115,7 @@ public class registerController implements Initializable {
         else{
             //connect to database
             String sha256hex = DigestUtils.sha256Hex(password);
-            MySQLOperation.registerUser(MySQLOperation.connectionToDatabase(),username,sha256hex,isAdmin);
+            MySQLOperation.registerUser(MySQLOperation.getConnection(),username,sha256hex,isAdmin);
             //JOptionPane.showMessageDialog(null,"Register Successful");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);

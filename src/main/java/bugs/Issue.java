@@ -114,7 +114,7 @@ public class Issue implements Serializable, Comparable<Issue> {
     public String getTags() {
         String res="";
         for(int i=0; i< tag.length; i++) {
-            if(i>0)res+=", ";
+            if(i>0)res+=" ";
             res += tag[i];
         }
         return res;
@@ -123,7 +123,7 @@ public class Issue implements Serializable, Comparable<Issue> {
     public String getTagAsString() {
         String temp="";
         for(String s:getTag()){
-            temp+=s+"; ";
+            temp+=s+" ";
         }
         return temp;
     }

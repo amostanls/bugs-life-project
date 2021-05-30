@@ -72,7 +72,7 @@ public class settingsController implements Initializable {
             alert.showAndWait();
         } else {
             //connect to database
-            MySQLOperation.updatePassword(MySQLOperation.connectionToDatabase(), Controller.getCurrentUser(), password);
+            MySQLOperation.updatePassword(MySQLOperation.getConnection(), Controller.getCurrentUser(), password);
             //JOptionPane.showMessageDialog(null, "Update Successful");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
@@ -95,7 +95,7 @@ public class settingsController implements Initializable {
         td.showAndWait();
         TextField input = td.getEditor();
         if (input.getText() != null && input.getText().toString().length() != 0) {
-            MySQLOperation.updateDatabaseFromUrl(MySQLOperation.connectionToDatabase(), input.getText());
+            MySQLOperation.updateDatabaseFromUrl(MySQLOperation.getConnection(), input.getText());
 
         }
     }
@@ -111,7 +111,7 @@ public class settingsController implements Initializable {
         td.showAndWait();
         TextField input = td.getEditor();
         if (input.getText() != null && input.getText().toString().length() != 0) {
-            MySQLOperation.exportJavaObjectsAsJson(MySQLOperation.connectionToDatabase(), Controller.getFinalProjectList(), input.getText().toString());
+            MySQLOperation.exportJavaObjectsAsJson(MySQLOperation.getConnection(), Controller.getFinalProjectList(), input.getText().toString());
 
         }
 
@@ -135,7 +135,7 @@ public class settingsController implements Initializable {
             td.showAndWait();
             TextField input = td.getEditor();
             if (input.getText() != null && input.getText().toString().length() != 0) {
-                MySQLOperation.resetDatabase(MySQLOperation.connectionToDatabase(), input.getText());
+                MySQLOperation.resetDatabase(MySQLOperation.getConnection(), input.getText());
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
             }
 
