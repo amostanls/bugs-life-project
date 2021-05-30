@@ -716,13 +716,13 @@ public class MySQLOperation {
         ResultSet myRs = null;
 
         try {
-            String SQL_GET_LAST_ISSUE_ID = "SELECT userid FROM users ORDER BY userid DESC LIMIT 1";
+            String SQL_GET_LAST_ISSUE_ID = "SELECT MAX(userid) FROM users";
             pstmt = myConn.prepareStatement(SQL_GET_LAST_ISSUE_ID);
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
             if (myRs.next()) {
-                return myRs.getInt("userid");
+                return myRs.getInt("MAX(userid)");
             }
 
         } catch (Exception ex) {
@@ -752,7 +752,7 @@ public class MySQLOperation {
         ResultSet myRs = null;
 
         try {
-            String SQL_GET_LAST_COMMENT_ID = "SELECT comment_id FROM comments WHERE project_id = ? AND issue_id = ? ORDER BY comment_id DESC LIMIT 1";
+            String SQL_GET_LAST_COMMENT_ID = "SELECT Max(comment_id) FROM comments WHERE project_id = ? AND issue_id = ?";
             pstmt = myConn.prepareStatement(SQL_GET_LAST_COMMENT_ID);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
@@ -760,7 +760,7 @@ public class MySQLOperation {
 
             //get parameter for creating issue object
             if (myRs.next()) {
-                return myRs.getInt("comment_id");
+                return myRs.getInt("MAX(comment_id)");
             }
 
         } catch (Exception ex) {
@@ -1848,8 +1848,9 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            User u = new User(1,"jhoe","asd",true,null,null);
-            updateComment(myConn, u, 2,1,3,"no!");
+//            User u = new User(1,"jhoe","asd",true,null,null);
+//            System.out.println(getLastUserID(myConn));
+            System.out.println(getLastCommentID(myConn,1,1));
 //            resetDatabase(myConn, "5peJ8pFLLQ");
 //            ArrayList<Project> projects = getProjectList(myConn);
 //            System.out.println(projects.get(0).getIssues().get(0).getTitle());
