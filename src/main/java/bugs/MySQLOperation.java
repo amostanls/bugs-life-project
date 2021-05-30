@@ -1045,7 +1045,7 @@ public class MySQLOperation {
 
         int issue_id = getLastIssueID(myConn, project_id) + 1;
 
-        String status = "In Progress";
+        String status = "Open";
         String createdBy = username;
         Timestamp issue_timestamp;
         issue_timestamp = new java.sql.Timestamp(new Date().getTime());

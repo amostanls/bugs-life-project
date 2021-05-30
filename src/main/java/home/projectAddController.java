@@ -37,6 +37,7 @@ public class projectAddController implements Initializable {
             MySQLOperation.createProject(MySQLOperation.getConnection(),name);
             clean();
             ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+
         }
     }
 

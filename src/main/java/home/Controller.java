@@ -155,15 +155,15 @@ public class Controller implements Initializable {
         userImage.setFitHeight(180);
         userImage.setPreserveRatio(true);
         urlImage = Controller.getCurrentUser().getUrl();
-//        if (urlImage != null) {
-//            Image image = new Image(urlImage);
-//            if (!image.isError()) {
-//                userImage.setImage(image);
-//            }
-//        } else {
-//            Image localImage = new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
-//            userImage.setImage(localImage);
-//        }
+        if (urlImage != null ) {
+            Image image = new Image(urlImage);
+            if (!image.isError()) {
+                userImage.setImage(image);
+            }
+        } else {
+            Image localImage = new Image(getClass().getResourceAsStream("/images/jimmy-fallon.png"));
+            userImage.setImage(localImage);
+        }
 
     }
 

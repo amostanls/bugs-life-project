@@ -6,10 +6,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.controlsfx.control.CheckComboBox;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static bugs.MySQLOperation.*;
@@ -17,11 +21,11 @@ import static home.Controller.*;
 
 public class issueEditController implements Initializable {
 
-    @FXML
-    private TextField issueTag;
-
-    @FXML
-    private TextField issuePriority;
+//    @FXML
+//    private TextField issueTag;
+//
+//    @FXML
+//    private TextField issuePriority;
 
     @FXML
     private TextField issueTitle;
@@ -29,11 +33,19 @@ public class issueEditController implements Initializable {
     @FXML
     private TextArea issueDesc;
 
-    @FXML
-    private TextField issueStatus;
+//    @FXML
+//    private TextField issueStatus;
 
     @FXML
     private TextField issueImageURL;
+    @FXML
+    private CheckComboBox<String> issueTag;
+
+    @FXML
+    private ComboBox<String> issuePriority;
+
+    @FXML
+    private ComboBox<String> issueStatus;
 
     @FXML
     private JFXButton saveBtn;
@@ -41,12 +53,33 @@ public class issueEditController implements Initializable {
     @FXML
     private JFXButton cancelBtn;
 
+    private ArrayList<String> list=new ArrayList<>();
+
+    @FXML
+    void setAddTag(MouseEvent event) {
+        TextInputDialog td = new TextInputDialog();
+        td.setTitle("Add Tag");
+        td.getDialogPane().setHeaderText(null);
+        td.getDialogPane().setContentText("Enter your new tag : ");
+        td.showAndWait();
+        TextField input = td.getEditor();
+        if (input.getText() != null && input.getText().toString().length() != 0) {
+            issueTag.getItems().addAll(input.getText());
+        }
+    }
+
 
     @FXML
     public void setSaveBtn(ActionEvent event) {
-        String tag = issueTag.getText();
-        String status = issueStatus.getText();
-        String priorityString = issuePriority.getText();
+        List list=issueTag.getCheckModel().getCheckedItems();
+        //String tag = issueTag.getText();
+        String tag="";
+        for(Object obj:list){
+            tag+="|"+obj.toString().replaceAll("\\s+","")+"| ";//removes all white spaces character
+        }
+        String status = issueStatus.getValue();
+
+        String priorityString=issuePriority.getValue();
         int priority = 0;
         if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
 
@@ -104,10 +137,10 @@ public class issueEditController implements Initializable {
     }
 
     private void clean() {
-        issueTag.clear();
-        issuePriority.clear();
+        //issueTag.clear();
+        //issuePriority.clear();
         issueTitle.clear();
-        issueStatus.clear();
+        //issueStatus.clear();
         issueDesc.clear();
     }
 
@@ -119,6 +152,37 @@ public class issueEditController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedProjectId() - 1).getIssues();
+
+
+        for (int i = 0; i < issueList.size(); i++) {
+            if (issueList.get(i).getIssue_id() == getSelectedIssueId()) {
+                issue_temp = issueList.get(i);
+            }
+        }
+        String[] statusList = {"Open", "Closed", "In Progress", "Resolved", "Reopened"};
+        String[] priorityList={"1","2","3","4","5","6","7","8","9"};
+        List<String> tagsList = new ArrayList<String>(Arrays.asList(issue_temp.getTags().split(" ")));
+
+        issueStatus.getItems().addAll(statusList);
+        issuePriority.getItems().addAll(priorityList);
+        for(int i=0;i<tagsList.size();i++){
+            issueTag.getItems().add(tagsList.get(i).substring(1,tagsList.get(i).length()-2));
+        }
+
+
+        for(int i=0;i<4;i++){
+            if(issue_temp.getStatus().equals(statusList[i])){
+                issueStatus.getSelectionModel().select(i);
+            }
+        }
+
+        issuePriority.getSelectionModel().select(Integer.valueOf(issue_temp.getPriority()));
+
+        for(int i=0;i<tagsList.size();i++){
+            issueTag.getCheckModel().check(i);
+        }
+
         setTextField();
     }
 
@@ -134,9 +198,9 @@ public class issueEditController implements Initializable {
             }
         }
 
-        issueStatus.setText(issue_temp.getStatus());
-        issueTag.setText(issue_temp.getTags() + "");
-        issuePriority.setText(issue_temp.getPriority() + "");
+//        issueStatus.setText(issue_temp.getStatus());
+//        issueTag.setText(issue_temp.getTags() + "");
+//        issuePriority.setText(issue_temp.getPriority() + "");
 
         issueTitle.setText(issue_temp.getTitle() + "");
         if (issue_temp.getUrl() == null) {
