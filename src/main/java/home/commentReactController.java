@@ -7,14 +7,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.input.*;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -88,7 +86,7 @@ public class commentReactController implements Initializable {
         //Issue issue_temp = getFinalProjectList().get(getSelectedProjectId()-1).getIssues().get(getSelectedIssueId()-1);
 
         for (int i = 0; i < issueList.size(); i++) {
-            if (issueList.get(i).getId() == getSelectedIssueId()) {
+            if (issueList.get(i).getIssue_id() == getSelectedIssueId()) {
                 issue_temp = issueList.get(i);
             }
         }

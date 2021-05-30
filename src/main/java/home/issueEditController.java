@@ -1,7 +1,6 @@
 package home;
 
 import bugs.Issue;
-import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -123,7 +122,7 @@ public class issueEditController implements Initializable {
 
 
         for (int i = 0; i < issueList.size(); i++) {
-            if (issueList.get(i).getId() == getSelectedIssueId()) {
+            if (issueList.get(i).getIssue_id() == getSelectedIssueId()) {
                 issue_temp = issueList.get(i);
             }
         }

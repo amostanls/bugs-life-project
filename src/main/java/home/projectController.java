@@ -1,25 +1,16 @@
 package home;
 
-import bugs.MySQLOperation;
 import bugs.Project;
-import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXToggleButton;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -27,25 +18,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static home.Controller.getFinalProjectList;
-import static home.Controller.getSelectedProjectId;
 
 //import static bugs.MySQLOperation.myConn;
 
@@ -143,7 +126,7 @@ public class projectController implements Initializable {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedID = 0;
             try{
-                selectedID = projectTable.getSelectionModel().getSelectedItem().getId();
+                selectedID = projectTable.getSelectionModel().getSelectedItem().getProject_id();
             }catch (NullPointerException e){}
 
             Controller.setSelectedProjectId(selectedID);
@@ -213,7 +196,7 @@ public class projectController implements Initializable {
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (String.valueOf(project.getId()).indexOf(lowerCaseFilter) != -1) {
+                if (String.valueOf(project.getProject_id()).indexOf(lowerCaseFilter) != -1) {
                     return true;
                 } else if (FuzzySearch.tokenSetPartialRatio(project.getName(), lowerCaseFilter) > 60 || FuzzySearch.tokenSortPartialRatio(project.getName(), lowerCaseFilter) > 60) {
                     return true;

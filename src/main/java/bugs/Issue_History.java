@@ -1,11 +1,10 @@
 package bugs;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 public class Issue_History {
     private int project_id;
-    private int id;
+    private int issue_id;
     private int version_id;
     private String title;
     private int priority;
@@ -16,9 +15,9 @@ public class Issue_History {
     private Timestamp timestamp;
     private String url;
 
-    public Issue_History(int project_id, int id, int version_id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, String url) {
+    public Issue_History(int project_id, int issue_id, int version_id, String title, int priority, String status, String[] tag, String descriptionText, String createdBy, String assignee, Timestamp timestamp, String url) {
         this.project_id = project_id;
-        this.id = id;
+        this.issue_id = issue_id;
         this.version_id = version_id;
         this.title = title;
         this.priority = priority;
@@ -39,12 +38,12 @@ public class Issue_History {
         this.project_id = project_id;
     }
 
-    public int getId() {
-        return id;
+    public int getIssue_id() {
+        return issue_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIssue_id(int issue_id) {
+        this.issue_id = issue_id;
     }
 
     public int getVersion_id() {

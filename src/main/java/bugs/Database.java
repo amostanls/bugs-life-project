@@ -16,7 +16,14 @@ public class Database implements Serializable{
 
     private List<Project> projects;
     private List<User> users;
-    
+    private History histories;
+
+    public Database(List<Project> projects, List<User> users, History histories) {
+        this.projects = projects;
+        this.users = users;
+        this.histories = histories;
+    }
+
     public List<User> getUsers() {
         return users;
     }
@@ -33,4 +40,11 @@ public class Database implements Serializable{
         this.projects = input;
     }
 
+    public History getHistories() {
+        return histories;
+    }
+
+    public void setHistories(History histories) {
+        this.histories = histories;
+    }
 }

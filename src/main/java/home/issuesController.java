@@ -1,24 +1,16 @@
 package home;
 
 import bugs.Issue;
-import bugs.MySQLOperation;
-import bugs.Project;
 import com.jfoenix.controls.JFXToggleButton;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -31,7 +23,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -151,7 +142,7 @@ public class issuesController implements Initializable {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedIssue=0;
             try{
-                selectedIssue = issueTable.getSelectionModel().getSelectedItem().getId();
+                selectedIssue = issueTable.getSelectionModel().getSelectedItem().getIssue_id();
             }catch (NullPointerException e){}
 
             //System.out.println(selectedIssue);
@@ -210,7 +201,7 @@ public class issuesController implements Initializable {
                 // Compare first name and last name of every person with filter text.
                 String queryString = newValue.toString();
 
-                if (String.valueOf(issue.getId()).indexOf(queryString) != -1) {
+                if (String.valueOf(issue.getIssue_id()).indexOf(queryString) != -1) {
                     System.out.println();
                     return true;
                 } else if (FuzzySearch.tokenSetPartialRatio(issue.getTitle(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getTitle(), queryString) > 60) {

@@ -21,9 +21,12 @@ public class Json {
         return defaultOM;
     }
 
-    public static JsonNode parse(URL source) throws JsonProcessingException, IOException {
-//        return om.readTree(source);
+    public static JsonNode parseUrl(URL source) throws JsonProcessingException, IOException {
         return om.readTree(source);
+    }
+
+    public static JsonNode parseFile(File jsonFile) throws JsonProcessingException, IOException {
+        return om.readTree(jsonFile);
     }
 
     public static <E> E fromJson(JsonNode node, Class<E> calzz) throws JsonProcessingException {

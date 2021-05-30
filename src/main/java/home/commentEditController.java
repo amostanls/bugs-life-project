@@ -4,7 +4,6 @@ import bugs.Comment;
 import bugs.Issue;
 import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
-import home.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -97,7 +96,7 @@ public class commentEditController implements Initializable {
         //Issue issue_temp = getFinalProjectList().get(getSelectedProjectId()-1).getIssues().get(getSelectedIssueId()-1);
 
         for (int i = 0; i < issueList.size(); i++) {
-            if (issueList.get(i).getId() == getSelectedIssueId()) {
+            if (issueList.get(i).getIssue_id() == getSelectedIssueId()) {
                 issue_temp = issueList.get(i);
             }
         }
