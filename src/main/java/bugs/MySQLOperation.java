@@ -54,7 +54,7 @@ title VARCHAR(50),
 priority INT,
 status VARCHAR(20),
 tag VARCHAR(100),
-descriptionText VARCHAR(500),
+descriptionText VARCHAR(19000),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
 issue_timestamp TIMESTAMP,
@@ -108,7 +108,7 @@ title VARCHAR(50),
 priority INT,
 status VARCHAR(20),
 tag VARCHAR(100),
-descriptionText VARCHAR(500),
+descriptionText VARCHAR(19000),
 createdBy VARCHAR(20),
 assignee VARCHAR(20),
 issue_timestamp TIMESTAMP,
@@ -1641,7 +1641,7 @@ public class MySQLOperation {
                 "priority INT,\n" +
                 "status VARCHAR(20),\n" +
                 "tag VARCHAR(100),\n" +
-                "descriptionText VARCHAR(500),\n" +
+                "descriptionText VARCHAR(19000),\n" +
                 "createdBy VARCHAR(20),\n" +
                 "assignee VARCHAR(20),\n" +
                 "issue_timestamp TIMESTAMP,\n" +
@@ -1695,7 +1695,7 @@ public class MySQLOperation {
                 "priority INT,\n" +
                 "status VARCHAR(20),\n" +
                 "tag VARCHAR(100),\n" +
-                "descriptionText VARCHAR(500),\n" +
+                "descriptionText VARCHAR(19000),\n" +
                 "createdBy VARCHAR(20),\n" +
                 "assignee VARCHAR(20),\n" +
                 "issue_timestamp TIMESTAMP,\n" +
