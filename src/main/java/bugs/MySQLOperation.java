@@ -1215,9 +1215,9 @@ public class MySQLOperation {
         ResultSet myRs = null;
 
         try {
-            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url) " +
-                    "SELECT project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url FROM issues " +
-                    "WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url, version_id) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ? ,? ,?, ?, ?)" ;
+            String SQL_GET_REQUIRED_ISSUE = "SELECT * FROM issues WHERE project_id = ? AND issue_id = ?";
             String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, issue_timestamp = ? ,url=? WHERE project_id = ? AND issue_id = ?";
             String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC";
 
@@ -1232,18 +1232,40 @@ public class MySQLOperation {
                 version_id = myRs.getInt("version_id") + 1;
             }
 
+            pstmt = myConn.prepareStatement(SQL_GET_REQUIRED_ISSUE);
+            pstmt.setInt(1,project_id);
+            pstmt.setInt(2,issue_id);
+            myRs = pstmt.executeQuery();
+            Issue newIssue = null;
+            if (myRs.next()) {
+                int temp_issue_id = myRs.getInt("issue_id");
+                String temp_title = myRs.getString("title");
+                int temp_priority = myRs.getInt("priority");
+                String temp_status = myRs.getString("status");
+                String[] temp_tag = {myRs.getString("tag")};
+                String temp_descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String asignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                ArrayList<Comment> comments = getCommentList(myConn, project_id, issue_id);
+                String temp_url = myRs.getString("url");
+                newIssue = new Issue(project_id, temp_issue_id, temp_title, temp_priority, temp_status, temp_tag, temp_descriptionText, createdBy, asignee, issue_timestamp, comments, temp_url);
+            }
+
             //update table issues history
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES_HISTORY);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
-
-            pstmt.execute();
-
-            //update table issues history version id
-            pstmt = myConn.prepareStatement("UPDATE issues_history SET version_id = ? where project_id = ? AND issue_id = ?");
-            pstmt.setInt(1, version_id);
-            pstmt.setInt(2, project_id);
-            pstmt.setInt(3, issue_id);
+            pstmt.setString(3, newIssue.getTitle());
+            pstmt.setInt(4, newIssue.getPriority());
+            pstmt.setString(5, newIssue.getStatus());
+            pstmt.setString(6, newIssue.getTagAsString());
+            pstmt.setString(7, newIssue.getDescriptionText());
+            pstmt.setString(8, newIssue.getCreatedBy());
+            pstmt.setString(9, newIssue.getAssignee());
+            pstmt.setTimestamp(10, newIssue.getTimestamp());
+            pstmt.setString(11, newIssue.getUrl());
+            pstmt.setInt(12, version_id);
             pstmt.execute();
 
             //update table issues
@@ -1748,9 +1770,6 @@ public class MySQLOperation {
 //        ResultSet comment_myRs = null;
 //        ResultSet react_myRs = null;
 //        ArrayList<Project> projects = new ArrayList<>();
-//        ArrayList<Issue> issues = new ArrayList<>();
-//        ArrayList<Comment> comments = new ArrayList<>();
-//        ArrayList<React> reacts = new ArrayList<>();
 //
 //        String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
 //        String SQL_GET_ISSUE_LIST = "SELECT * FROM issues WHERE project_id = ? ORDER BY priority DESC";
@@ -1767,6 +1786,7 @@ public class MySQLOperation {
 //                String name = project_myRs.getString("name");
 //
 //                //get issue
+//                ArrayList<Issue> issues = new ArrayList<>();
 //                issuePstmt = myConn.prepareStatement(SQL_GET_ISSUE_LIST);
 //                issuePstmt.setInt(1, project_id);
 //                issue_myRs = issuePstmt.executeQuery();
@@ -1783,6 +1803,7 @@ public class MySQLOperation {
 //                    Timestamp issue_timestamp = issue_myRs.getTimestamp("issue_timestamp");
 //
 //                    //get comments
+//                    ArrayList<Comment> comments = new ArrayList<>();
 //                    commentPstmt = myConn.prepareStatement(SQL_GET_COMMENT_LIST);
 //                    commentPstmt.setInt(1, project_id);
 //                    commentPstmt.setInt(2, issue_id);
@@ -1794,6 +1815,7 @@ public class MySQLOperation {
 //                        String text = comment_myRs.getString("text");
 //
 //                        //get reacts
+//                        ArrayList<React> reacts = new ArrayList<>();
 //                        reactPstmt = myConn.prepareStatement(SQL_GET_REACT_LIST);
 //                        reactPstmt.setInt(1, project_id);
 //                        reactPstmt.setInt(2, issue_id);
@@ -1851,8 +1873,8 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-//            ArrayList<Project> projects = getProjectList(myConn);
-//            System.out.println(projects.get(0).getIssues().get(3).getTitle());
+            ArrayList<Project> projects = getProjectList(myConn);
+            System.out.println(projects.get(0).getIssues().get(0).getTitle());
 //            List<Project> projectList = getProjectList(myConn);
 //            System.out.println(projectList.get(0).getName());
 //            initializedDatabase();
