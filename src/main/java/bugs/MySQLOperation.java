@@ -716,7 +716,7 @@ public class MySQLOperation {
         ResultSet myRs = null;
 
         try {
-            String SQL_GET_LAST_ISSUE_ID = "SELECT * FROM users ORDER BY userid DESC LIMIT 1";
+            String SQL_GET_LAST_ISSUE_ID = "SELECT userid FROM users ORDER BY userid DESC LIMIT 1";
             pstmt = myConn.prepareStatement(SQL_GET_LAST_ISSUE_ID);
             myRs = pstmt.executeQuery();
 
@@ -752,7 +752,7 @@ public class MySQLOperation {
         ResultSet myRs = null;
 
         try {
-            String SQL_GET_LAST_COMMENT_ID = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ? ORDER BY comment_id DESC LIMIT 1";
+            String SQL_GET_LAST_COMMENT_ID = "SELECT comment_id FROM comments WHERE project_id = ? AND issue_id = ? ORDER BY comment_id DESC LIMIT 1";
             pstmt = myConn.prepareStatement(SQL_GET_LAST_COMMENT_ID);
             pstmt.setInt(1, project_id);
             pstmt.setInt(2, issue_id);
@@ -866,23 +866,6 @@ public class MySQLOperation {
         }
 
         return UserList;
-    }
-
-    public static String displayIssue(List<Issue> issueList) {
-//        System.out.printf("\n%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy");
-//
-//        for (int i = 0; i < issueList.size(); i++) {
-//            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
-//            System.out.printf("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy());
-//        }
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%s\n%-3s %-40s %-20s %-15s %-15s %-22s %-20s %-20s\n", "Issue board", "ID", "Title", "Status", "Tag", "Priority", "Time", "Assignee", "createdBy"));
-
-        for (int i = 0; i < issueList.size(); i++) {
-            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
-            sb.append(String.format("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getIssue_id(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy()));
-        }
-        return sb.toString();
     }
 
     public static User login(Connection myConn, String username, String password) {
@@ -1219,7 +1202,7 @@ public class MySQLOperation {
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ? ,? ,?, ?, ?)" ;
             String SQL_GET_REQUIRED_ISSUE = "SELECT * FROM issues WHERE project_id = ? AND issue_id = ?";
             String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, assignee=?, issue_timestamp = ? ,url=? WHERE project_id = ? AND issue_id = ?";
-            String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC";
+            String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC LIMIT 1";
 
             //get last version id
             int version_id = 1;
@@ -1865,7 +1848,9 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-            resetDatabase(myConn, "5peJ8pFLLQ");
+            User u = new User(1,"jhoe","asd",true,null,null);
+            updateComment(myConn, u, 2,1,3,"no!");
+//            resetDatabase(myConn, "5peJ8pFLLQ");
 //            ArrayList<Project> projects = getProjectList(myConn);
 //            System.out.println(projects.get(0).getIssues().get(0).getTitle());
 //            List<Project> projectList = getProjectList(myConn);
