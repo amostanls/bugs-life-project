@@ -72,6 +72,7 @@ public class issueAddController implements Initializable {
             if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
                 if (Controller.isValidURL(issueImageURL.getText())) {
                     url=issueImageURL.getText();
+                    System.out.println(url);
                     MySQLOperation.createIssueJavaFX(MySQLOperation.connectionToDatabase(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -10,6 +10,7 @@ public class Issue_History {
     private int priority;
     private String status;
     private String[] tag;
+    private String tags;
     private String descriptionText;
     private String createdBy, assignee;
     private Timestamp timestamp;
@@ -84,6 +85,14 @@ public class Issue_History {
 
     public void setTag(String[] tag) {
         this.tag = tag;
+    }
+
+    public String getTags() {
+        return tag[0];
+    }
+
+    public void setTags(String tags) {
+        this.tag[0] = tags;
     }
 
     public String getDescriptionText() {

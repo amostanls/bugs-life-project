@@ -52,7 +52,7 @@ public class issueEditController implements Initializable {
 
         String title = issueTitle.getText();
         String issueDescription = issueDesc.getText();
-        String url = "";
+        String url = issueImageURL.getText();
 
 
         if (tag.isEmpty() || title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty() || status.isEmpty()) {
@@ -67,13 +67,18 @@ public class issueEditController implements Initializable {
             alert.showAndWait();
         } else {
             //connect to database
-            if (tag.equals(issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority()) {
+            if (tag.equals(issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && url.equals(issue_temp.getUrl())) {
                 //same,no change in data
-                //System.out.println("SAME,no change");
-                if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
-                    if (Controller.isValidURL(issueImageURL.getText())) {
+                System.out.println("SAME,no change");
+                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+
+            } else {//exists some changes
+                if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {//url is not empty
+                    if (Controller.isValidURL(issueImageURL.getText())) {//url is valid
+
                         url = issueImageURL.getText();
                         updateIssue(connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
+                        System.out.println("HAVE URL");
                         clean();
                         ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
                     } else {
@@ -82,12 +87,14 @@ public class issueEditController implements Initializable {
                         alert.setContentText("Not a valid URL");
                         alert.showAndWait();
                     }
-                }
-            } else {
+                } else {//url is empty
 
-                updateIssue(connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
-                clean();
-                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+                    url = null;
+                    updateIssue(connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
+                    System.out.println("NO URL");
+                    clean();
+                    ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+                }
 
 
             }
@@ -140,7 +147,7 @@ public class issueEditController implements Initializable {
 
 
         issueDesc.setText(issue_temp.getDescriptionText() + "");
-
+        issueImageURL.setText(issue_temp.getUrl());
 
     }
 
