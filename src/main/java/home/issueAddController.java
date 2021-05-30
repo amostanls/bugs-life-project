@@ -73,7 +73,7 @@ public class issueAddController implements Initializable {
         List list=issueTag.getCheckModel().getCheckedItems();
         String tag="";
         for(Object obj:list){
-            tag+="-"+obj.toString().replaceAll("\\s+","")+"- ";//removes all white spaces character
+            tag+=obj.toString().replaceAll("\\s+","")+" ";//removes all white spaces character
         }
 
         String priorityString=issuePriority.getValue();
@@ -87,7 +87,7 @@ public class issueAddController implements Initializable {
 
 
 
-        if(tag.isEmpty() ||title.isEmpty() ||assignee.isEmpty() ||issueDescription.isEmpty() || priorityString.isEmpty()){
+        if(title.isEmpty()  ||issueDescription.isEmpty() || priorityString.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please Fill All DATA");

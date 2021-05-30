@@ -48,12 +48,15 @@ public class issueEditController implements Initializable {
     private ComboBox<String> issueStatus;
 
     @FXML
+    private TextField issueAssignee;
+
+    @FXML
     private JFXButton saveBtn;
 
     @FXML
     private JFXButton cancelBtn;
 
-    private ArrayList<String> list=new ArrayList<>();
+    private ArrayList<String> list = new ArrayList<>();
 
     @FXML
     void setAddTag(MouseEvent event) {
@@ -71,24 +74,30 @@ public class issueEditController implements Initializable {
 
     @FXML
     public void setSaveBtn(ActionEvent event) {
-        List list=issueTag.getCheckModel().getCheckedItems();
+        List list = issueTag.getCheckModel().getCheckedItems();
         //String tag = issueTag.getText();
-        String tag="";
-        for(Object obj:list){
-            tag+="|"+obj.toString().replaceAll("\\s+","")+"| ";//removes all white spaces character
+        String tag = "";
+        if (list.isEmpty()) {
+            tag = null;
+        } else {
+            for (Object obj : list) {
+                tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
+            }
         }
+
         String status = issueStatus.getValue();
 
-        String priorityString=issuePriority.getValue();
+        String priorityString = issuePriority.getValue();
         int priority = 0;
         if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
 
         String title = issueTitle.getText();
+        String assignee = issueAssignee.getText();
         String issueDescription = issueDesc.getText();
         String url = issueImageURL.getText();
 
 
-        if (tag.isEmpty() || title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty() || status.isEmpty()) {
+        if (title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty() || status.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please Fill All DATA");
@@ -110,7 +119,7 @@ public class issueEditController implements Initializable {
                     if (Controller.isValidURL(issueImageURL.getText())) {//url is valid
 
                         url = issueImageURL.getText();
-                        updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
+                        updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url, assignee);
                         System.out.println("HAVE URL");
                         clean();
                         ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
@@ -123,7 +132,7 @@ public class issueEditController implements Initializable {
                 } else {//url is empty
 
                     url = null;
-                    updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url);
+                    updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url, assignee);
                     System.out.println("NO URL");
                     clean();
                     ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
@@ -161,25 +170,26 @@ public class issueEditController implements Initializable {
             }
         }
         String[] statusList = {"Open", "Closed", "In Progress", "Resolved", "Reopened"};
-        String[] priorityList={"1","2","3","4","5","6","7","8","9"};
+        String[] priorityList = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
         List<String> tagsList = new ArrayList<String>(Arrays.asList(issue_temp.getTags().split(" ")));
 
         issueStatus.getItems().addAll(statusList);
         issuePriority.getItems().addAll(priorityList);
-        for(int i=0;i<tagsList.size();i++){
-            issueTag.getItems().add(tagsList.get(i).substring(1,tagsList.get(i).length()-2));
-        }
+        issueTag.getItems().addAll(tagsList);
+//        for(int i=0;i<tagsList.size();i++){
+//            issueTag.getItems().add(tagsList.get(i).substring(1,tagsList.get(i).length()-2));
+//        }
 
 
-        for(int i=0;i<4;i++){
-            if(issue_temp.getStatus().equals(statusList[i])){
+        for (int i = 0; i < 4; i++) {
+            if (issue_temp.getStatus().equals(statusList[i])) {
                 issueStatus.getSelectionModel().select(i);
             }
         }
 
         issuePriority.getSelectionModel().select(Integer.valueOf(issue_temp.getPriority()));
 
-        for(int i=0;i<tagsList.size();i++){
+        for (int i = 0; i < tagsList.size(); i++) {
             issueTag.getCheckModel().check(i);
         }
 
