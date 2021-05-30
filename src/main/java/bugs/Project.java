@@ -6,6 +6,7 @@ package bugs;/*
 
 
 import java.io.Serializable;
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,10 +40,10 @@ public class Project implements Serializable {
         this.project_timestamp = project_timestamp;
     }
 
-    public Project(int project_id, String name, List<Issue> issues, Timestamp project_timestamp) {
+    public Project(int project_id, String name, ArrayList<Issue> issues, Timestamp project_timestamp) {
         this.project_id = project_id;
         this.name = name;
-        this.issues = (ArrayList<Issue>) issues;
+        this.issues = issues;
         this.project_timestamp = project_timestamp;
         this.issuesNumber=issues.size();
     }
