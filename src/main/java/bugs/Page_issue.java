@@ -103,5 +103,6 @@ public class Page_issue {
 
     public static void addIssue(Issue tmp) {
         project.addIssue(tmp);
+        project.sortIssue();
     }
 }
