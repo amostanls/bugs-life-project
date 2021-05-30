@@ -23,9 +23,9 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    private static int selectedProjectId = 0;
-    private static int selectedIssueId = 0;
-    private static int selectedCommentId = 0;
+    private static int selectedProjectId = 1;
+    private static int selectedIssueId = 1;
+    private static int selectedCommentId = 1;
     private static List<Project> finalProjectList;
     private static User currentUser;
     private static String username = "";

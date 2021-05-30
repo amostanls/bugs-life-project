@@ -140,7 +140,7 @@ public class projectController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("INNNN");
+
         isEditToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (isEditToggle.isSelected() == true) isEditing = true;
             else isEditing = false;

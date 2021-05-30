@@ -169,7 +169,7 @@ public class issuesController implements Initializable {
         issueId.setCellValueFactory(new PropertyValueFactory<>("issue_id"));
         issueTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         issueStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        issueTag.setCellValueFactory(new PropertyValueFactory<>("tagAsString"));
+        issueTag.setCellValueFactory(new PropertyValueFactory<>("tags"));
         issuePriority.setCellValueFactory(new PropertyValueFactory<>("priority"));
         issueTime.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
         issueAssignee.setCellValueFactory(new PropertyValueFactory<>("assignee"));

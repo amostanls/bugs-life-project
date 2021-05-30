@@ -1210,7 +1210,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText,String url) {
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText,String assignee,String url) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -1218,7 +1218,7 @@ public class MySQLOperation {
             String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url, version_id) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ? ,? ,?, ?, ?)" ;
             String SQL_GET_REQUIRED_ISSUE = "SELECT * FROM issues WHERE project_id = ? AND issue_id = ?";
-            String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, issue_timestamp = ? ,url=? WHERE project_id = ? AND issue_id = ?";
+            String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, assignee=?, issue_timestamp = ? ,url=? WHERE project_id = ? AND issue_id = ?";
             String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC";
 
             //get last version id
@@ -1259,7 +1259,7 @@ public class MySQLOperation {
             pstmt.setString(3, newIssue.getTitle());
             pstmt.setInt(4, newIssue.getPriority());
             pstmt.setString(5, newIssue.getStatus());
-            pstmt.setString(6, newIssue.getTagAsString());
+            pstmt.setString(6, newIssue.getTags());
             pstmt.setString(7, newIssue.getDescriptionText());
             pstmt.setString(8, newIssue.getCreatedBy());
             pstmt.setString(9, newIssue.getAssignee());
@@ -1275,13 +1275,15 @@ public class MySQLOperation {
             pstmt.setString(3, status);
             pstmt.setString(4, tag);
             pstmt.setString(5, descriptionText);
+            pstmt.setString(6,assignee);
 
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
-            pstmt.setTimestamp(6, currentTimestamp);
-            pstmt.setString(7,url);
 
-            pstmt.setInt(8, project_id);
-            pstmt.setInt(9, issue_id);
+            pstmt.setTimestamp(7, currentTimestamp);
+            pstmt.setString(8,url);
+
+            pstmt.setInt(9, project_id);
+            pstmt.setInt(10, issue_id);
             pstmt.execute();
 
         } catch (Exception ex) {

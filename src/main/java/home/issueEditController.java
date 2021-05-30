@@ -11,10 +11,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static bugs.MySQLOperation.*;
 import static home.Controller.*;
@@ -76,9 +73,10 @@ public class issueEditController implements Initializable {
     public void setSaveBtn(ActionEvent event) {
         List list = issueTag.getCheckModel().getCheckedItems();
         //String tag = issueTag.getText();
+
         String tag = "";
         if (list.isEmpty()) {
-            tag = null;
+            tag = "";
         } else {
             for (Object obj : list) {
                 tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
@@ -91,8 +89,8 @@ public class issueEditController implements Initializable {
         int priority = 0;
         if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
 
-        String title = issueTitle.getText();
-        String assignee = issueAssignee.getText();
+        String title = issueTitle.getText().trim();
+        String assignee = issueAssignee.getText().trim();
         String issueDescription = issueDesc.getText();
         String url = issueImageURL.getText();
 
@@ -109,17 +107,19 @@ public class issueEditController implements Initializable {
             alert.showAndWait();
         } else {
             //connect to database
-            if (tag.equals(issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && url.equals(issue_temp.getUrl())) {
-                //same,no change in data
-                System.out.println("SAME,no change");
+            if (Objects.equals(tag, issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && Objects.equals(url, issue_temp.getUrl()) && Objects.equals(assignee,issue_temp.getAssignee())) {
+
+                System.out.println("SAME,no change");//same,no change in data
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
 
+
             } else {//exists some changes
+
                 if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {//url is not empty
                     if (Controller.isValidURL(issueImageURL.getText())) {//url is valid
 
                         url = issueImageURL.getText();
-                        updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url, assignee);
+                        updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
                         System.out.println("HAVE URL");
                         clean();
                         ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
@@ -132,7 +132,7 @@ public class issueEditController implements Initializable {
                 } else {//url is empty
 
                     url = null;
-                    updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, url, assignee);
+                    updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
                     System.out.println("NO URL");
                     clean();
                     ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
@@ -187,7 +187,7 @@ public class issueEditController implements Initializable {
             }
         }
 
-        issuePriority.getSelectionModel().select(Integer.valueOf(issue_temp.getPriority()));
+        issuePriority.getSelectionModel().select(Integer.valueOf(issue_temp.getPriority()) - 1);
 
         for (int i = 0; i < tagsList.size(); i++) {
             issueTag.getCheckModel().check(i);
@@ -221,6 +221,7 @@ public class issueEditController implements Initializable {
 
 
         issueDesc.setText(issue_temp.getDescriptionText() + "");
+        issueAssignee.setText(issue_temp.getAssignee() + " ");
         issueImageURL.setText(issue_temp.getUrl());
 
     }

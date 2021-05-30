@@ -72,16 +72,20 @@ public class issueAddController implements Initializable {
         //String tag=issueTag.getText();
         List list=issueTag.getCheckModel().getCheckedItems();
         String tag="";
-        for(Object obj:list){
-            tag+=obj.toString().replaceAll("\\s+","")+" ";//removes all white spaces character
+        if (list.isEmpty()) {
+            tag="";
+        } else {
+            for (Object obj : list) {
+                tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
+            }
         }
 
         String priorityString=issuePriority.getValue();
         int priority=0;
         if(!priorityString.isEmpty()) priority=Integer.valueOf(priorityString);
 
-        String title=issueTitle.getText();
-        String assignee=issueAssignedTo.getText();
+        String title=issueTitle.getText().trim();
+        String assignee=issueAssignedTo.getText().trim();
         String issueDescription=issueDesc.getText();
         String url="";
 
@@ -103,7 +107,7 @@ public class issueAddController implements Initializable {
             if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
                 if (Controller.isValidURL(issueImageURL.getText())) {
                     url=issueImageURL.getText();
-                    System.out.println(url);
+                    //System.out.println(url);
                     MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -113,6 +117,10 @@ public class issueAddController implements Initializable {
                 }
             }
             else{
+                System.out.println(tag);
+                System.out.println(priority);
+                System.out.println(assignee);
+                System.out.println(url);
                 MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
             }
 

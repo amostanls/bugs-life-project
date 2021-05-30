@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issueEditController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.issueEditController">
    <children>
       <Label layoutX="51.0" layoutY="35.0" prefHeight="40.0" prefWidth="152.0" text="Edit Issue">
          <font>
@@ -19,7 +19,7 @@
          </font>
       </Label>
       <Label layoutX="51.0" layoutY="171.0" text="Title" />
-      <TextField fx:id="issueTitle" layoutX="97.0" layoutY="167.0" prefHeight="25.0" prefWidth="406.0" promptText="Enter Title" />
+      <TextField fx:id="issueTitle" layoutX="97.0" layoutY="167.0" prefHeight="25.0" prefWidth="243.0" promptText="Enter Title" />
       <Label layoutX="51.0" layoutY="228.0" prefHeight="17.0" prefWidth="123.0" text="Issue Description" />
       <TextArea fx:id="issueDesc" layoutX="52.0" layoutY="255.0" prefHeight="142.0" prefWidth="725.0" promptText="Enter your problem" />
       <HBox alignment="CENTER" layoutX="52.0" layoutY="397.0" prefHeight="96.0" prefWidth="725.0">
@@ -48,5 +48,7 @@
       <ComboBox fx:id="issuePriority" layoutX="115.0" layoutY="126.0" prefWidth="150.0" />
       <JFXButton layoutX="534.0" layoutY="126.0" onMouseClicked="#setAddTag" style="-fx-background-color: #C0C0C0;" text="Add Tag" />
       <ComboBox fx:id="issueStatus" layoutX="115.0" layoutY="90.0" prefWidth="150.0" />
+      <Label layoutX="362.0" layoutY="171.0" text="Assignee" />
+      <TextField fx:id="issueAssignee" layoutX="422.0" layoutY="167.0" prefHeight="25.0" prefWidth="134.0" promptText="Enter Assignee" />
    </children>
 </AnchorPane>
