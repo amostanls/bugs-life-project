@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.text.SimpleDateFormat;
 
 /**
@@ -21,7 +20,7 @@ public class Comment implements Serializable {
     private int comment_id;
     private String text;
     private ArrayList<React> react;
-    private Timestamp timestamp;
+    private Timestamp comment_timestamp;
     private String user;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -30,30 +29,30 @@ public class Comment implements Serializable {
         this.text = text;
         this.user = user;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        this.timestamp = timestamp;
+        this.comment_timestamp = timestamp;
         react = new ArrayList<>();
     }
 
-    public Comment(int comment_id, String text, Timestamp timestamp, String user) {
+    public Comment(int comment_id, String text, Timestamp comment_timestamp, String user) {
         this.comment_id = comment_id;
         this.text = text;
         this.react = new ArrayList<>();
-        this.timestamp = timestamp;
+        this.comment_timestamp = comment_timestamp;
         this.user = user;
     }
 
-    public Comment(int comment_id, String text, ArrayList<React> react, Timestamp timestamp, String user) {
+    public Comment(int comment_id, String text, ArrayList<React> react, Timestamp comment_timestamp, String user) {
         this.comment_id = comment_id;
         this.text = text;
         this.react = react;
-        this.timestamp = timestamp;
+        this.comment_timestamp = comment_timestamp;
         this.user = user;
     }
 
     @Override
     public String toString() {
         String res = "";
-        res += String.format("%s %s \t\t\t %s %s\n", "Created On:", sdf.format(timestamp), "By:", user);
+        res += String.format("%s %s \t\t\t %s %s\n", "Created On:", sdf.format(comment_timestamp), "By:", user);
         res += String.format("%s\n", text);
         for(int i=0; i<react.size(); i++)
             res += String.format("$$ %s\n", react.get(i).toString());
@@ -99,12 +98,12 @@ public class Comment implements Serializable {
         return -1;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getComment_timestamp() {
+        return comment_timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setComment_timestamp(Timestamp comment_timestamp) {
+        this.comment_timestamp = comment_timestamp;
     }
 
     public String getUser() {

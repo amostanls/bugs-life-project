@@ -2,7 +2,6 @@ package home;
 
 import bugs.Issue_History;
 import bugs.MySQLOperation;
-import bugs.Project_History;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.util.ResourceBundle;
 
 import static home.Controller.getSelectedIssueId;
@@ -63,7 +61,7 @@ public class issueHistoryController implements Initializable {
         if (event.getClickCount() == 2) {//Checking double click
             Issue_History issue = issueTable.getSelectionModel().getSelectedItem();
 
-            MySQLOperation.updateIssue(MySQLOperation.connectionToDatabase(), issue.getProject_id(), issue.getId(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getUrl());
+            MySQLOperation.updateIssue(MySQLOperation.connectionToDatabase(), issue.getProject_id(), issue.getIssue_id(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getUrl());
             ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
 
 

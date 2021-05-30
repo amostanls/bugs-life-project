@@ -3,17 +3,12 @@ package home;
 import bugs.Issue;
 import com.jfoenix.controls.JFXButton;
 
-import home.Controller;
-import home.projectController;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -24,12 +19,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -212,11 +204,11 @@ public class commentController implements Initializable {
         //Issue issue_temp = getFinalProjectList().get(getSelectedProjectId()-1).getIssues().get(getSelectedIssueId()-1);
         Issue issue_temp = null;
         for (int i = 0; i < issueList.size(); i++) {
-            if (issueList.get(i).getId() == getSelectedIssueId()) {
+            if (issueList.get(i).getIssue_id() == getSelectedIssueId()) {
                 issue_temp = issueList.get(i);
             }
         }
-        issueID.setText(issue_temp.getId() + "");
+        issueID.setText(issue_temp.getIssue_id() + "");
         issueStatus.setText(issue_temp.getStatus());
         issueTag.setText(issue_temp.getTags() + "");
         issuePriority.setText(issue_temp.getPriority() + "");
@@ -238,7 +230,7 @@ public class commentController implements Initializable {
         ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedProjectId() - 1).getIssues();
         Issue issue_temp = null;
         for (int i = 0; i < issueList.size(); i++) {
-            if (issueList.get(i).getId() == getSelectedIssueId()) issue_temp = issueList.get(i);
+            if (issueList.get(i).getIssue_id() == getSelectedIssueId()) issue_temp = issueList.get(i);
         }
         for (int i = 0; i < issue_temp.getComments().size(); i++) {
             if (issue_temp.getComments().get(i).getUser().equals(Controller.getUsername())) return true;
@@ -250,7 +242,7 @@ public class commentController implements Initializable {
         ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedProjectId() - 1).getIssues();
         Issue issue_temp = null;
         for (int i = 0; i < issueList.size(); i++) {
-            if (issueList.get(i).getId() == getSelectedIssueId()) issue_temp = issueList.get(i);
+            if (issueList.get(i).getIssue_id() == getSelectedIssueId()) issue_temp = issueList.get(i);
         }
         if(issue_temp.getComments().size()>0) return true;
         return false;

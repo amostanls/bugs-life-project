@@ -6,7 +6,6 @@ package bugs;/*
 
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import static bugs.util.*;
  */
 public class Project implements Serializable {
 
-    private int id;
+    private int project_id;
     private String name;
     private ArrayList<Issue> issues;
     private Timestamp project_timestamp;
@@ -32,15 +31,15 @@ public class Project implements Serializable {
     private int len_assignee = 8;
     private int len_createdby = 9;
 
-    public Project(int id, String name, Timestamp project_timestamp) {
-        this.id = id;
+    public Project(int project_id, String name, Timestamp project_timestamp) {
+        this.project_id = project_id;
         this.name = name;
         this.issues = new ArrayList<>();
         this.project_timestamp = project_timestamp;
     }
 
-    public Project(int id, String name, List<Issue> issues, Timestamp project_timestamp) {
-        this.id = id;
+    public Project(int project_id, String name, List<Issue> issues, Timestamp project_timestamp) {
+        this.project_id = project_id;
         this.name = name;
         this.issues = (ArrayList<Issue>) issues;
         this.project_timestamp = project_timestamp;
@@ -198,12 +197,12 @@ public class Project implements Serializable {
         this.issuesNumber = issuesNumber;
     }
 
-    public int getId() {
-        return id;
+    public int getProject_id() {
+        return project_id;
     }
 
-    public void setId(int input) {
-        this.id = input;
+    public void setProject_id(int input) {
+        this.project_id = input;
     }
 
     public String getName() {

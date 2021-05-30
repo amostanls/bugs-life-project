@@ -2,28 +2,20 @@ package bugs;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.protocol.Resultset;
 import javafx.scene.control.Alert;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -170,6 +162,7 @@ public class MySQLOperation {
         return myConn;
     }
 
+    //Return absolute path of exported file as string
     public static String exportJavaObjectsAsJson(Connection myConn, List objects, String fileName) {
         fileName += ".json";
         ObjectMapper om = Json.getDefaultOM();
@@ -192,9 +185,152 @@ public class MySQLOperation {
         }
     }
 
+    public static void importJsonFileToDataBase(Connection myConn, String filePath) throws IOException, SQLException {
+        File jsonFile = new File(filePath);
+        JsonNode node = Json.parseFile(jsonFile);
+
+        String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
+        String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
+        String INSERT_COMMENT = "INSERT INTO comments (project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";  //6
+        String INSERT_REACT = "INSERT INTO react (project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)"; //2
+        String INSERT_USER = "INSERT INTO users (userid, username, password, admin, url, email) VALUES (?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement updateProject = myConn.prepareStatement(INSERT_PROJECT, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateIssue = myConn.prepareStatement(INSERT_ISSUE, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateComment = myConn.prepareStatement(INSERT_COMMENT, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateReact = myConn.prepareStatement(INSERT_REACT, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateUser = myConn.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+
+        //add projects
+        for (int i = 0; i < node.get("projects").size(); i++) {
+            updateProject.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+            updateProject.setString(2, node.get("projects").get(i).get("name").asText());
+
+            Timestamp newTimestamp = convertStringTimestamp("1565192640");
+            updateProject.setTimestamp(3, newTimestamp);
+            updateProject.addBatch();
+
+            //add issues
+            for (int j = 0; j < node.get("projects").get(i).get("issues").size(); j++) {
+                updateIssue.setInt(1, node.get("projects").get(i).get("id").asInt());
+                updateIssue.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
+                updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
+                updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
+                updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).withArray("tag").get(0).asText());
+                updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
+                updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
+                updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
+
+                //convert string timestamp to timestamp
+                Timestamp newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                updateIssue.setTimestamp(10, newTs);
+
+                updateIssue.setString(11, node.get("projects").get(i).get("issues").get(j).get("url").asText());
+                updateIssue.addBatch();
+
+                //add comments
+                for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).get("comments").size(); k++) {
+                    updateComment.setInt(1, node.get("projects").get(i).get("id").asInt());
+                    updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                    updateComment.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                    updateComment.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("text").asText());
+
+                    newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                    updateComment.setTimestamp(5, newTs);
+                    updateComment.setString(6, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("user").asText());
+                    updateComment.addBatch();
+
+                    //add react
+                    for (int l = 0; l < node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").size(); l++) {
+                        updateReact.setInt(1, node.get("projects").get(i).get("id").asInt());
+                        updateReact.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                        updateReact.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                        updateReact.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("reaction").asText());
+                        updateReact.setInt(5, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("count").asInt());
+                        updateReact.addBatch();
+
+                        if (i == node.get("projects").size() - 1) {
+                            updateProject.executeBatch();
+                            updateComment.executeBatch();
+                            updateIssue.executeBatch();
+                            updateReact.executeBatch();
+                        }
+                    }
+                }
+            }
+        }
+
+        //add user information
+        for (int i = 0; i < node.get("users").size(); i++) {
+            updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
+            updateUser.setString(2, node.get("users").get(i).get("username").asText());
+            updateUser.setString(3, node.get("users").get(i).get("password").asText());
+            updateUser.setBoolean(4, node.get("users").get(i).get("admin").asBoolean());
+            updateUser.setString(5, node.get("users").get(i).get("url").asText());
+            updateUser.setString(6,node.get("users").get(i).get("email").asText());
+            updateUser.addBatch();
+
+            if (i == node.get("users").size() - 1) {
+                updateUser.executeBatch();
+            }
+        }
+
+        //Add history table
+        String INSERT_PROJECT_HISTORY = "INSERT INTO projects_history (project_id, version_id, name, originalTime) VALUE (?,?,?,?)";
+        String INSERT_ISSUE_HISTORY = "INSERT INTO issues_history (project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
+        String INSERT_COMMENT_HISTORY = "INSERT INTO comments (project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";  //6
+
+        PreparedStatement updateProjectHistory = myConn.prepareStatement(INSERT_PROJECT_HISTORY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateIssueHistory = myConn.prepareStatement(INSERT_ISSUE_HISTORY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateCommentHistory = myConn.prepareStatement(INSERT_COMMENT_HISTORY, Statement.RETURN_GENERATED_KEYS);
+
+        for (int i = 0; i < node.get("histories").get("project_histories").size(); i++) {
+            updateProjectHistory.setInt(1, node.get("projects_histories").get(i).get("project_id").asInt());
+            updateProjectHistory.setInt(2, node.get("projects_histories").get(i).get("version_id").asInt());
+            updateProjectHistory.setString(3, node.get("projects_histories").get(i).get("name").asText());
+
+            Timestamp newTimestamp = Timestamp.valueOf(node.get("projects_histories").get(i).get("originalTime").asText());
+            updateProjectHistory.setTimestamp(3, newTimestamp);
+            updateProjectHistory.addBatch();
+        }
+        updateProjectHistory.executeBatch();
+
+        for (int i = 0; i < node.get("histories").get("issue_histories").size(); i++) {
+            updateIssueHistory.setInt(1, node.get("issues_history").get(i).get("project_id").asInt());
+            updateIssueHistory.setInt(2, node.get("issues_history").get(i).get("issue_id").asInt());
+            updateIssueHistory.setInt(3, node.get("issues_history").get(i).get("version_id").asInt());
+            updateIssueHistory.setString(4, node.get("issues_history").get(i).get("title").asText());
+            updateIssueHistory.setInt(5, node.get("issues_history").get(i).get("priority").asInt());
+            updateIssueHistory.setString(6, node.get("issues_history").get(i).get("status").asText());
+            updateIssueHistory.setString(7, node.get("issues_history").get(i).get("tag").asText());
+            updateIssueHistory.setString(8, node.get("issues_history").get(i).get("descriptionText").asText());
+            updateIssueHistory.setString(9, node.get("issues_history").get(i).get("createdBy").asText());
+            updateIssueHistory.setString(10, node.get("issues_history").get(i).get("assignee").asText());
+            Timestamp newTS = Timestamp.valueOf(node.get("issues_history").get(i).get("issue_timestamp").asText());
+            updateIssueHistory.setTimestamp(11, newTS);
+            updateIssueHistory.setString(12, node.get("issues_history").get(i).get("url").asText());
+            updateIssueHistory.addBatch();
+        }
+        updateIssueHistory.executeBatch();
+
+        for (int i = 0; i < node.get("histories").get("comment_histories").size(); i++) {
+            updateCommentHistory.setInt(1, node.get("issues_history").get(i).get("project_id").asInt());
+            updateCommentHistory.setInt(2, node.get("issues_history").get(i).get("issue_id").asInt());
+            updateCommentHistory.setInt(3, node.get("issues_history").get(i).get("comment_id").asInt());
+            updateCommentHistory.setInt(3, node.get("issues_history").get(i).get("version_id").asInt());
+            updateCommentHistory.setString(4, node.get("issues_history").get(i).get("text").asText());
+            Timestamp comment_timestamp = Timestamp.valueOf(node.get("issues_history").get(i).get("comment_timestamp").asText());
+            updateCommentHistory.setTimestamp(5, comment_timestamp);
+            updateCommentHistory.setString(6, node.get("issues_history").get(i).get("user").asText());
+            updateCommentHistory.addBatch();
+        }
+        updateCommentHistory.executeBatch();
+    }
+
     public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
         URL jsonUrl = new URL(url);
-        JsonNode node = Json.parse(jsonUrl);
+        JsonNode node = Json.parseUrl(jsonUrl);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
         String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
@@ -471,7 +607,7 @@ public class MySQLOperation {
 
     private static boolean containProjectID(List<Project> allProjects, int project_id) {
         for (Project p : allProjects) {
-            if (p.getId() == project_id) {
+            if (p.getProject_id() == project_id) {
                 return true;
             }
         }
@@ -794,7 +930,7 @@ public class MySQLOperation {
                 String SQL_GET_COMMENT_LIST = "SELECT * FROM comments WHERE project_id = ? AND issue_id = ? AND text REGEXP ?";
                 pstmt = myConn.prepareStatement(SQL_GET_COMMENT_LIST);
                 pstmt.setInt(1, project_id);
-                pstmt.setInt(2, issueList.get(i).getId());
+                pstmt.setInt(2, issueList.get(i).getIssue_id());
                 pstmt.setString(3, searchStr);
                 myRs = pstmt.executeQuery();
 
@@ -1004,6 +1140,48 @@ public class MySQLOperation {
         return reactList;
     }
 
+    public static ArrayList<User> getUserList(Connection myConn) {
+        Statement stmt = null;
+        ResultSet myRs = null;
+        ArrayList<User> UserList = new ArrayList<>();
+
+        try {
+            String SQL_GET_USER = "SELECT * FROM users";
+            stmt = myConn.createStatement();
+            myRs = stmt.executeQuery(SQL_GET_USER);
+
+            while (myRs.next()) {
+                int userid = myRs.getInt("userid");
+                String username = myRs.getString("username");
+                String password = myRs.getString("password");
+                boolean admin = myRs.getBoolean("admin");
+                String url = myRs.getString("url");
+                String email = myRs.getString("email");
+                UserList.add(new User(userid, username, password, admin, url, email));
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return UserList;
+    }
+
     public static int showProjectDashboard(Connection myConn) {
         boolean inputIsInt = false;
         Scanner sc = new Scanner(System.in);
@@ -1011,7 +1189,7 @@ public class MySQLOperation {
         System.out.printf("\n%s\n%-3s %-20s %-20s\n", "Project board", "ID", "Project Name", "Issue");
 
         for (int i = 0; i < projectList.size(); i++) {
-            System.out.printf("%-3d %-20s %-20d\n", projectList.get(i).getId(), projectList.get(i).getName(), projectList.get(i).getIssues().size());
+            System.out.printf("%-3d %-20s %-20d\n", projectList.get(i).getProject_id(), projectList.get(i).getName(), projectList.get(i).getIssues().size());
         }
 
         while (!inputIsInt) {
@@ -1092,7 +1270,7 @@ public class MySQLOperation {
 
         for (int i = 0; i < issueList.size(); i++) {
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(issueList.get(i).getTimestamp());
-            sb.append(String.format("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getId(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy()));
+            sb.append(String.format("%-3d %-40s %-20s %-15s %-15d %-22s %-20s %-20s\n", issueList.get(i).getIssue_id(), issueList.get(i).getTitle(), issueList.get(i).getStatus(), issueList.get(i).getTag()[0], issueList.get(i).getPriority(), timeStamp, issueList.get(i).getAssignee(), issueList.get(i).getCreatedBy()));
         }
         return sb.toString();
     }
@@ -1694,7 +1872,7 @@ public class MySQLOperation {
                 pstmt.setInt(3, requiredComment.getComment_id());
                 pstmt.setInt(4, version_id);
                 pstmt.setString(5, requiredComment.getText());
-                pstmt.setTimestamp(6, requiredComment.getTimestamp());
+                pstmt.setTimestamp(6, requiredComment.getComment_timestamp());
                 pstmt.setString(7, requiredComment.getUser());
                 pstmt.execute();
 
@@ -1868,6 +2046,98 @@ public class MySQLOperation {
 
     }
 
+    public static History getHistoryList(Connection myConn) {
+        Statement stmt = null;
+        ResultSet myRs = null;
+        History history = new History();
+        ArrayList<Project_History> projectHistories = new ArrayList<>();
+        ArrayList<Issue_History> issueHistories = new ArrayList<>();
+        ArrayList<Comment_History> commentHistories = new ArrayList<>();
+
+        String SQL_GET_PROJECT_HISTORY = "SELECT * FROM projects_history";
+        String SQL_GET_COMMENT_HISTORY = "SELECT * FROM comments_history";
+        String SQL_GET_ISSUE_HISTORY = "SELECT * FROM issues_history";
+
+
+        try {
+            stmt = myConn.createStatement();
+            //add project history list to history
+            myRs = stmt.executeQuery(SQL_GET_PROJECT_HISTORY);
+            while (myRs.next()) {
+                while (myRs.next()) {
+                    int id = myRs.getInt("project_id");
+                    int version_id = myRs.getInt("version_id");
+                    String name = myRs.getString("name");
+                    Timestamp originalTime = myRs.getTimestamp("originalTime");
+                    projectHistories.add(new Project_History(id, version_id, name, originalTime));
+                }
+            }
+            history.setProject_histories(projectHistories);
+
+            //add issue history to history
+            myRs = stmt.executeQuery(SQL_GET_ISSUE_HISTORY);
+            while (myRs.next()) {
+                int project_id = myRs.getInt("project_id");
+                int issue_id = myRs.getInt("issue_id");
+                int version_id = myRs.getInt("version_id");
+                String title = myRs.getString("title");
+                int priority = myRs.getInt("priority");
+                String status = myRs.getString("status");
+                String[] tag = {myRs.getString("tag")};
+                String descriptionText = myRs.getString("descriptionText");
+                String createdBy = myRs.getString("createdBy");
+                String assignee = myRs.getString("assignee");
+                Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
+                String url = myRs.getString("url");
+                issueHistories.add(new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url));
+            }
+            history.setIssue_histories(issueHistories);
+
+            //add comment history to history
+            myRs = stmt.executeQuery(SQL_GET_COMMENT_HISTORY);
+            while (myRs.next()) {
+                int project_id = myRs.getInt("project_id");
+                int issue_id = myRs.getInt("issue_id");
+                int comment_id = myRs.getInt("comment_id");
+                int version_id = myRs.getInt("version_id");
+                String text = myRs.getString("text");
+                Timestamp timestamp = myRs.getTimestamp("comment_timestamp");
+                String user = myRs.getString("user");
+                commentHistories.add(new Comment_History(project_id, issue_id, comment_id, version_id, text, timestamp, user));
+            }
+            history.setComment_histories(commentHistories);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return history;
+    }
+
+    public static Database getDatabase(Connection myConn) {
+        List<Project> projects = getProjectList(myConn);
+        List<User> users = getUserList(myConn);
+        History history = getHistoryList(myConn);
+        Database db = new Database(projects, users, history);
+
+        return db;
+    }
+
     public static Connection connectionToDatabase() {
         Connection myConnection = null;
         try {
@@ -2017,22 +2287,23 @@ public class MySQLOperation {
 
     public static void main(String[] args) {
 
-//        Connection myConn = null;
-//        try {
-//            myConn = getConnection();
-//            List<Issue> i = getIssueListByTimestamp(myConn,1);
-//            System.out.println(i.get(0).getTimestamp());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (myConn != null) {
-//                try {
-//                    myConn.close();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
+        Connection myConn = null;
+        try {
+            myConn = getConnection();
+//            Database db = getDatabase(myConn);
+//            exportJavaObjectAsJson(myConn, db, "db");
+            importJsonFileToDataBase(myConn, "/Users/tanweilok/IdeaProjects/bugs-life-project/db.json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (myConn != null) {
+                try {
+                    myConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 //        showIssueDashboard(1,"priority","jhoe");
     }
 }

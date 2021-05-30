@@ -1,7 +1,5 @@
 package bugs;
 
-import java.io.IOException;
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -139,7 +137,7 @@ public class Page_project {
         for(int i=0; i<projects.size(); i++) {
             String tmp = "|";
             Project cur = projects.get(i);
-            tmp += right(len_id, cur.getId());
+            tmp += right(len_id, cur.getProject_id());
             tmp += left(len_name, cur.getName());
             tmp += right(len_issues, cur.getIssues().size());
             tmp += "\n";
