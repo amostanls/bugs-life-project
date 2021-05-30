@@ -417,8 +417,8 @@ public class MySQLOperation {
         }
     }
 
-    private static Timestamp convertStringTimestamp(String str) {
-        String time = str + "000";
+    private static Timestamp convertStringTimestamp(String strTime) {
+        String time = strTime + "000";
         SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
         Date date = new Date(Long.parseLong(time));
         long longtime = date.getTime();
@@ -426,9 +426,9 @@ public class MySQLOperation {
         return newTs;
     }
 
-    private static Timestamp convertStringTimestampForImport(String str) {
+    private static Timestamp convertStringTimestampForImport(String strTime) {
         SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
-        Date date = new Date(Long.parseLong(str));
+        Date date = new Date(Long.parseLong(strTime));
         long longtime = date.getTime();
         Timestamp newTs = new Timestamp(longtime);
         return newTs;
@@ -503,10 +503,10 @@ public class MySQLOperation {
         }
     }
 
-    public static List<Project> getProjectList(Connection myConn) {
+    public static ArrayList<Project> getProjectList(Connection myConn) {
         Statement stmt = null;
         ResultSet myRs = null;
-        List<Project> projectList = new ArrayList<>();
+        ArrayList<Project> projectList = new ArrayList<>();
 
         try {
             String SQL_GET_PROJECT_LIST = "SELECT * FROM projects ORDER BY project_id";
@@ -516,7 +516,7 @@ public class MySQLOperation {
             while (myRs.next()) {
                 int id = myRs.getInt("project_id");
                 String name = myRs.getString("name");
-                List<Issue> issues = getIssueListByPriority(myConn, id);
+                ArrayList<Issue> issues = getIssueListByPriority(myConn, id);
                 Timestamp ts = myRs.getTimestamp("project_timestamp");
                 projectList.add(new Project(id, name, issues, ts));
             }
@@ -1244,6 +1244,7 @@ public class MySQLOperation {
             pstmt.setInt(1, version_id);
             pstmt.setInt(2, project_id);
             pstmt.setInt(3, issue_id);
+            pstmt.execute();
 
             //update table issues
             pstmt = myConn.prepareStatement(SQL_UPDATE_ISSUES);
