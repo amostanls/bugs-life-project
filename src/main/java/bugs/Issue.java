@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author tanweilok
  */
-public class Issue implements Serializable {
+public class Issue implements Serializable, Comparable<Issue> {
 
     private int project_id;
     private int issue_id;
@@ -126,6 +126,13 @@ public class Issue implements Serializable {
             temp+=s+"; ";
         }
         return temp;
+    }
+
+    @Override
+    public int compareTo(Issue o) {
+        if(this.priority>o.getPriority())return -1;
+        if(this.priority==o.getPriority())return 0;
+        return 1;
     }
 
     public String getTime() {

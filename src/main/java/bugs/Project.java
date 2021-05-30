@@ -8,6 +8,7 @@ package bugs;/*
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import static bugs.util.*;
 
@@ -187,6 +188,11 @@ public class Project implements Serializable {
         res += "\n";
 
         return res;
+    }
+
+    public void sortIssue() {
+        Collections.sort(issues);
+        return;
     }
 
     public int getIssuesNumber() {
