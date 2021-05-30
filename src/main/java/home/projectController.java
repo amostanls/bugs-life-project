@@ -149,7 +149,7 @@ public class projectController implements Initializable {
             else isChange = false;
         });
 
-        project_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        project_id.setCellValueFactory(new PropertyValueFactory<>("project_id"));
         project_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         project_issues.setCellValueFactory(new PropertyValueFactory<>("issuesNumber"));
         projectTableBackGroundTask();

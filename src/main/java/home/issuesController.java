@@ -166,7 +166,7 @@ public class issuesController implements Initializable {
             if (changeLogToggle.isSelected()) isChange = true;
             else isChange = false;
         });
-        issueId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        issueId.setCellValueFactory(new PropertyValueFactory<>("issue_id"));
         issueTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         issueStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         issueTag.setCellValueFactory(new PropertyValueFactory<>("tagAsString"));
