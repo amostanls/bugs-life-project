@@ -26,6 +26,8 @@ In MySQLOperation class, comment the part that you don't want to use.
 
 For online database, make sure you have a stable internet connection.
 
+### The following only work on Windows.
+
 For local database, follow the steps below.
 
 1. Download XAMPP for your reespective OS and install it.
