@@ -68,7 +68,7 @@ public class issueHistoryController implements Initializable {
         }
     }
 
-    public void setIssueTable() {
+    public void setIssueHistoryTable() {
 
         ObservableList<Issue_History> issueHistory = FXCollections.observableArrayList(MySQLOperation.getIssueHistoryList(MySQLOperation.connectionToDatabase(), getSelectedProjectId(), getSelectedIssueId()));
         issueTable.setItems(issueHistory);
@@ -79,16 +79,16 @@ public class issueHistoryController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         issueTable.setPlaceholder(new Label(("This issue has no changes")));
         issueVersion.setCellValueFactory(new PropertyValueFactory<>("version_id"));
-        issueId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        issueId.setCellValueFactory(new PropertyValueFactory<>("issue_id"));
         issueTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         issueStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        issueTag.setCellValueFactory(new PropertyValueFactory<>("tagAsString"));
+        issueTag.setCellValueFactory(new PropertyValueFactory<>("tags"));
         issuePriority.setCellValueFactory(new PropertyValueFactory<>("priority"));
         issueTime.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
         issueAssignee.setCellValueFactory(new PropertyValueFactory<>("assignee"));
         issueCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         issueImageURL.setCellValueFactory(new PropertyValueFactory<>("url"));
-        setIssueTable();
+        setIssueHistoryTable();
 
     }
 }
