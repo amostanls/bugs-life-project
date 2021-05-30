@@ -206,14 +206,14 @@ public class MySQLOperation {
             updateProject.setInt(1, node.get("projects").get(i).get("project_id").asInt());
             updateProject.setString(2, node.get("projects").get(i).get("name").asText());
 
-            Timestamp newTimestamp = convertStringTimestamp("1565192640");
+            Timestamp newTimestamp = convertStringTimestampForImport(node.get("projects").get(i).get("project_timestamp").asText());
             updateProject.setTimestamp(3, newTimestamp);
             updateProject.addBatch();
 
             //add issues
             for (int j = 0; j < node.get("projects").get(i).get("issues").size(); j++) {
-                updateIssue.setInt(1, node.get("projects").get(i).get("id").asInt());
-                updateIssue.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                updateIssue.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+                updateIssue.setInt(2, node.get("projects").get(i).get("issues").get(j).get("issue_id").asInt());
                 updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
                 updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
                 updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
@@ -223,7 +223,7 @@ public class MySQLOperation {
                 updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
 
                 //convert string timestamp to timestamp
-                Timestamp newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                Timestamp newTs = convertStringTimestampForImport(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
                 updateIssue.setTimestamp(10, newTs);
 
                 updateIssue.setString(11, node.get("projects").get(i).get("issues").get(j).get("url").asText());
@@ -231,20 +231,20 @@ public class MySQLOperation {
 
                 //add comments
                 for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).get("comments").size(); k++) {
-                    updateComment.setInt(1, node.get("projects").get(i).get("id").asInt());
-                    updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                    updateComment.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+                    updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("issue_id").asInt());
                     updateComment.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
                     updateComment.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("text").asText());
 
-                    newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                    newTs = convertStringTimestampForImport(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
                     updateComment.setTimestamp(5, newTs);
                     updateComment.setString(6, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("user").asText());
                     updateComment.addBatch();
 
                     //add react
                     for (int l = 0; l < node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").size(); l++) {
-                        updateReact.setInt(1, node.get("projects").get(i).get("id").asInt());
-                        updateReact.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                        updateReact.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+                        updateReact.setInt(2, node.get("projects").get(i).get("issues").get(j).get("issue_id").asInt());
                         updateReact.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
                         updateReact.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("reaction").asText());
                         updateReact.setInt(5, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("count").asInt());
@@ -290,7 +290,7 @@ public class MySQLOperation {
             updateProjectHistory.setInt(2, node.get("projects_histories").get(i).get("version_id").asInt());
             updateProjectHistory.setString(3, node.get("projects_histories").get(i).get("name").asText());
 
-            Timestamp newTimestamp = Timestamp.valueOf(node.get("projects_histories").get(i).get("originalTime").asText());
+            Timestamp newTimestamp = convertStringTimestampForImport(node.get("projects_histories").get(i).get("originalTime").asText());
             updateProjectHistory.setTimestamp(3, newTimestamp);
             updateProjectHistory.addBatch();
         }
@@ -307,7 +307,7 @@ public class MySQLOperation {
             updateIssueHistory.setString(8, node.get("issues_history").get(i).get("descriptionText").asText());
             updateIssueHistory.setString(9, node.get("issues_history").get(i).get("createdBy").asText());
             updateIssueHistory.setString(10, node.get("issues_history").get(i).get("assignee").asText());
-            Timestamp newTS = Timestamp.valueOf(node.get("issues_history").get(i).get("issue_timestamp").asText());
+            Timestamp newTS = convertStringTimestampForImport(node.get("issues_history").get(i).get("issue_timestamp").asText());
             updateIssueHistory.setTimestamp(11, newTS);
             updateIssueHistory.setString(12, node.get("issues_history").get(i).get("url").asText());
             updateIssueHistory.addBatch();
@@ -320,7 +320,7 @@ public class MySQLOperation {
             updateCommentHistory.setInt(3, node.get("issues_history").get(i).get("comment_id").asInt());
             updateCommentHistory.setInt(3, node.get("issues_history").get(i).get("version_id").asInt());
             updateCommentHistory.setString(4, node.get("issues_history").get(i).get("text").asText());
-            Timestamp comment_timestamp = Timestamp.valueOf(node.get("issues_history").get(i).get("comment_timestamp").asText());
+            Timestamp comment_timestamp = convertStringTimestampForImport(node.get("issues_history").get(i).get("comment_timestamp").asText());
             updateCommentHistory.setTimestamp(5, comment_timestamp);
             updateCommentHistory.setString(6, node.get("issues_history").get(i).get("user").asText());
             updateCommentHistory.addBatch();
@@ -420,6 +420,14 @@ public class MySQLOperation {
         String time = str + "000";
         SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
         Date date = new Date(Long.parseLong(time));
+        long longtime = date.getTime();
+        Timestamp newTs = new Timestamp(longtime);
+        return newTs;
+    }
+
+    private static Timestamp convertStringTimestampForImport(String str) {
+        SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
+        Date date = new Date(Long.parseLong(str));
         long longtime = date.getTime();
         Timestamp newTs = new Timestamp(longtime);
         return newTs;
@@ -2290,9 +2298,11 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
+//            initializedDatabase();
 //            Database db = getDatabase(myConn);
 //            exportJavaObjectAsJson(myConn, db, "db");
             importJsonFileToDataBase(myConn, "/Users/tanweilok/IdeaProjects/bugs-life-project/db.json");
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
