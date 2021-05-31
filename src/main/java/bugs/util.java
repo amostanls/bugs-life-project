@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class util {
     private static ArrayList<ArrayList<String>> choices = new ArrayList<>(); //2d ArrayList
 
-    public static String ask(int len, String command, String Choices, boolean search) {
+    public static String ask(int len, String command, String Choices, boolean proj) {
         //for project page
         Scanner in = new Scanner(System.in);
         while(true){
@@ -22,8 +22,10 @@ public class util {
                     prompt_any();
                 }
             }else{
-                if(search&&s.equals("s"))return s;
-                else if(s.equals("r"))return s;
+                if (!proj) {
+                    if (s.equals("s")) return s;
+                    if (s.equals("r")) return s;
+                }
                 if(s.equals("c"))return s;
                 System.out.println("Invalid input");
                 prompt_any();

@@ -13,7 +13,7 @@ public class Page_issue {
     public static void issue_page() {
         String c=null;
         do {
-            c = ask(0, "Enter 'c' to comment\nor 'r' to react\nor 's' to search\nor '0' to go back.\nor 'help' for more commands: ", issue.toString(), true);
+            c = ask(0, "Enter 'c' to comment\nor 'r' to react\nor 's' to search\nor '0' to go back.\nor 'help' for more commands: ", issue.toString(), false);
             if(c.equals("r")) {
                 //react, select which comment to react first
                 if(issue.getComments().isEmpty()) {
@@ -37,8 +37,6 @@ public class Page_issue {
                 ArrayList<Integer> indices = search(x);
                 System.out.println(issue.commentstoString(indices));
                 prompt_any();
-            }else if(c.equals("help")) {
-
             }else {
                 //confirm this is 0
                 return;
@@ -65,10 +63,6 @@ public class Page_issue {
 
     //priority from 1-9
     private static String status[]={"Resolved", "Closed", "Open", "In Progress"};
-
-    public static void claimIssue() {
-        //only admin can do? assignee part?
-    }
 
     public static void createIssue() {
         Scanner in = new Scanner(System.in);

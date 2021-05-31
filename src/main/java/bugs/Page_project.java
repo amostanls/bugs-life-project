@@ -13,7 +13,7 @@ public class Page_project {
     public static void proj_page() {
         String c=null;
         do {
-            c = ask(project.getIssues().size(), "Enter selected issue ID to check issue\nor 's' to search\nor 'c' to create issue\nor '0' to go back: ", project.issueBoard(), true);
+            c = ask(project.getIssues().size(), "Enter selected issue ID to check issue\nor 's' to search\nor 'c' to create issue\nor '0' to go back: ", project.issueBoard(), false);
             if(c.equals("s")) {
                 //search issue
                 if(project.getIssues().isEmpty()) {

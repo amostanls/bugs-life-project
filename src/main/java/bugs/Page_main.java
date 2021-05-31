@@ -12,7 +12,7 @@ import static bugs.authentication.*;
 public class Page_main {
     // this one use for database, inc one when there's new registration / project / issue / comment
     public static int userenum = 0;
-    public static int projectenum = 0;
+    public static int projectenum = 1;
     public static int issueenum = 0;
     public static int commentenum = 0;
 
@@ -35,9 +35,9 @@ public class Page_main {
 //        comment1.addReact("happy");
 //        Issue issue = new Issue(2, "cannot launch app", 2, "In Progress", new String[]{(new String("Frontend"))}, "tak boleh open", "ben", "josh", new Timestamp(timestamp.getTime()));
 //        issue.addComment(comment1);
-        Project a = new Project(1,"TableView Widget", timestamp);
+//        Project a = new Project(1,"TableView Widget", timestamp);
 //        a.addIssue(issue);
-        addProject(a);
+//        addProject(a);
 //        System.out.println(comment.toString());
 //        System.out.println(issue.toString());
 //        System.out.println("\n");
@@ -62,15 +62,22 @@ public class Page_main {
     }
 
     public static void main_page(){
-        int c = 0;
+        String c;
         do {
-            c = ask0(projects.size(),"Enter selected project ID to check project \nor '0' to log out: ", projectBoard());
-            if(c>0) {
-                setProjid(c - 1);
-                project = (Project) projects.get(c - 1);
-                proj_page();
+            c = ask(projects.size(),"Enter selected project ID to check project \nor '0' to log out\nor 'c' to create project: ", projectBoard(), true);
+            if(isInteger(c)) {
+                int choice = Integer.parseInt(c);
+                if(choice==0)return;
+                else {
+                    setProjid(choice - 1);
+                    project = (Project) projects.get(choice - 1);
+                    proj_page();
+                }
+            }else {
+                //create Project
+                createProject();
             }
-        }while(c!=0);
+        }while(true);
     }
 
     public static int getUserid() {
