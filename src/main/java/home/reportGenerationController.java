@@ -2,6 +2,7 @@ package home;
 
 import bugs.reportGeneration;
 
+import com.jfoenix.controls.JFXSpinner;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -40,15 +41,24 @@ public class reportGenerationController implements Initializable {
 
     @FXML
     void setGenerate(MouseEvent event) {
-        String type=reportType.getValue();
-        LocalDate localdate=datePicker.getValue();
+        String type = reportType.getValue();
+        LocalDate localdate = datePicker.getValue();
 
-        String date= localdate +" 00:00:00";
+        String date = localdate + " 00:00:00";
 
         System.out.println(date);
+        try{
+            Timestamp timestamp = Timestamp.valueOf(date);
+
+            reportBackGroundTask(timestamp, type);
+        }catch (IllegalArgumentException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all data");
+            alert.showAndWait();
+        }
         //String date = "2019-08-08 00:00:00";   // user type date
-        Timestamp timestamp = Timestamp.valueOf(date);
-        reportBackGroundTask(timestamp,type);
+
     }
 
     @Override
@@ -64,12 +74,12 @@ public class reportGenerationController implements Initializable {
 
     }
 
-   private void reportBackGroundTask(Timestamp timestamp, String occurrence) {
+    private void reportBackGroundTask(Timestamp timestamp, String occurrence) {
 
-        backGroundThread = new Service<String>() {
+        backGroundThread = new Service<>() {
             @Override
             protected Task<String> createTask() {
-                return new Task<String>() {
+                return new Task<>() {
                     @Override
                     protected String call() throws Exception {
                         reportGeneration report = new reportGeneration(timestamp, occurrence);  // type Weekly or Monthly
@@ -89,11 +99,13 @@ public class reportGenerationController implements Initializable {
         //veil.setStyle("-fx-background-radius: 30 30 0 0");
         veil.setPrefSize(1030, 530);
 
+        //JFXSpinner p=new JFXSpinner();
+        //p.setPrefWidth(10);
         ProgressIndicator p = new ProgressIndicator();
         p.setMaxSize(100, 100);
 
-        Label label=new Label("This might take a while\n Please wait...");
-        label. setFont(new Font("Arial", 30));
+        Label label = new Label("This might take a while\n Please wait...");
+        label.setFont(new Font("Arial", 30));
         label.setPadding(new Insets(20));
 
         p.progressProperty().bind(backGroundThread.progressProperty());
@@ -101,10 +113,10 @@ public class reportGenerationController implements Initializable {
         p.visibleProperty().bind(backGroundThread.runningProperty());
         label.visibleProperty().bind(backGroundThread.runningProperty());
 
-        stackPane.setAlignment(label,Pos.TOP_CENTER);
+        stackPane.setAlignment(label, Pos.TOP_CENTER);
         //stackPane.getChildren().add(label);
 
-        stackPane.getChildren().addAll(veil, label,p);
+        stackPane.getChildren().addAll(veil, label, p);
         backGroundThread.start();
     }
 }

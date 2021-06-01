@@ -112,6 +112,7 @@ public class issuesController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -157,6 +158,7 @@ public class issuesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         isEditToggle.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (isEditToggle.isSelected()) isEditing = true;
             else isEditing = false;
@@ -237,7 +239,7 @@ public class issuesController implements Initializable {
 
     }
 
-    private void issueTableBackGroundTask(){
+    public void issueTableBackGroundTask(){
         backGroundThread = new Service<Void>() {
             @Override
             protected Task<Void> createTask() {

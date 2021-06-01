@@ -5,18 +5,24 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.controlsfx.control.CheckComboBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class issueAddController implements Initializable {
+
+
 
     @FXML
     private ComboBox<String> issuePriority;
@@ -68,7 +74,7 @@ public class issueAddController implements Initializable {
     }
 
     @FXML
-    public void setSaveBtn(ActionEvent event) {
+    public void setSaveBtn(ActionEvent event) throws IOException {
         //String tag=issueTag.getText();
         List list=issueTag.getCheckModel().getCheckedItems();
         String tag="";
@@ -125,7 +131,14 @@ public class issueAddController implements Initializable {
             }
 
             clean();
+
             ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+//            FXMLLoader loader = (FXMLLoader) (getClass().getResource("issue.fxml"));
+//            //FXMLLoader loader= new FXMLLoader(getClass().getResource("issue.fxml"));
+//            loader.load();
+//            issuesController controller= (issuesController) loader.getController();
+//
+//            controller.issueTableBackGroundTask();
         }
     }
 

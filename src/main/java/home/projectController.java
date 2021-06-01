@@ -1,6 +1,7 @@
 package home;
 
 import bugs.Project;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -126,9 +127,10 @@ public class projectController implements Initializable {
     public void switchToIssues(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedID = 0;
-            try{
+            try {
                 selectedID = projectTable.getSelectionModel().getSelectedItem().getProject_id();
-            }catch (NullPointerException e){}
+            } catch (NullPointerException e) {
+            }
 
             Controller.setSelectedProjectId(selectedID);
             if (isEditing == true) getEditView();
@@ -154,23 +156,11 @@ public class projectController implements Initializable {
         project_id.setCellValueFactory(new PropertyValueFactory<>("project_id"));
         project_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         project_issues.setCellValueFactory(new PropertyValueFactory<>("issuesNumber"));
-        projectTableBackGroundTask();
-        /*try {
-            if (!initialise) {
-                System.out.println("ASAAS");
-                searchProject();
-            }
-            if (initialise) {//only load table on start of program
-                projectTableBackGroundTask();
-                //Controller.updateTable();
-                initialise = false;
-            }
-            setProjectTable();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
+        if (getFinalProjectList() != null) searchProject();
+        if (initialise) {
+            projectTableBackGroundTask();
+            initialise = false;
+        }
     }
 
     public void setProjectTable() {
@@ -248,8 +238,8 @@ public class projectController implements Initializable {
         //veil.setStyle("-fx-background-radius: 30 30 0 0");
         veil.setPrefSize(1030, 530);
 
-        //JFXSpinner p =new JFXSpinner();
-        //p.setRadius(10);
+        //JFXSpinner p=new JFXSpinner();
+
         ProgressIndicator p = new ProgressIndicator();
         p.setMaxSize(100, 100);
 
