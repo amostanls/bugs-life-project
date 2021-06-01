@@ -147,11 +147,11 @@ public class MySQLOperation {
         final String path = "jdbc:mysql://remotemysql.com:3306/5peJ8pFLLQ?zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true";
 
         final String driver = "com.mysql.cj.jdbc.Driver";
-        Connection myConn=null;
-        try{
+        Connection myConn = null;
+        try {
             Class.forName(driver);
             myConn = DriverManager.getConnection(path, user, pass);
-        }catch (ClassNotFoundException | SQLException e){
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
             //JOptionPane.showMessageDialog(null, "Connection refused!!!");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -269,7 +269,7 @@ public class MySQLOperation {
             updateUser.setString(3, node.get("users").get(i).get("password").asText());
             updateUser.setBoolean(4, node.get("users").get(i).get("admin").asBoolean());
             updateUser.setString(5, node.get("users").get(i).get("url").asText());
-            updateUser.setString(6,node.get("users").get(i).get("email").asText());
+            updateUser.setString(6, node.get("users").get(i).get("email").asText());
             updateUser.addBatch();
 
             if (i == node.get("users").size() - 1) {
@@ -1021,7 +1021,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText,String url) {
+    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText, String url) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -1048,7 +1048,7 @@ public class MySQLOperation {
             pstmt.setString(8, createdBy);
             pstmt.setString(9, assignee);
             pstmt.setTimestamp(10, issue_timestamp);
-            pstmt.setString(11,url);
+            pstmt.setString(11, url);
 
             pstmt.execute();
         } catch (Exception ex) {
@@ -1193,13 +1193,13 @@ public class MySQLOperation {
         }
     }
 
-    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText,String assignee,String url) {
+    public static void updateIssue(Connection myConn, int project_id, int issue_id, String title, int priority, String status, String tag, String descriptionText, String assignee, String url) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
         try {
             String SQL_UPDATE_ISSUES_HISTORY = "INSERT INTO issues_history(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url, version_id) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ? ,? ,?, ?, ?)" ;
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ? ,? ,?, ?, ?)";
             String SQL_GET_REQUIRED_ISSUE = "SELECT * FROM issues WHERE project_id = ? AND issue_id = ?";
             String SQL_UPDATE_ISSUES = "UPDATE issues SET title = ?, priority = ?, status = ?, tag = ?, descriptionText = ?, assignee=?, issue_timestamp = ? ,url=? WHERE project_id = ? AND issue_id = ?";
             String SQL_GET_LAST_VERSION_ID = "SELECT * FROM issues_history WHERE project_id = ? AND issue_id = ? ORDER BY version_id DESC LIMIT 1";
@@ -1216,8 +1216,8 @@ public class MySQLOperation {
             }
 
             pstmt = myConn.prepareStatement(SQL_GET_REQUIRED_ISSUE);
-            pstmt.setInt(1,project_id);
-            pstmt.setInt(2,issue_id);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
             myRs = pstmt.executeQuery();
             Issue newIssue = null;
             if (myRs.next()) {
@@ -1258,12 +1258,12 @@ public class MySQLOperation {
             pstmt.setString(3, status);
             pstmt.setString(4, tag);
             pstmt.setString(5, descriptionText);
-            pstmt.setString(6,assignee);
+            pstmt.setString(6, assignee);
 
             Timestamp currentTimestamp = new Timestamp(new Date().getTime());
 
             pstmt.setTimestamp(7, currentTimestamp);
-            pstmt.setString(8,url);
+            pstmt.setString(8, url);
 
             pstmt.setInt(9, project_id);
             pstmt.setInt(10, issue_id);
@@ -1549,7 +1549,7 @@ public class MySQLOperation {
                 String assignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 String url = myRs.getString("url");
-                issueHistories.add(new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url));
+                issueHistories.add(new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url));
             }
             history.setIssue_histories(issueHistories);
 
@@ -1850,7 +1850,7 @@ public class MySQLOperation {
             myConn = getConnection();
 //            User u = new User(1,"jhoe","asd",true,null,null);
 //            System.out.println(getLastUserID(myConn));
-            System.out.println(getLastCommentID(myConn,1,1));
+            System.out.println(getLastCommentID(myConn, 1, 1));
 //            resetDatabase(myConn, "5peJ8pFLLQ");
 //            ArrayList<Project> projects = getProjectList(myConn);
 //            System.out.println(projects.get(0).getIssues().get(0).getTitle());

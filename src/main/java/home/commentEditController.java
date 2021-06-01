@@ -58,7 +58,7 @@ public class commentEditController implements Initializable {
             if (comment.equals(possible_comments.get(selection_id).getText())) {//no change
 
             } else {
-                //System.out.println(getSelectedCommentId());
+
                 MySQLOperation.updateComment(MySQLOperation.getConnection(), getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), comment);
 
             }
@@ -76,7 +76,9 @@ public class commentEditController implements Initializable {
         commentSelection.getItems().addAll(comment_list);
         commentSelection.setValue(comment_list.get(0));
         commentField.setText(possible_comments.get(0).getText());
-        setSelectedCommentId(issue_temp.getComments().get(0).getComment_id());
+
+        setSelectedCommentId(possible_comments.get(0).getComment_id());
+
         commentSelection.setOnAction(this::getCommentSelection);
 
 
@@ -84,8 +86,7 @@ public class commentEditController implements Initializable {
 
     private void getCommentSelection(ActionEvent actionEvent) {
         selection_id = commentSelection.getSelectionModel().getSelectedIndex();
-        setSelectedCommentId(issue_temp.getComments().get(selection_id).getComment_id());
-        System.out.println(getSelectedCommentId());
+        setSelectedCommentId(possible_comments.get(selection_id).getComment_id());
         commentField.setText(possible_comments.get(selection_id).getText());
     }
 
@@ -101,10 +102,10 @@ public class commentEditController implements Initializable {
             }
         }
         for (int i = 0; i < issue_temp.getComments().size(); i++) {
-            if (issue_temp.getComments().get(i).getUser().equals(Controller.getUsername())) {
-                possible_comments.add(issue_temp.getComments().get(i));
+            if (issue_temp.getComments().get(i).getUser().equals(Controller.getUsername())) {//only the user can edit his comments
+                possible_comments.add(issue_temp.getComments().get(i));//add that comment to possible_comments list
                 String temp_string = issue_temp.getComments().get(i).getText();
-                if (temp_string.length() > 20)
+                if (temp_string.length() > 20)//this is for the display of choice box
                     comment_list.add(issue_temp.getComments().get(i).getComment_id() + " - " + issue_temp.getComments().get(i).getText().substring(0, 20));
                 else
                     comment_list.add(issue_temp.getComments().get(i).getComment_id() + " - " + issue_temp.getComments().get(i).getText());
