@@ -58,7 +58,7 @@ public class loginController implements Initializable {
         String password= passwordField.getText();
 
         String sha256hex = DigestUtils.sha256Hex(password);
-        System.out.println(sha256hex);
+        //System.out.println(sha256hex);
         if(username.isEmpty()||password.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
@@ -77,9 +77,9 @@ public class loginController implements Initializable {
             //connect to database
             User currentUser_temp= MySQLOperation.login(MySQLOperation.getConnection(),username,sha256hex);
             if(currentUser_temp!=null){
-                System.out.println("LOGIN successful");
-                System.out.println("Initialising main dashboard");
-                System.out.println("PLease wait");
+//                System.out.println("LOGIN successful");
+//                System.out.println("Initialising main dashboard");
+//                System.out.println("PLease wait");
                 Controller.setCurrentUser(currentUser_temp);
                 Controller.setUsername(username);
 

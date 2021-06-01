@@ -15,7 +15,7 @@
          <font>
             <Font size="36.0" />
          </font></Label>
-      <DatePicker fx:id="datePicker" layoutX="39.0" layoutY="106.0" prefHeight="37.0" prefWidth="286.0" />
+      <DatePicker fx:id="datePicker" layoutX="39.0" layoutY="106.0" prefHeight="37.0" prefWidth="286.0" promptText="Select starting date" />
       <ChoiceBox fx:id="reportType" layoutX="347.0" layoutY="106.0" prefHeight="37.0" prefWidth="155.0" />
       <JFXButton layoutX="538.0" layoutY="105.0" onMouseClicked="#setGenerate" prefHeight="39.0" prefWidth="193.0" style="-fx-background-color: #5cb85c; -fx-text-fill: white;" text="Generate Report">
          <font>
@@ -24,7 +24,7 @@
       </JFXButton>
       <StackPane fx:id="stackPane" layoutX="37.0" layoutY="159.0" prefHeight="561.0" prefWidth="1052.0">
          <children>
-            <TextArea fx:id="reportDisplay" editable="false" prefHeight="568.0" prefWidth="1030.0" />
+            <TextArea fx:id="reportDisplay" editable="false" prefHeight="568.0" prefWidth="1030.0" promptText="Please select starting date and type of report to be generated" />
          </children>
       </StackPane>
    </children>

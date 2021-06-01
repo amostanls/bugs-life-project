@@ -6,6 +6,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -43,6 +44,8 @@ public class reportGenerationController implements Initializable {
         LocalDate localdate=datePicker.getValue();
 
         String date= localdate +" 00:00:00";
+
+        System.out.println(date);
         //String date = "2019-08-08 00:00:00";   // user type date
         Timestamp timestamp = Timestamp.valueOf(date);
         reportBackGroundTask(timestamp,type);
@@ -91,6 +94,7 @@ public class reportGenerationController implements Initializable {
 
         Label label=new Label("This might take a while\n Please wait...");
         label. setFont(new Font("Arial", 30));
+        label.setPadding(new Insets(20));
 
         p.progressProperty().bind(backGroundThread.progressProperty());
         veil.visibleProperty().bind(backGroundThread.runningProperty());
