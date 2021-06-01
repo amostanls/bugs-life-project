@@ -134,6 +134,14 @@ public class Issue implements Serializable, Comparable<Issue> {
         return 1;
     }
 
+    public int getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(int project_id) {
+        this.project_id = project_id;
+    }
+
     public String getTime() {
         return (String)sdf.format(timestamp);
     }

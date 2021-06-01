@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.reportGenerationController">
    <children>
-      <Label layoutX="34.0" layoutY="23.0" prefHeight="17.0" prefWidth="308.0" text="Report Generation">
+      <Label layoutX="39.0" layoutY="23.0" prefHeight="17.0" prefWidth="308.0" text="Report Generation">
          <font>
             <Font size="36.0" />
          </font></Label>
-      <TextArea fx:id="reportDisplay" editable="false" layoutX="58.0" layoutY="181.0" prefHeight="555.0" prefWidth="1011.0" />
+      <DatePicker fx:id="datePicker" layoutX="39.0" layoutY="106.0" prefHeight="37.0" prefWidth="286.0" />
+      <ChoiceBox fx:id="reportType" layoutX="347.0" layoutY="106.0" prefHeight="37.0" prefWidth="155.0" />
+      <JFXButton layoutX="538.0" layoutY="105.0" onMouseClicked="#setGenerate" prefHeight="39.0" prefWidth="193.0" style="-fx-background-color: #5cb85c; -fx-text-fill: white;" text="Generate Report">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </JFXButton>
+      <StackPane fx:id="stackPane" layoutX="37.0" layoutY="159.0" prefHeight="561.0" prefWidth="1052.0">
+         <children>
+            <TextArea fx:id="reportDisplay" editable="false" prefHeight="568.0" prefWidth="1030.0" />
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>
