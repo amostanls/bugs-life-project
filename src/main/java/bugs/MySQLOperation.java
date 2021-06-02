@@ -346,7 +346,7 @@ public class MySQLOperation {
         JsonNode node = Json.parseUrl(jsonUrl);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
-        String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
+        String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
         String INSERT_COMMENT = "INSERT INTO comments (project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";  //6
         String INSERT_REACT = "INSERT INTO react (project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)"; //2
         String INSERT_USER = "INSERT INTO users (userid, username, password, admin) VALUES (?, ?, ?, ?)";
@@ -381,6 +381,7 @@ public class MySQLOperation {
                 //convert string timestamp to timestamp
                 Timestamp newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
                 updateIssue.setTimestamp(10, newTs);
+                updateIssue.setString(11, null);
                 updateIssue.addBatch();
 
                 //add comments
@@ -1861,14 +1862,14 @@ public class MySQLOperation {
 //            User u = new User(1,"jhoe","asd",true,null,null);
 //            System.out.println(getLastUserID(myConn));
 //            System.out.println(getLastCommentID(myConn, 1, 1));
-//            resetDatabase(myConn, "5peJ8pFLLQ");
+            resetDatabase(myConn, "5peJ8pFLLQ");
 //            ArrayList<Project> projects = getProjectList(myConn);
 //            System.out.println(projects.get(0).getIssues().get(0).getTitle());
 //            List<Project> projectList = getProjectList(myConn);
 //            System.out.println(projectList.get(0).getName());
 //            initializedDatabase();
-            Database db = getDatabase(myConn);
-            exportJavaObjectAsJson(myConn, db, "db");
+//            Database db = getDatabase(myConn);
+//            exportJavaObjectAsJson(myConn, db, "db");
 //            importJsonFileToDataBase(myConn, "/Users/tanweilok/IdeaProjects/bugs-life-project/db.json");
 
         } catch (Exception e) {
