@@ -41,11 +41,14 @@ public class commentHistoryController implements Initializable {
     @FXML
     void changeToVersion(MouseEvent event) {
         if (event.getClickCount() == 2) {//Checking double click
-            Comment_History comment = commentTable.getSelectionModel().getSelectedItem();
-            if(comment!=null){
-                MySQLOperation.updateComment(MySQLOperation.getConnection(), Controller.getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), comment.getComment_id(), comment.getText());
-                ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+            if(commentTable.getSelectionModel().getSelectedItem()!=null){
+                Comment_History comment = commentTable.getSelectionModel().getSelectedItem();
+                if(comment!=null){
+                    MySQLOperation.updateComment(MySQLOperation.getConnection(), Controller.getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), comment.getComment_id(), comment.getText());
+                    ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+                }
             }
+
 
 
 

@@ -127,15 +127,17 @@ public class projectController implements Initializable {
     public void switchToIssues(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedID = 0;
-            try {
-                selectedID = projectTable.getSelectionModel().getSelectedItem().getProject_id();
-            } catch (NullPointerException e) {
-            }
+            if(projectTable.getSelectionModel().getSelectedItem()!=null){
+                try {
+                    selectedID = projectTable.getSelectionModel().getSelectedItem().getProject_id();
+                } catch (NullPointerException e) {
+                }
 
-            Controller.setSelectedProjectId(selectedID);
-            if (isEditing == true) getEditView();
-            else if (isChange == true) getChangeLogView();
-            else Controller.switchToIssues();
+                Controller.setSelectedProjectId(selectedID);
+                if (isEditing == true) getEditView();
+                else if (isChange == true) getChangeLogView();
+                else Controller.switchToIssues();
+            }
 
         }
     }

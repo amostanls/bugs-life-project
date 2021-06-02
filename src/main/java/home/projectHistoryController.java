@@ -40,9 +40,11 @@ public class projectHistoryController implements Initializable {
         if (event.getClickCount() == 2) {//Checking double click
 
             //update project history
+            if(projectTable.getSelectionModel().getSelectedItem()!=null){
+                MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
+                ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
 
-            MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
-            ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+            }
 
         }
     }

@@ -141,18 +141,16 @@ public class issuesController implements Initializable {
     @FXML
     void switchToComment(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
-            int selectedIssue=0;
-            try{
+            int selectedIssue = 0;
+            if (issueTable.getSelectionModel().getSelectedItem() != null) {
                 selectedIssue = issueTable.getSelectionModel().getSelectedItem().getIssue_id();
-            }catch (NullPointerException e){}
+                //System.out.println(selectedIssue);
+                Controller.setSelectedIssueId(selectedIssue);
+                if (isEditing == true) getEditView();
+                else if (isChange == true) getChangeLogView();
+                else Controller.switchToComment();
 
-            //System.out.println(selectedIssue);
-            Controller.setSelectedIssueId(selectedIssue);
-            if (isEditing == true) getEditView();
-            else if (isChange == true) getChangeLogView();
-            else Controller.switchToComment();
-
-
+            }
         }
     }
 
@@ -239,7 +237,7 @@ public class issuesController implements Initializable {
 
     }
 
-    public void issueTableBackGroundTask(){
+    public void issueTableBackGroundTask() {
         backGroundThread = new Service<Void>() {
             @Override
             protected Task<Void> createTask() {
@@ -264,19 +262,19 @@ public class issuesController implements Initializable {
 
         });
 
-        Region veil=new Region();
+        Region veil = new Region();
         veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4); -fx-background-radius: 30 30 0 0;");
         //veil.setStyle("-fx-background-radius: 30 30 0 0");
-        veil.setPrefSize(1030,530);
+        veil.setPrefSize(1030, 530);
 
-        ProgressIndicator p =new ProgressIndicator();
-        p.setMaxSize(100,100);
+        ProgressIndicator p = new ProgressIndicator();
+        p.setMaxSize(100, 100);
 
         p.progressProperty().bind(backGroundThread.progressProperty());
         veil.visibleProperty().bind(backGroundThread.runningProperty());
         p.visibleProperty().bind(backGroundThread.runningProperty());
 
-        stackPane.getChildren().addAll(veil,p);
+        stackPane.getChildren().addAll(veil, p);
         backGroundThread.start();
     }
 

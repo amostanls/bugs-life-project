@@ -59,10 +59,13 @@ public class issueHistoryController implements Initializable {
     @FXML
     void changeToVersion(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
-            Issue_History issue = issueTable.getSelectionModel().getSelectedItem();
+            if (issueTable.getSelectionModel().getSelectedItem() != null) {
+                Issue_History issue = issueTable.getSelectionModel().getSelectedItem();
 
-            MySQLOperation.updateIssue(MySQLOperation.getConnection(), issue.getProject_id(), issue.getIssue_id(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getAssignee(),issue.getUrl());
-            ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+                MySQLOperation.updateIssue(MySQLOperation.getConnection(), issue.getProject_id(), issue.getIssue_id(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getAssignee(),issue.getUrl());
+                ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+
+            }
 
 
         }
