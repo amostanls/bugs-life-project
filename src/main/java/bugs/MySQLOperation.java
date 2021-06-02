@@ -1859,19 +1859,6 @@ public class MySQLOperation {
         Connection myConn = null;
         try {
             myConn = getConnection();
-//            User u = new User(1,"jhoe","asd",true,null,null);
-//            System.out.println(getLastUserID(myConn));
-//            System.out.println(getLastCommentID(myConn, 1, 1));
-            resetDatabase(myConn, "5peJ8pFLLQ");
-//            ArrayList<Project> projects = getProjectList(myConn);
-//            System.out.println(projects.get(0).getIssues().get(0).getTitle());
-//            List<Project> projectList = getProjectList(myConn);
-//            System.out.println(projectList.get(0).getName());
-//            initializedDatabase();
-//            Database db = getDatabase(myConn);
-//            exportJavaObjectAsJson(myConn, db, "db");
-//            importJsonFileToDataBase(myConn, "/Users/tanweilok/IdeaProjects/bugs-life-project/db.json");
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
