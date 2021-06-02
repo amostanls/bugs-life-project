@@ -268,8 +268,16 @@ public class MySQLOperation {
             updateUser.setString(2, node.get("users").get(i).get("username").asText());
             updateUser.setString(3, node.get("users").get(i).get("password").asText());
             updateUser.setBoolean(4, node.get("users").get(i).get("admin").asBoolean());
-            updateUser.setString(5, node.get("users").get(i).get("url").asText());
-            updateUser.setString(6, node.get("users").get(i).get("email").asText());
+            if (node.get("users").get(i).get("url").asText().equals("null")) {
+                updateUser.setString(5, null);
+            }else {
+                updateUser.setString(5, node.get("users").get(i).get("url").asText());
+            }
+            if (node.get("users").get(i).get("email").asText().equals("null")) {
+                updateUser.setString(6, null);
+            } else {
+                updateUser.setString(6, node.get("users").get(i).get("email").asText());
+            }
             updateUser.addBatch();
 
             if (i == node.get("users").size() - 1) {
@@ -280,50 +288,54 @@ public class MySQLOperation {
         //Add history table
         String INSERT_PROJECT_HISTORY = "INSERT INTO projects_history (project_id, version_id, name, originalTime) VALUE (?,?,?,?)";
         String INSERT_ISSUE_HISTORY = "INSERT INTO issues_history (project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
-        String INSERT_COMMENT_HISTORY = "INSERT INTO comments (project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";  //6
+        String INSERT_COMMENT_HISTORY = "INSERT INTO comments_history (project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";  //6
 
         PreparedStatement updateProjectHistory = myConn.prepareStatement(INSERT_PROJECT_HISTORY, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement updateIssueHistory = myConn.prepareStatement(INSERT_ISSUE_HISTORY, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement updateCommentHistory = myConn.prepareStatement(INSERT_COMMENT_HISTORY, Statement.RETURN_GENERATED_KEYS);
 
         for (int i = 0; i < node.get("histories").get("project_histories").size(); i++) {
-            updateProjectHistory.setInt(1, node.get("projects_histories").get(i).get("project_id").asInt());
-            updateProjectHistory.setInt(2, node.get("projects_histories").get(i).get("version_id").asInt());
-            updateProjectHistory.setString(3, node.get("projects_histories").get(i).get("name").asText());
+            updateProjectHistory.setInt(1, node.get("histories").get("projects_histories").get(i).get("project_id").asInt());
+            updateProjectHistory.setInt(2, node.get("histories").get("projects_histories").get(i).get("version_id").asInt());
+            updateProjectHistory.setString(3, node.get("histories").get("projects_histories").get(i).get("name").asText());
 
-            Timestamp newTimestamp = convertStringTimestampForImport(node.get("projects_histories").get(i).get("originalTime").asText());
+            Timestamp newTimestamp = convertStringTimestampForImport(node.get("histories").get("projects_histories").get(i).get("originalTime").asText());
             updateProjectHistory.setTimestamp(3, newTimestamp);
             updateProjectHistory.addBatch();
         }
         updateProjectHistory.executeBatch();
 
         for (int i = 0; i < node.get("histories").get("issue_histories").size(); i++) {
-            updateIssueHistory.setInt(1, node.get("issues_history").get(i).get("project_id").asInt());
-            updateIssueHistory.setInt(2, node.get("issues_history").get(i).get("issue_id").asInt());
-            updateIssueHistory.setInt(3, node.get("issues_history").get(i).get("version_id").asInt());
-            updateIssueHistory.setString(4, node.get("issues_history").get(i).get("title").asText());
-            updateIssueHistory.setInt(5, node.get("issues_history").get(i).get("priority").asInt());
-            updateIssueHistory.setString(6, node.get("issues_history").get(i).get("status").asText());
-            updateIssueHistory.setString(7, node.get("issues_history").get(i).get("tag").asText());
-            updateIssueHistory.setString(8, node.get("issues_history").get(i).get("descriptionText").asText());
-            updateIssueHistory.setString(9, node.get("issues_history").get(i).get("createdBy").asText());
-            updateIssueHistory.setString(10, node.get("issues_history").get(i).get("assignee").asText());
-            Timestamp newTS = convertStringTimestampForImport(node.get("issues_history").get(i).get("issue_timestamp").asText());
+            updateIssueHistory.setInt(1, node.get("histories").get("issue_histories").get(i).get("project_id").asInt());
+            updateIssueHistory.setInt(2, node.get("histories").get("issue_histories").get(i).get("issue_id").asInt());
+            updateIssueHistory.setInt(3, node.get("histories").get("issue_histories").get(i).get("version_id").asInt());
+            updateIssueHistory.setString(4, node.get("histories").get("issue_histories").get(i).get("title").asText());
+            updateIssueHistory.setInt(5, node.get("histories").get("issue_histories").get(i).get("priority").asInt());
+            updateIssueHistory.setString(6, node.get("histories").get("issue_histories").get(i).get("status").asText());
+            updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).get("tag").asText());
+            updateIssueHistory.setString(8, node.get("histories").get("issue_histories").get(i).get("descriptionText").asText());
+            updateIssueHistory.setString(9, node.get("histories").get("issue_histories").get(i).get("createdBy").asText());
+            updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());
+            Timestamp newTS = convertStringTimestampForImport(node.get("histories").get("issue_histories").get(i).get("issue_timestamp").asText());
             updateIssueHistory.setTimestamp(11, newTS);
-            updateIssueHistory.setString(12, node.get("issues_history").get(i).get("url").asText());
+            if (node.get("histories").get("issue_histories").get(i).get("url").asText().equals("null")) {
+                updateIssueHistory.setString(12, null);
+            }else {
+                updateIssueHistory.setString(12, node.get("histories").get("issue_histories").get(i).get("url").asText());
+            }
             updateIssueHistory.addBatch();
         }
         updateIssueHistory.executeBatch();
 
         for (int i = 0; i < node.get("histories").get("comment_histories").size(); i++) {
-            updateCommentHistory.setInt(1, node.get("issues_history").get(i).get("project_id").asInt());
-            updateCommentHistory.setInt(2, node.get("issues_history").get(i).get("issue_id").asInt());
-            updateCommentHistory.setInt(3, node.get("issues_history").get(i).get("comment_id").asInt());
-            updateCommentHistory.setInt(3, node.get("issues_history").get(i).get("version_id").asInt());
-            updateCommentHistory.setString(4, node.get("issues_history").get(i).get("text").asText());
-            Timestamp comment_timestamp = convertStringTimestampForImport(node.get("issues_history").get(i).get("comment_timestamp").asText());
-            updateCommentHistory.setTimestamp(5, comment_timestamp);
-            updateCommentHistory.setString(6, node.get("issues_history").get(i).get("user").asText());
+            updateCommentHistory.setInt(1, node.get("histories").get("comment_histories").get(i).get("project_id").asInt());
+            updateCommentHistory.setInt(2, node.get("histories").get("comment_histories").get(i).get("issue_id").asInt());
+            updateCommentHistory.setInt(3, node.get("histories").get("comment_histories").get(i).get("comment_id").asInt());
+            updateCommentHistory.setInt(4, node.get("histories").get("comment_histories").get(i).get("version_id").asInt());
+            updateCommentHistory.setString(5, node.get("histories").get("comment_histories").get(i).get("text").asText());
+            Timestamp comment_timestamp = convertStringTimestampForImport(node.get("histories").get("comment_histories").get(i).get("comment_timestamp").asText());
+            updateCommentHistory.setTimestamp(6, comment_timestamp);
+            updateCommentHistory.setString(7, node.get("histories").get("comment_histories").get(i).get("user").asText());
             updateCommentHistory.addBatch();
         }
         updateCommentHistory.executeBatch();
@@ -334,7 +346,7 @@ public class MySQLOperation {
         JsonNode node = Json.parseUrl(jsonUrl);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
-        String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
+        String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
         String INSERT_COMMENT = "INSERT INTO comments (project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";  //6
         String INSERT_REACT = "INSERT INTO react (project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)"; //2
         String INSERT_USER = "INSERT INTO users (userid, username, password, admin) VALUES (?, ?, ?, ?)";
@@ -369,6 +381,7 @@ public class MySQLOperation {
                 //convert string timestamp to timestamp
                 Timestamp newTs = convertStringTimestamp(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
                 updateIssue.setTimestamp(10, newTs);
+                updateIssue.setString(11, null);
                 updateIssue.addBatch();
 
                 //add comments
@@ -1524,13 +1537,11 @@ public class MySQLOperation {
             //add project history list to history
             myRs = stmt.executeQuery(SQL_GET_PROJECT_HISTORY);
             while (myRs.next()) {
-                while (myRs.next()) {
-                    int id = myRs.getInt("project_id");
-                    int version_id = myRs.getInt("version_id");
-                    String name = myRs.getString("name");
-                    Timestamp originalTime = myRs.getTimestamp("originalTime");
-                    projectHistories.add(new Project_History(id, version_id, name, originalTime));
-                }
+                int id = myRs.getInt("project_id");
+                int version_id = myRs.getInt("version_id");
+                String name = myRs.getString("name");
+                Timestamp originalTime = myRs.getTimestamp("originalTime");
+                projectHistories.add(new Project_History(id, version_id, name, originalTime));
             }
             history.setProject_histories(projectHistories);
 
@@ -1850,8 +1861,8 @@ public class MySQLOperation {
             myConn = getConnection();
 //            User u = new User(1,"jhoe","asd",true,null,null);
 //            System.out.println(getLastUserID(myConn));
-            System.out.println(getLastCommentID(myConn, 1, 1));
-//            resetDatabase(myConn, "5peJ8pFLLQ");
+//            System.out.println(getLastCommentID(myConn, 1, 1));
+            resetDatabase(myConn, "5peJ8pFLLQ");
 //            ArrayList<Project> projects = getProjectList(myConn);
 //            System.out.println(projects.get(0).getIssues().get(0).getTitle());
 //            List<Project> projectList = getProjectList(myConn);

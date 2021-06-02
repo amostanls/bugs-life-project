@@ -1,18 +1,18 @@
 {
   "projects" : [ {
     "project_id" : 1,
-    "name" : "Nuxtjs",
+    "name" : "new project",
     "issues" : [ {
+      "project_id" : 1,
       "issue_id" : 1,
-      "title" : "Can't display the table",
+      "title" : "new name",
       "priority" : 4,
       "status" : "In Progress",
-      "tag" : [ "Frontend" ],
-      "tagAsString" : "Frontend; ",
+      "tag" : [ "Frontend " ],
       "descriptionText" : "Hi, \n\n            I'm receiving the \"Can't display the data because Power BI can't determine the relationship between two or more fields.\" error message and I do not understand why. I have searched the net for help but can't find a post that answers my question.\n\n           It may well be a straight modelling restriction but best to check.\n\n\n   I have two datasources (Sheet 1 and Sheet 2). Both are Excel files.",
       "createdBy" : "jhoe",
       "assignee" : "btan",
-      "timestamp" : 1565192640000,
+      "timestamp" : 1622596123000,
       "comments" : [ {
         "comment_id" : 1,
         "text" : "Please find below links to the two .pbix files I've created in an attempt toconquer this error I'm receiving.",
@@ -23,7 +23,7 @@
           "reaction" : "happy",
           "count" : 1
         } ],
-        "comment_timestamp" : 1565192640000,
+        "comment_timestamp" : 1622596123000,
         "user" : "liew"
       }, {
         "comment_id" : 2,
@@ -35,19 +35,19 @@
           "reaction" : "happy",
           "count" : 0
         } ],
-        "comment_timestamp" : 1565192640000,
+        "comment_timestamp" : 1622596123000,
         "user" : "ang"
       } ],
-      "url" : null,
-      "time" : "2019-08-07 23:44:00",
-      "tags" : "Frontend"
+      "url" : "null",
+      "time" : "2021-06-02 09:08:43",
+      "tags" : "Frontend  "
     }, {
+      "project_id" : 1,
       "issue_id" : 2,
       "title" : "Can't open file",
       "priority" : 3,
       "status" : "Open",
       "tag" : [ "Backend" ],
-      "tagAsString" : "Backend; ",
       "descriptionText" : "Windows 10 Photo will not open a jpg file. I get \"We can't open this file.\" error message.\n\nThey're family photo that I sure would like to salvage.  Thanks",
       "createdBy" : "btan",
       "assignee" : "jhoe",
@@ -66,7 +66,7 @@
         "user" : "liew"
       }, {
         "comment_id" : 2,
-        "text" : "lad photos of windows 8 & 10 are worst possible application ever developed!\n\n                    just change default view to \"windows photo viewer\" if you dont have any other application",
+        "text" : "lad photos of windows 8 & 10 are worst possible application ever develope\n just change default view to \"windows photo viewer\" if you dont have any other application",
         "react" : [ {
           "reaction" : "angry",
           "count" : 5
@@ -89,11 +89,11 @@
         "comment_timestamp" : 1565279040000,
         "user" : "ang"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-08-08 23:44:00",
-      "tags" : "Backend"
+      "tags" : "Backend "
     } ],
-    "project_timestamp" : 1565192640000,
+    "project_timestamp" : 1622596107000,
     "issuesNumber" : 2,
     "len_id" : 2,
     "len_title" : 5,
@@ -105,14 +105,14 @@
     "len_createdby" : 9
   }, {
     "project_id" : 2,
-    "name" : "Vuejs",
+    "name" : "new projecttttt",
     "issues" : [ {
+      "project_id" : 2,
       "issue_id" : 2,
       "title" : "User is \"trapped\" on 404 page",
       "priority" : 8,
       "status" : "Closed",
       "tag" : [ "Backend" ],
-      "tagAsString" : "Backend; ",
       "descriptionText" : "When hitting the 404 page, the Nuxt layout isn't applied correctly.",
       "createdBy" : "ang",
       "assignee" : "jhoe",
@@ -142,16 +142,16 @@
         "comment_timestamp" : 1570507200000,
         "user" : "ang"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-10-08 12:00:00",
-      "tags" : "Backend"
+      "tags" : "Backend "
     }, {
+      "project_id" : 2,
       "issue_id" : 1,
       "title" : "Flash of unstyled content",
       "priority" : 6,
       "status" : "Open",
       "tag" : [ "cmty:bug-report" ],
-      "tagAsString" : "cmty:bug-report; ",
       "descriptionText" : "What is expected ?\nExpected correct scrollspy active link highlighting and all links work.\n\nWhat is actually happening?\nPage jumps to top before smooth scroll, which leads to weird links highlighting. Also, sometimes some links doesn't highlight (like Server Rendered in demo video)\n\nAdditional comments?\nDemonstration - https://imgur.com/a/GGvITVB",
       "createdBy" : "btan",
       "assignee" : "ang",
@@ -176,13 +176,13 @@
           "count" : 5
         }, {
           "reaction" : "happy",
-          "count" : 2
+          "count" : 3
         } ],
         "comment_timestamp" : 1569920400000,
         "user" : "ang"
       }, {
         "comment_id" : 3,
-        "text" : "Thanks for everything",
+        "text" : "no!",
         "react" : [ {
           "reaction" : "angry",
           "count" : 1
@@ -193,11 +193,11 @@
         "comment_timestamp" : 1569920400000,
         "user" : "jhoe"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-10-01 17:00:00",
-      "tags" : "cmty:bug-report"
+      "tags" : "cmty:bug-report "
     } ],
-    "project_timestamp" : 1565192640000,
+    "project_timestamp" : 1622599184000,
     "issuesNumber" : 2,
     "len_id" : 2,
     "len_title" : 5,
@@ -211,12 +211,42 @@
     "project_id" : 3,
     "name" : "Reactjs",
     "issues" : [ {
+      "project_id" : 3,
+      "issue_id" : 2,
+      "title" : "New title",
+      "priority" : 5,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "Hahahaha",
+      "createdBy" : "Lok",
+      "assignee" : "",
+      "timestamp" : 1622539555000,
+      "comments" : [ ],
+      "url" : "",
+      "time" : "2021-06-01 17:25:55",
+      "tags" : " "
+    }, {
+      "project_id" : 3,
+      "issue_id" : 3,
+      "title" : "new title",
+      "priority" : 2,
+      "status" : "Open",
+      "tag" : [ "Frontend Backend " ],
+      "descriptionText" : "asdf",
+      "createdBy" : "tay",
+      "assignee" : "",
+      "timestamp" : 1622558171000,
+      "comments" : [ ],
+      "url" : "",
+      "time" : "2021-06-01 22:36:11",
+      "tags" : "Frontend Backend  "
+    }, {
+      "project_id" : 3,
       "issue_id" : 1,
       "title" : "Flash of unstyled content",
       "priority" : 1,
       "status" : "Open",
       "tag" : [ "cmty:bug-report" ],
-      "tagAsString" : "cmty:bug-report; ",
       "descriptionText" : "What is expected ?\nThere is no flash of unstyled content            \n\nWhat is actually happening?\nThere is a brief flash of unstyled content\n\nAdditional comments? \nDoesn't occur in Chrome",
       "createdBy" : "liew",
       "assignee" : "btan",
@@ -249,12 +279,140 @@
         "comment_timestamp" : 1567339200000,
         "user" : "ang"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-09-01 20:00:00",
-      "tags" : "cmty:bug-report"
+      "tags" : "cmty:bug-report "
     } ],
     "project_timestamp" : 1565192640000,
-    "issuesNumber" : 1,
+    "issuesNumber" : 3,
+    "len_id" : 2,
+    "len_title" : 5,
+    "len_status" : 6,
+    "len_tag" : 3,
+    "len_priority" : 8,
+    "len_time" : 4,
+    "len_assignee" : 8,
+    "len_createdby" : 9
+  }, {
+    "project_id" : 4,
+    "name" : "New Project",
+    "issues" : [ {
+      "project_id" : 4,
+      "issue_id" : 9,
+      "title" : "test refersh",
+      "priority" : 9,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "eae",
+      "createdBy" : "tay",
+      "assignee" : "",
+      "timestamp" : 1622560635000,
+      "comments" : [ ],
+      "url" : "",
+      "time" : "2021-06-01 23:17:15",
+      "tags" : " "
+    }, {
+      "project_id" : 4,
+      "issue_id" : 8,
+      "title" : "testing final",
+      "priority" : 8,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "test",
+      "createdBy" : "tay",
+      "assignee" : "",
+      "timestamp" : 1622560527000,
+      "comments" : [ ],
+      "url" : "",
+      "time" : "2021-06-01 23:15:27",
+      "tags" : " "
+    }, {
+      "project_id" : 4,
+      "issue_id" : 7,
+      "title" : "fasdf",
+      "priority" : 5,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "asdf",
+      "createdBy" : "tay",
+      "assignee" : "",
+      "timestamp" : 1622560488000,
+      "comments" : [ ],
+      "url" : "",
+      "time" : "2021-06-01 23:14:48",
+      "tags" : " "
+    }, {
+      "project_id" : 4,
+      "issue_id" : 6,
+      "title" : "dsaf",
+      "priority" : 4,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "afds",
+      "createdBy" : "tay",
+      "assignee" : "",
+      "timestamp" : 1622560324000,
+      "comments" : [ ],
+      "url" : "",
+      "time" : "2021-06-01 23:12:04",
+      "tags" : " "
+    }, {
+      "project_id" : 4,
+      "issue_id" : 3,
+      "title" : "qwerty",
+      "priority" : 3,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "qwerty",
+      "createdBy" : "tay",
+      "assignee" : "",
+      "timestamp" : 1622558954000,
+      "comments" : [ ],
+      "url" : "",
+      "time" : "2021-06-01 22:49:14",
+      "tags" : " "
+    }, {
+      "project_id" : 4,
+      "issue_id" : 1,
+      "title" : "New issue",
+      "priority" : 2,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "I have no idea.",
+      "createdBy" : "jhoe",
+      "assignee" : "",
+      "timestamp" : 1622415437000,
+      "comments" : [ {
+        "comment_id" : 1,
+        "text" : "new comm",
+        "react" : [ {
+          "reaction" : "angry",
+          "count" : 0
+        }, {
+          "reaction" : "happy",
+          "count" : 0
+        } ],
+        "comment_timestamp" : 1622415437000,
+        "user" : "btan"
+      }, {
+        "comment_id" : 2,
+        "text" : "new comment 12",
+        "react" : [ {
+          "reaction" : "angry",
+          "count" : 0
+        }, {
+          "reaction" : "happy",
+          "count" : 0
+        } ],
+        "comment_timestamp" : 1622415437000,
+        "user" : "btan"
+      } ],
+      "url" : "",
+      "time" : "2021-05-31 06:57:17",
+      "tags" : " "
+    } ],
+    "project_timestamp" : 1622415397000,
+    "issuesNumber" : 6,
     "len_id" : 2,
     "len_title" : 5,
     "len_status" : 6,
@@ -296,10 +454,101 @@
     "admin" : false,
     "url" : null,
     "email" : null
+  }, {
+    "userid" : 5,
+    "username" : "Lok",
+    "password" : "22d710ec5e78a06a1dbb8aa3aadf063d3894e760b5e6c01b1360c0f73448e28e",
+    "name" : null,
+    "admin" : true,
+    "url" : null,
+    "email" : null
+  }, {
+    "userid" : 6,
+    "username" : "normal",
+    "password" : "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "name" : null,
+    "admin" : false,
+    "url" : null,
+    "email" : null
+  }, {
+    "userid" : 7,
+    "username" : "33",
+    "password" : "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+    "name" : null,
+    "admin" : false,
+    "url" : null,
+    "email" : null
+  }, {
+    "userid" : 8,
+    "username" : "tay",
+    "password" : "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "name" : null,
+    "admin" : true,
+    "url" : null,
+    "email" : null
   } ],
   "histories" : {
-    "project_histories" : [ ],
-    "issue_histories" : [ ],
-    "comment_histories" : [ ]
+    "project_histories" : [ {
+      "project_id" : 2,
+      "version_id" : 1,
+      "name" : "Vuejs",
+      "originalTime" : 1565192640000
+    } ],
+    "issue_histories" : [ {
+      "project_id" : 1,
+      "issue_id" : 1,
+      "version_id" : 1,
+      "title" : "Can't display the table",
+      "priority" : 4,
+      "status" : "In Progress",
+      "tag" : [ "" ],
+      "tags" : "",
+      "descriptionText" : "Hi, \n\n            I'm receiving the \"Can't display the data because Power BI can't determine the relationship between two or more fields.\" error message and I do not understand why. I have searched the net for help but can't find a post that answers my question.\n\n           It may well be a straight modelling restriction but best to check.\n\n\n   I have two datasources (Sheet 1 and Sheet 2). Both are Excel files.",
+      "createdBy" : "jhoe",
+      "assignee" : "btan",
+      "issue_timestamp" : 1565192640000,
+      "url" : "null"
+    } ],
+    "comment_histories" : [ {
+      "project_id" : 1,
+      "issue_id" : 2,
+      "comment_id" : 2,
+      "version_id" : 1,
+      "text" : "lad photos of windows 8 & 10 are worst possible application ever developed!\n\n                    just change default view to \"windows photo viewer\" if you dont have any other application",
+      "comment_timestamp" : 1565279040000,
+      "user" : "btan"
+    }, {
+      "project_id" : 2,
+      "issue_id" : 1,
+      "comment_id" : 3,
+      "version_id" : 1,
+      "text" : "Thanks for everything",
+      "comment_timestamp" : 1569920400000,
+      "user" : "jhoe"
+    }, {
+      "project_id" : 4,
+      "issue_id" : 1,
+      "comment_id" : 1,
+      "version_id" : 1,
+      "text" : "new comment",
+      "comment_timestamp" : 1622544477000,
+      "user" : "btan"
+    }, {
+      "project_id" : 4,
+      "issue_id" : 1,
+      "comment_id" : 1,
+      "version_id" : 2,
+      "text" : "new comment dsafasd",
+      "comment_timestamp" : 1622544509000,
+      "user" : "btan"
+    }, {
+      "project_id" : 4,
+      "issue_id" : 1,
+      "comment_id" : 2,
+      "version_id" : 1,
+      "text" : "new comment",
+      "comment_timestamp" : 1622548447000,
+      "user" : "btan"
+    } ]
   }
 }
