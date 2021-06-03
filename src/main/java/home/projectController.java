@@ -160,7 +160,7 @@ public class projectController implements Initializable {
         project_issues.setCellValueFactory(new PropertyValueFactory<>("issuesNumber"));
         if (getFinalProjectList() != null) searchProject();
         if (initialise) {
-            projectTableBackGroundTask();
+            //projectTableBackGroundTask();
             initialise = false;
         }
     }

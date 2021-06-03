@@ -1,6 +1,7 @@
 package home;
 
 import animatefx.animation.FadeIn;
+import bugs.MyRunnable;
 import bugs.reportGeneration;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -26,6 +27,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class main extends Application {
+    public static MyRunnable myRunnable = new MyRunnable();
+    public static Thread t = new Thread(myRunnable);
     public static void main(String[] args) {
         launch(args);
 
@@ -45,7 +48,12 @@ public class main extends Application {
         stage.setTitle("Bugs Life");
         stage.setResizable(false);
         stage.setScene(scene);
+
+        stage.setOnShowing(event -> {
+            t.start();
+        });
         stage.show();
+
 
         new FadeIn(root).play();
     }

@@ -1,43 +1,44 @@
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Issue_History.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/MySQLOperation.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/History.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/commentEditController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Tag.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/issueHistoryController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/projectHistoryController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Database.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Page_comment.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Page_react.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/issueAddController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/reportGenerationController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/projectEditController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/util.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/React.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/commentController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/settingsController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/issuesController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/commentReactController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Issue.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Page_main.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/projectController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/login/loginController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Project.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Mail.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/issueImageViewController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/main.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/FxmlLoader.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Page_project.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/login/registerController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/commentHistoryController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/projectAddController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/reportGeneration.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Page_issue.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/authentication.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/Controller.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Comment.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Comment_History.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/commentAddController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Json.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/Project_History.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/home/issueEditController.java
-/Users/tanweilok/IdeaProjects/bugs-life-project/src/main/java/bugs/User.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_project.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\login\registerController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Project_History.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\authentication.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Mail.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_main.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\React.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\User.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Json.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_comment.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\FxmlLoader.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\History.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueAddController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\MySQLOperation.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\util.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Tag.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\login\loginController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\MyRunnable.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issuesController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueHistoryController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Comment_History.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_react.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_issue.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\main.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentAddController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Database.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentHistoryController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectHistoryController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Issue.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentEditController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Project.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Comment.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentReactController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\settingsController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\Controller.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\reportGeneration.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueEditController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueImageViewController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\reportGenerationController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectAddController.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Issue_History.java
+D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectEditController.java

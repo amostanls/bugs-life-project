@@ -186,8 +186,8 @@ public class MySQLOperation {
         }
     }
 
-    public static void importJsonFileToDataBase(Connection myConn, String filePath) throws IOException, SQLException {
-        File jsonFile = new File(filePath);
+    public static void importJsonFileToDataBase(Connection myConn, File jsonFile) throws IOException, SQLException {
+        //File jsonFile = new File(filePath);
         JsonNode node = Json.parseFile(jsonFile);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
@@ -927,7 +927,7 @@ public class MySQLOperation {
         return null;
     }
 
-    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin) {
+    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin,String email) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -935,12 +935,13 @@ public class MySQLOperation {
         int user_id = getLastUserID(myConn) + 1;
 
         try {
-            String SQL_CREATE_USER = "INSERT INTO users(userid, username, password, admin)VALUES (?, ?, ?, ?)";
+            String SQL_CREATE_USER = "INSERT INTO users(userid, username, password, admin, email)VALUES (?, ?, ?, ?,?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_USER);
             pstmt.setInt(1, user_id);
             pstmt.setString(2, username);
             pstmt.setString(3, password);
             pstmt.setBoolean(4, isAdmin);
+            pstmt.setString(5,email);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);

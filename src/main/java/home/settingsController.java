@@ -1,5 +1,6 @@
 package home;
 
+import bugs.Mail;
 import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
@@ -9,7 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
 
 public class settingsController implements Initializable {
@@ -60,33 +64,60 @@ public class settingsController implements Initializable {
             alert.setContentText("Password must be the same");
             alert.showAndWait();
         } else {
-            //connect to database
-            MySQLOperation.updatePassword(MySQLOperation.getConnection(), Controller.getCurrentUser(), password);
-            //JOptionPane.showMessageDialog(null, "Update Successful");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText(null);
-            alert.setContentText("Update Successful");
-            alert.showAndWait();
-            newPasswordField.clear();
-            confirmPasswordField.clear();
+            String verificationCode = Mail.resetPassword(Controller.getCurrentUser().getEmail());
 
+            TextInputDialog td = new TextInputDialog();
+            td.setTitle("Email verification");
+            td.getDialogPane().setHeaderText("Sending email to " + Controller.getCurrentUser().getEmail());
+            td.getDialogPane().setContentText("Enter the code sent to your email : ");
+            td.showAndWait();
+            TextField input = td.getEditor();
+            if (input.getText() != null && input.getText().toString().length() != 0) {
+                if (verificationCode.equals(input.getText())) {
+                    //connect to database
+                    MySQLOperation.updatePassword(MySQLOperation.getConnection(), Controller.getCurrentUser(), password);
+                    //JOptionPane.showMessageDialog(null, "Update Successful");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Update Successful");
+                    alert.showAndWait();
+                    newPasswordField.clear();
+                    confirmPasswordField.clear();
+                }
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Wrong code");
+                    alert.showAndWait();
+                }
+
+
+            }
         }
 
     }
 
     @FXML
     void importJSON(MouseEvent event) throws Exception {
-        TextInputDialog td = new TextInputDialog();
-        td.setTitle("Import JSON");
-        td.getDialogPane().setHeaderText("Make sure the values inside JSON file does not conflict with existing data\n\n" +
-                "Instead, you may consider to reset the Database, use Initialise database button");
-        td.getDialogPane().setContentText("Enter your file URL : ");
-        td.showAndWait();
-        TextField input = td.getEditor();
-        if (input.getText() != null && input.getText().toString().length() != 0) {
-            MySQLOperation.updateDatabaseFromUrl(MySQLOperation.getConnection(), input.getText());
+        JFileChooser jfc = new JFileChooser();
+        jfc.showDialog(null,"Please Select the File");
+        jfc.setVisible(true);
+        File filename = jfc.getSelectedFile();
+        System.out.println("File name "+filename.getName());
 
-        }
+
+        MySQLOperation.importJsonFileToDataBase(MySQLOperation.getConnection(), filename);
+//        TextInputDialog td = new TextInputDialog();
+//        td.setTitle("Import JSON");
+//        td.getDialogPane().setHeaderText("Make sure the values inside JSON file does not conflict with existing data\n\n" +
+//                "Instead, you may consider to reset the Database, use Initialise database button");
+//        td.getDialogPane().setContentText("Enter your file URL : ");
+//        td.showAndWait();
+//        TextField input = td.getEditor();
+//        if (input.getText() != null && input.getText().toString().length() != 0) {
+//            MySQLOperation.updateDatabaseFromUrl(MySQLOperation.getConnection(), input.getText());
+//
+//        }
     }
 
     @FXML
@@ -100,7 +131,7 @@ public class settingsController implements Initializable {
         td.showAndWait();
         TextField input = td.getEditor();
         if (input.getText() != null && input.getText().toString().length() != 0) {
-            MySQLOperation.exportJavaObjectsAsJson(MySQLOperation.getConnection(), Controller.getFinalProjectList(), input.getText().toString());
+            MySQLOperation.exportJavaObjectAsJson(MySQLOperation.getConnection(),MySQLOperation.getDatabase(MySQLOperation.getConnection()), input.getText());
 
         }
 
