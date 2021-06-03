@@ -1747,20 +1747,27 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        ArrayList<Project> projects = new ArrayList<>();
-        MyRunnable myRunnable = new MyRunnable(projects);
+        ArrayList<Project> projects;
+
+        //Getting the projects list
+        MyRunnable myRunnable = new MyRunnable();
         Thread t = new Thread(myRunnable);
         t.start();
 
+        //run anything at the same time
         System.out.println("hahahahha");
         System.out.print("Enter: ");
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
         System.out.println("lol");
         System.out.println("Continue");
-        t.join();   // to make sure it complete the run before next action is being taken
-        System.out.println(myRunnable.getProjects().get(0).getName());
 
+        //to make sure it complete the run before next action is being taken
+        t.join();
+
+        //assign the projects
+        projects = myRunnable.getProjects();
+        System.out.println(projects.get(0).getName());
 
 
     }

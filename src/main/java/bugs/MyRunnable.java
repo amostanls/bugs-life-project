@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class MyRunnable implements Runnable{
     private ArrayList<Project> projects;
 
-    public MyRunnable(ArrayList<Project> projects) {
-        this.projects = projects;
+    public MyRunnable() {
+        this.projects = new ArrayList<>();
     }
 
     @Override
