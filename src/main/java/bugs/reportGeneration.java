@@ -2,6 +2,7 @@ package bugs;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class reportGeneration {
@@ -11,32 +12,28 @@ public class reportGeneration {
     private Timestamp startTime;
     private Timestamp endTime;
     private List<Project> projectList;
+    private String duration = "Weekly";
 
 
     public reportGeneration(Timestamp time, String date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(time);
+        duration = date;
         if (date.equals("Weekly")) {
-            endTime = new Timestamp(Calendar.getInstance().get(
-                    Calendar.YEAR), Calendar.getInstance().get(
-                    Calendar.MONTH), Calendar.getInstance().get(
-                    Calendar.DATE) + 7, Calendar.getInstance().get(
-                    Calendar.HOUR), Calendar.getInstance().get(
-                    Calendar.MINUTE), Calendar.getInstance().get(
-                    Calendar.SECOND), 0);// 7 days before as start date
-            startTime = time;
-        } else if (date.equals("Monthly")) {
-            endTime = new Timestamp(Calendar.getInstance().get(
-                    Calendar.YEAR), Calendar.getInstance().get(
-                    Calendar.MONTH) + 1, Calendar.getInstance().get(
-                    Calendar.DATE), Calendar.getInstance().get(
-                    Calendar.HOUR), Calendar.getInstance().get(
-                    Calendar.MINUTE), Calendar.getInstance().get(
-                    Calendar.SECOND), 0);// 7 days before as start date
-            startTime = time;
+            c.add(Calendar.DATE, 7);
+            Timestamp newTime = new Timestamp(c.getTime().getTime());
+            setStartTime(time);
+            setEndTime(newTime);
+        } else {
+            c.add(Calendar.MONTH, 1);
+            Timestamp newTime = new Timestamp(c.getTime().getTime());
+            setStartTime(time);
+            setEndTime(newTime);
         }
     }
 
     public List<Project> getProjectlist() {  //base on the date to get the projects list
-       projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
+        projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
         List<Project> newProjectList = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             if (projectList.get(i).getProject_timestamp().compareTo(startTime) >= 0 || projectList.get(i).getProject_timestamp().compareTo(endTime) <= 0) {
@@ -98,8 +95,12 @@ public class reportGeneration {
         int inProgress = 0;
         int other = 0;
         String str = "";
-        str += "\t\t\t\t\t" + "WEEKLY REPORT" + "\t\t\t\t\t" + "\n"; //title
-        str+="Starting from "+startTime+" to "+endTime+"\n\n";
+        if (duration.equals("Weekly")) str += "\t\t\t\t\t" + "WEEKLY REPORT" + "\t\t\t\t\t" + "\n"; //title
+        else str += "\t\t\t\t\t" + "MONTHLY REPORT" + "\t\t\t\t\t" + "\n"; //title
+
+
+        str += "Starting from " + startTime.toLocalDateTime().toLocalDate() + " to " + endTime.toLocalDateTime().toLocalDate() + "\n\n";
+
         String performance = showTopTeamPerformer();
         str += performance + "\n";
         str += "this week has " + projectlist.size() + " projects in Process" + "\n";
@@ -129,12 +130,12 @@ public class reportGeneration {
         str += "The issues in progress in this week is: " + inProgress + "\n" + "issues id: " + list3.toString() + "\n";
         str += "Other: " + other + "\n";
         str += "\n----------User Activity-----------" + "\n";
-        str+="---issue---"+"\n";
+        str += "---issue---" + "\n";
         Map<String, Integer> map = getUserMap();
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             str += entry.getKey() + "----issue created----" + entry.getValue() + "\n";
         }
-        str+="---comment---"+"\n";
+        str += "---comment---" + "\n";
         Map<String, Integer> map1 = getCommentUserMap();
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             str += entry.getKey() + "----comment created----" + entry.getValue() + "\n";
@@ -236,7 +237,6 @@ public class reportGeneration {
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
-
 
     public static void main(String[] args) {
 

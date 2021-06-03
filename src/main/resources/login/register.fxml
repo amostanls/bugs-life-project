@@ -51,13 +51,26 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </HBox>
-      <VBox layoutX="231.0" layoutY="164.0" prefHeight="502.0" prefWidth="338.0">
+      <VBox layoutX="231.0" layoutY="205.0" prefHeight="502.0" prefWidth="338.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="59.0" prefWidth="317.0">
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="98.0" prefWidth="389.0" style="-fx-border-color: white; -fx-border-width: 0 0 2 0;">
                <children>
-                  <ChoiceBox fx:id="userTypeSelection" prefHeight="34.0" prefWidth="176.0" />
+                  <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@mail.png" />
+                     </image>
+                  </ImageView>
+                  <TextField fx:id="emailField" prefHeight="96.0" prefWidth="278.0" promptText="Enter email" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
                </children>
             </HBox>
+            <HBox alignment="CENTER" prefHeight="59.0" prefWidth="317.0" />
             <HBox alignment="CENTER" prefHeight="98.0" prefWidth="389.0" style="-fx-border-color: white; -fx-border-width: 0 0 2 0;">
                <children>
                   <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
@@ -118,6 +131,7 @@
                </font>
             </JFXButton>
          </children></VBox>
+      <ChoiceBox fx:id="userTypeSelection" layoutX="312.0" layoutY="139.0" prefHeight="34.0" prefWidth="176.0" />
    </children>
    <padding>
       <Insets top="5.0" />

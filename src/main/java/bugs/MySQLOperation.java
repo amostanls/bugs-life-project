@@ -186,8 +186,8 @@ public class MySQLOperation {
         }
     }
 
-    public static void importJsonFileToDataBase(Connection myConn, String filePath) throws IOException, SQLException {
-        File jsonFile = new File(filePath);
+    public static void importJsonFileToDataBase(Connection myConn, File jsonFile) throws IOException, SQLException {
+        //File jsonFile = new File(filePath);
         JsonNode node = Json.parseFile(jsonFile);
 
         String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
@@ -927,7 +927,7 @@ public class MySQLOperation {
         return null;
     }
 
-    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin) {
+    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin,String email) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -935,12 +935,13 @@ public class MySQLOperation {
         int user_id = getLastUserID(myConn) + 1;
 
         try {
-            String SQL_CREATE_USER = "INSERT INTO users(userid, username, password, admin)VALUES (?, ?, ?, ?)";
+            String SQL_CREATE_USER = "INSERT INTO users(userid, username, password, admin, email)VALUES (?, ?, ?, ?,?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_USER);
             pstmt.setInt(1, user_id);
             pstmt.setString(2, username);
             pstmt.setString(3, password);
             pstmt.setBoolean(4, isAdmin);
+            pstmt.setString(5,email);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -1609,12 +1610,20 @@ public class MySQLOperation {
         return db;
     }
 
-    public static void resetDatabase(Connection myConn, String database_name) {
+    public static void resetDatabase(Connection myConn) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         String query = "SHOW DATABASES;\n" +
-                "USE " + database_name + ";\n" +
-                "\n" +
+                "USE 5peJ8pFLLQ;\n" +
+                "SHOW TABLES;\n" +
+                "SELECT * FROM projects;\n" +
+                "SELECT * FROM issues;\n" +
+                "SELECT * FROM comments;\n" +
+                "SELECT * FROM react;\n" +
+                "SELECT * FROM users;\n" +
+                "SELECT * FROM projects_history;\n" +
+                "SELECT * FROM issues_history;\n" +
+                "SELECT * FROM comments_history;\n" +
                 "DROP TABLE projects_history;\n" +
                 "DROP TABLE issues_history;\n" +
                 "DROP TABLE comments_history;\n" +
@@ -1718,10 +1727,8 @@ public class MySQLOperation {
 
         try {
             pstmt = myConn.prepareStatement(query);
-
-            System.out.println(database_name);
             myRs = pstmt.executeQuery();
-            initializedDatabase();
+            //initializedDatabase();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -1747,27 +1754,28 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        ArrayList<Project> projects;
-
-        //Getting the projects list
-        MyRunnable myRunnable = new MyRunnable();
-        Thread t = new Thread(myRunnable);
-        t.start();
-
-        //run anything at the same time
-        System.out.println("hahahahha");
-        System.out.print("Enter: ");
-        Scanner sc = new Scanner(System.in);
-        sc.nextLine();
-        System.out.println("lol");
-        System.out.println("Continue");
-
-        //to make sure it complete the run before next action is being taken
-        t.join();
-
-        //assign the projects
-        projects = myRunnable.getProjects();
-        System.out.println(projects.get(0).getName());
+        resetDatabase(getConnection());
+//        ArrayList<Project> projects;
+//
+//        //Getting the projects list
+//        MyRunnable myRunnable = new MyRunnable();
+//        Thread t = new Thread(myRunnable);
+//        t.start();
+//
+//        //run anything at the same time
+//        System.out.println("hahahahha");
+//        System.out.print("Enter: ");
+//        Scanner sc = new Scanner(System.in);
+//        sc.nextLine();
+//        System.out.println("lol");
+//        System.out.println("Continue");
+//
+//        //to make sure it complete the run before next action is being taken
+//        t.join();
+//
+//        //assign the projects
+//        projects = myRunnable.getProjects();
+//        System.out.println(projects.get(0).getName());
 
 
     }

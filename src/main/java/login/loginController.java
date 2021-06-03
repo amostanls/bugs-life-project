@@ -1,6 +1,8 @@
 package login;
 
+import bugs.MyRunnable;
 import bugs.MySQLOperation;
+import bugs.Project;
 import bugs.User;
 import home.Controller;
 import home.main;
@@ -15,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -26,8 +29,13 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static home.Controller.setFinalProjectList;
+import static home.main.myRunnable;
+
 public class loginController implements Initializable {
 
+    @FXML
+    private AnchorPane loginStage;
 
     @FXML
     private Button registerBtn;
@@ -53,6 +61,13 @@ public class loginController implements Initializable {
 
     @FXML
     void setEnterBtn(ActionEvent event) {
+
+        try {
+            main.t.join();
+            setFinalProjectList(myRunnable.getProjects());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String username=usernameField.getText();
 
         String password= passwordField.getText();
