@@ -1610,12 +1610,20 @@ public class MySQLOperation {
         return db;
     }
 
-    public static void resetDatabase(Connection myConn, String database_name) {
+    public static void resetDatabase(Connection myConn) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
         String query = "SHOW DATABASES;\n" +
-                "USE " + database_name + ";\n" +
-                "\n" +
+                "USE 5peJ8pFLLQ;\n" +
+                "SHOW TABLES;\n" +
+                "SELECT * FROM projects;\n" +
+                "SELECT * FROM issues;\n" +
+                "SELECT * FROM comments;\n" +
+                "SELECT * FROM react;\n" +
+                "SELECT * FROM users;\n" +
+                "SELECT * FROM projects_history;\n" +
+                "SELECT * FROM issues_history;\n" +
+                "SELECT * FROM comments_history;\n" +
                 "DROP TABLE projects_history;\n" +
                 "DROP TABLE issues_history;\n" +
                 "DROP TABLE comments_history;\n" +
@@ -1719,10 +1727,8 @@ public class MySQLOperation {
 
         try {
             pstmt = myConn.prepareStatement(query);
-
-            System.out.println(database_name);
             myRs = pstmt.executeQuery();
-            initializedDatabase();
+            //initializedDatabase();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -1748,27 +1754,28 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        ArrayList<Project> projects;
-
-        //Getting the projects list
-        MyRunnable myRunnable = new MyRunnable();
-        Thread t = new Thread(myRunnable);
-        t.start();
-
-        //run anything at the same time
-        System.out.println("hahahahha");
-        System.out.print("Enter: ");
-        Scanner sc = new Scanner(System.in);
-        sc.nextLine();
-        System.out.println("lol");
-        System.out.println("Continue");
-
-        //to make sure it complete the run before next action is being taken
-        t.join();
-
-        //assign the projects
-        projects = myRunnable.getProjects();
-        System.out.println(projects.get(0).getName());
+        resetDatabase(getConnection());
+//        ArrayList<Project> projects;
+//
+//        //Getting the projects list
+//        MyRunnable myRunnable = new MyRunnable();
+//        Thread t = new Thread(myRunnable);
+//        t.start();
+//
+//        //run anything at the same time
+//        System.out.println("hahahahha");
+//        System.out.print("Enter: ");
+//        Scanner sc = new Scanner(System.in);
+//        sc.nextLine();
+//        System.out.println("lol");
+//        System.out.println("Continue");
+//
+//        //to make sure it complete the run before next action is being taken
+//        t.join();
+//
+//        //assign the projects
+//        projects = myRunnable.getProjects();
+//        System.out.println(projects.get(0).getName());
 
 
     }

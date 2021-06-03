@@ -30,6 +30,7 @@ public class Page_main {
     private static String[] start_page={"Terminate the program", "Log In", "Registration", "Registration (Admin Only)"};
 
     public static void main(String[] args) {
+
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 //        Comment comment1 = new Comment(2, "nice one, it's helpful", new Timestamp(timestamp.getTime()), "amos");
 //        comment1.addReact("happy");

@@ -65,7 +65,6 @@ public class loginController implements Initializable {
         try {
             main.t.join();
             setFinalProjectList(myRunnable.getProjects());
-            System.out.println(myRunnable.getProjects().get(0).getName());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

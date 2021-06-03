@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.swing.*;
 import java.io.File;
@@ -46,7 +47,7 @@ public class settingsController implements Initializable {
         String password = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        //String sha256hex = DigestUtils.sha256Hex(password);
+        String sha256hex = DigestUtils.sha256Hex(password);
 
         if (password.isEmpty() || confirmPassword.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -64,35 +65,46 @@ public class settingsController implements Initializable {
             alert.setContentText("Password must be the same");
             alert.showAndWait();
         } else {
-            String verificationCode = Mail.resetPassword(Controller.getCurrentUser().getEmail());
+            if (Controller.getCurrentUser().getEmail() == null) {//no email provided
+                MySQLOperation.updatePassword(MySQLOperation.getConnection(), Controller.getCurrentUser(), sha256hex);
+                //JOptionPane.showMessageDialog(null, "Update Successful");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("Update Successful");
+                alert.showAndWait();
+                newPasswordField.clear();
+                confirmPasswordField.clear();
+            } else {
+                String verificationCode = Mail.resetPassword(Controller.getCurrentUser().getEmail());
 
-            TextInputDialog td = new TextInputDialog();
-            td.setTitle("Email verification");
-            td.getDialogPane().setHeaderText("Sending email to " + Controller.getCurrentUser().getEmail());
-            td.getDialogPane().setContentText("Enter the code sent to your email : ");
-            td.showAndWait();
-            TextField input = td.getEditor();
-            if (input.getText() != null && input.getText().toString().length() != 0) {
-                if (verificationCode.equals(input.getText())) {
-                    //connect to database
-                    MySQLOperation.updatePassword(MySQLOperation.getConnection(), Controller.getCurrentUser(), password);
-                    //JOptionPane.showMessageDialog(null, "Update Successful");
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(null);
-                    alert.setContentText("Update Successful");
-                    alert.showAndWait();
-                    newPasswordField.clear();
-                    confirmPasswordField.clear();
+                TextInputDialog td = new TextInputDialog();
+                td.setTitle("Email verification");
+                td.getDialogPane().setHeaderText("Sending email to " + Controller.getCurrentUser().getEmail());
+                td.getDialogPane().setContentText("Enter the code sent to your email : ");
+                td.showAndWait();
+                TextField input = td.getEditor();
+                if (input.getText() != null && input.getText().toString().length() != 0) {
+                    if (verificationCode.equals(input.getText())) {
+                        //connect to database
+                        MySQLOperation.updatePassword(MySQLOperation.getConnection(), Controller.getCurrentUser(), sha256hex);
+                        //JOptionPane.showMessageDialog(null, "Update Successful");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setContentText("Update Successful");
+                        alert.showAndWait();
+                        newPasswordField.clear();
+                        confirmPasswordField.clear();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setHeaderText(null);
+                        alert.setContentText("Wrong code");
+                        alert.showAndWait();
+                    }
+
+
                 }
-                else{
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setHeaderText(null);
-                    alert.setContentText("Wrong code");
-                    alert.showAndWait();
-                }
-
-
             }
+
         }
 
     }
@@ -100,13 +112,19 @@ public class settingsController implements Initializable {
     @FXML
     void importJSON(MouseEvent event) throws Exception {
         JFileChooser jfc = new JFileChooser();
-        jfc.showDialog(null,"Please Select the File");
+        jfc.showDialog(null, "Please Select the File");
         jfc.setVisible(true);
-        File filename = jfc.getSelectedFile();
-        System.out.println("File name "+filename.getName());
+        try {
+            File filename = jfc.getSelectedFile();
+
+            System.out.println("File name " + filename.getName());
 
 
-        MySQLOperation.importJsonFileToDataBase(MySQLOperation.getConnection(), filename);
+            MySQLOperation.importJsonFileToDataBase(MySQLOperation.getConnection(), filename);
+        } catch (NullPointerException e) {
+            System.out.println("No file selected");
+        }
+
 //        TextInputDialog td = new TextInputDialog();
 //        td.setTitle("Import JSON");
 //        td.getDialogPane().setHeaderText("Make sure the values inside JSON file does not conflict with existing data\n\n" +
@@ -131,7 +149,7 @@ public class settingsController implements Initializable {
         td.showAndWait();
         TextField input = td.getEditor();
         if (input.getText() != null && input.getText().toString().length() != 0) {
-            MySQLOperation.exportJavaObjectAsJson(MySQLOperation.getConnection(),MySQLOperation.getDatabase(MySQLOperation.getConnection()), input.getText());
+            MySQLOperation.exportJavaObjectAsJson(MySQLOperation.getConnection(), MySQLOperation.getDatabase(MySQLOperation.getConnection()), input.getText());
 
         }
 
@@ -143,20 +161,22 @@ public class settingsController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Initialize Database");
         alert.setHeaderText("You will lose all data, this cannot be undone!");
-        alert.setContentText("After finished initializing database, you will be automatically logged out!\n" +
-                "This function will reset the database using values from : https://jiuntian.com/data.json");
+        alert.setContentText("After finished initializing database, please manually import all data!");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
             //do stuff
             TextInputDialog td = new TextInputDialog();
             td.setTitle("Reset Database");
-            td.getDialogPane().setHeaderText("Make sure to enter the correct name for the database (Case-sensitive)");
-            td.getDialogPane().setContentText("Enter the name of the database : ");
+            td.getDialogPane().setHeaderText("Type \'CONFIRM\'");
+            td.getDialogPane().setContentText("Enter : ");
             td.showAndWait();
             TextField input = td.getEditor();
-            if (input.getText() != null && input.getText().toString().length() != 0) {
-                MySQLOperation.resetDatabase(MySQLOperation.getConnection(), input.getText());
-                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+            if (input.getText() != null && input.getText().toString().length() != 0 && input.getText().equalsIgnoreCase("confirm")) {
+                MySQLOperation.resetDatabase(MySQLOperation.getConnection());
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                alert1.setHeaderText(null);
+                alert1.setContentText("Initialise successful");
+                alert1.showAndWait();
             }
 
         }
