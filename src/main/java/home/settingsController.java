@@ -6,8 +6,10 @@ import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -111,11 +113,17 @@ public class settingsController implements Initializable {
 
     @FXML
     void importJSON(MouseEvent event) throws Exception {
-        JFileChooser jfc = new JFileChooser();
-        jfc.showDialog(null, "Please Select the File");
-        jfc.setVisible(true);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json")
+        );
+//        JFileChooser jfc = new JFileChooser();
+//        jfc.showDialog(null, "Please Select the File");
+//        jfc.setVisible(true);
         try {
-            File filename = jfc.getSelectedFile();
+
+            File filename=fileChooser.showOpenDialog(((Node)event.getTarget()).getScene().getWindow());
+            //File filename = jfc.getSelectedFile();
 
             System.out.println("File name " + filename.getName());
 
