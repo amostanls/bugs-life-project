@@ -1758,7 +1758,7 @@ public class MySQLOperation {
         sc.nextLine();
         System.out.println("lol");
         System.out.println("Continue");
-        t.join();
+        t.join();   // to make sure it complete the run before next action is being taken
         System.out.println(myRunnable.getProjects().get(0).getName());
 
 
