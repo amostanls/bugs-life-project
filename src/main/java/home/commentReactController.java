@@ -39,6 +39,7 @@ public class commentReactController implements Initializable {
 
     @FXML
     void setHappyBtn(MouseEvent event) throws Exception {
+<<<<<<< HEAD
         String reacted = check_reacted(event);
         if(reacted!=null&&reacted.equals("Happy")) {
             Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
@@ -53,6 +54,12 @@ public class commentReactController implements Initializable {
             return;
         }
         MySQLOperation.reacting(getCurrentUser().getUserid(),getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId(),"Happy");
+=======
+
+        MySQLOperation.reactHappy(getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId());
+
+
+>>>>>>> 368379092b278dfbb64bdd1cc3775f15d6d8dfa6
         Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
         //currentStage.close();
         currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));

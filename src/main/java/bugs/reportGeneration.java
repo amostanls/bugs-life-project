@@ -26,8 +26,14 @@ public class reportGeneration {
             setStartTime(time);
             setEndTime(newTime);
             setType(date);
-        }else {
+        }else if(date.equals("Weekly")) {
             c.add(Calendar.MONTH,1);
+            Timestamp newTime=new Timestamp(c.getTime().getTime());
+            setStartTime(time);
+            setEndTime(newTime);
+            setType(date);
+        }else {
+            c.add(Calendar.YEAR,1);
             Timestamp newTime=new Timestamp(c.getTime().getTime());
             setStartTime(time);
             setEndTime(newTime);
@@ -104,10 +110,12 @@ public class reportGeneration {
         int resovled = 0;
         int unresovled = 0;
         int inProgress = 0;
-        int other = 0;
+       // int other = 0;
+        int closed=0;
+     //   int whatever=0;
+        int open=0;
         String str = "";
-        if (type.equals("Weekly")) str += "\t\t\t\t\t" + "WEEKLY REPORT" + "\t\t\t\t\t" + "\n\n"; //title
-        else str += "\t\t\t\t\t" + "MONTHLY REPORT" + "\t\t\t\t\t" + "\n\n"; //title
+         str += "\t\t\t\t\t" + getType()+ " Report" + "\t\t\t\t\t" + "\n\n"; //title
         str+="Start time: "+startTime.toLocalDateTime().toLocalDate()+" End time: "+endTime.toLocalDateTime().toLocalDate()+"\n\n";
         String performance = showTopTeamPerformer();
         str += performance + "\n";
@@ -121,22 +129,31 @@ public class reportGeneration {
         List<String> list1 = new ArrayList<>();
         List<String> list2 = new ArrayList<>();
         List<String> list3 = new ArrayList<>();
+        List<String> list4 = new ArrayList<>();
+        List<String> list5 = new ArrayList<>();
         for (int i = 0; i < issue.size(); i++) { //issue comment react
             if (issue.get(i).getStatus().equalsIgnoreCase("closed")) {
-                list1.add("Project "+issue.get(i).getProject_id()+"-Issue "+issue.get(i).getIssue_id());
-                resovled++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("whatever")) {
-                list2.add("Project "+issue.get(i).getProject_id()+"-Issue "+issue.get(i).getIssue_id());
-                unresovled++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") || issue.get(i).getStatus().equalsIgnoreCase("open")) {
+                list5.add("Project "+issue.get(i).getProject_id()+"-Issue "+issue.get(i).getIssue_id());
+                closed++;
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") ) {
                 list3.add("Project "+issue.get(i).getProject_id()+"-Issue "+issue.get(i).getIssue_id());
                 inProgress++;
-            } else other++;
+            }else if (issue.get(i).getStatus().equalsIgnoreCase("open") ) {
+                list4.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
+                open++;
+            }else if (issue.get(i).getStatus().equalsIgnoreCase("resolved") ) {
+                list1.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
+                resovled++;
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved") ) {
+                list2.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
+                unresovled++;
+            }
         }
-        str += "The issues resolved in this week is: " + resovled + "\n" + "which is " + list1.toString() + "\n";
-        str += "The issues unresolved in this week is: " + unresovled + "\n" + "which is " + list2.toString() + "\n";
-        str += "The issues in progress in this week is: " + inProgress + "\n" + "which is " + list3.toString() + "\n";
-        str += "Other: " + other + "\n";
+        str += "resolved issues in this "+getType()+": " + resovled + "\n" + "which is " + list1.toString() + "\n";
+        str += "unresolved issues in this "+getType()+": " + unresovled + "\n" + "which is " + list2.toString() + "\n";
+        str += "in progress issues in this "+getType()+": " + inProgress + "\n" + "which is " + list3.toString() + "\n";
+        str += "open issues in this "+getType()+": " + open + "\n" + "which is " + list4.toString() + "\n";
+        str += "closed issues in this "+getType()+": " + closed + "\n" + "which is " + list5.toString() + "\n";
         str += "\n----------USER ACTIVITY-----------" + "\n";
         str+="\n---ISSUE---"+"\n";
         Map<String, Integer> map = getUserMap();
@@ -250,7 +267,7 @@ public class reportGeneration {
 
         String date = "2019-08-01 00:00:00";   // user type date
         Timestamp timestamp = Timestamp.valueOf(date);
-        reportGeneration reportGeneration = new reportGeneration(timestamp, "Monthly");  // type Weekly or Monthly
+        reportGeneration reportGeneration = new reportGeneration(timestamp, "Month");  // type Weekly or Monthly or Yearly
         System.out.println(reportGeneration.toString());
 
     }

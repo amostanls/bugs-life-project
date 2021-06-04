@@ -47,12 +47,12 @@ public class reportGenerationController implements Initializable {
 
         String date = localdate + " 00:00:00";
 
-        System.out.println(date);
-        try{
+        //System.out.println(date);
+        try {
             Timestamp timestamp = Timestamp.valueOf(date);
 
             reportBackGroundTask(timestamp, type);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please fill in all data");
@@ -63,19 +63,20 @@ public class reportGenerationController implements Initializable {
     }
 
     @FXML
-    void setStatistics(MouseEvent event){
+    void setStatistics(MouseEvent event) {
         reportDisplay.setText(null);
         statistics statistic = new statistics();
         reportDisplay.setText(statistic.showStatic());
         statistic.tagHTML();
         statistic.issueStatusHTML();
         statistic.timeHTML();
+        statistic.UserHTML();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        String[] list = {"Weekly", "Monthly"};
+        String[] list = {"Weekly", "Monthly","Yearly"};
         reportType.getItems().addAll(list);
         reportType.setValue(list[0]);
 
