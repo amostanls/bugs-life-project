@@ -23,8 +23,6 @@ public class forgotPasswordController implements Initializable {
     private static MyRunnableUsers run = new MyRunnableUsers();
     private static Thread resetThread = new Thread(run);
 
-    @FXML
-    private PasswordField oldPasswordField;
 
     @FXML
     private PasswordField newPasswordField;
@@ -35,15 +33,13 @@ public class forgotPasswordController implements Initializable {
     @FXML
     void setUpdaterBtn(ActionEvent event) throws InterruptedException {
         getUserInfo();
-        String oldPassword = oldPasswordField.getText();
+
         String password = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
         String sha256hex = DigestUtils.sha256Hex(password);
 
-        if (!DigestUtils.sha256Hex(oldPassword).equals(currentResetUser.getPassword())) {//old password does not match
-            errorBox("Old password does not match");
-        }
+
 
         if (password.isEmpty() || confirmPassword.isEmpty()) {
             errorBox("Please Fill All DATA");
@@ -71,7 +67,7 @@ public class forgotPasswordController implements Initializable {
     }
 
     private void clean(){
-        oldPasswordField.clear();
+
         newPasswordField.clear();
         confirmPasswordField.clear();
     }
