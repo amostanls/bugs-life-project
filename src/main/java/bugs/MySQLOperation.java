@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.control.Alert;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.dbutils.DbUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 import java.util.logging.Level;
@@ -330,7 +328,7 @@ public class MySQLOperation {
         updateCommentHistory.executeBatch();
     }
 
-    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, MalformedURLException, IOException, ParseException {
+    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, IOException{
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parseUrl(jsonUrl);
 
@@ -421,25 +419,20 @@ public class MySQLOperation {
 
     private static Timestamp convertStringTimestamp(String strTime) {
         String time = strTime + "000";
-        SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
         Date date = new Date(Long.parseLong(time));
         long longtime = date.getTime();
-        Timestamp newTs = new Timestamp(longtime);
-        return newTs;
+        return new Timestamp(longtime);
     }
 
     private static Timestamp convertStringTimestampForImport(String strTime) {
-        SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
         Date date = new Date(Long.parseLong(strTime));
         long longtime = date.getTime();
-        Timestamp newTs = new Timestamp(longtime);
-        return newTs;
+        return new Timestamp(longtime);
     }
 
     private static void initializedDatabase() {
-        Connection myConn = null;
         try {
-            myConn = getConnection();
+            Connection myConn = getConnection();
             myConn.setAutoCommit(false);
             updateDatabaseFromUrl(myConn, "https://jiuntian.com/data.json");
             myConn.commit();
@@ -488,20 +481,8 @@ public class MySQLOperation {
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            DbUtils.closeQuietly(myRs);
+            DbUtils.closeQuietly(pstmt);
         }
     }
 
@@ -601,11 +582,11 @@ public class MySQLOperation {
                 String[] tag = {myRs.getString("tag")};
                 String descriptionText = myRs.getString("descriptionText");
                 String createdBy = myRs.getString("createdBy");
-                String asignee = myRs.getString("assignee");
+                String assignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 ArrayList<Comment> comments = getCommentList(myConn, project_id, issue_id);
                 String url = myRs.getString("url");
-                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, comments, url);
+                Issue newIssue = new Issue(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, comments, url);
                 issueList.add(newIssue);
             }
 
@@ -875,7 +856,6 @@ public class MySQLOperation {
         ResultSet myRs = null;
 
         try {
-            myConn = getConnection();
             myConn.setAutoCommit(false);
             String SQL_CHECK_USERNAME_AND_PASSWORD = "SELECT * FROM users WHERE username = ? AND password = ?";
             pstmt = myConn.prepareStatement(SQL_CHECK_USERNAME_AND_PASSWORD);
@@ -889,8 +869,7 @@ public class MySQLOperation {
                 boolean admin = myRs.getBoolean("admin");
                 String url = myRs.getString("url");
                 String email = myRs.getString("email");
-                User newUser = new User(userid, username, password, admin, url, email);
-                return newUser;
+                return new User(userid, username, password, admin, url, email);
             }
 
             myConn.commit();
@@ -935,20 +914,8 @@ public class MySQLOperation {
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            DbUtils.closeQuietly(myRs);
+            DbUtils.closeQuietly(pstmt);
         }
     }
 
@@ -971,20 +938,8 @@ public class MySQLOperation {
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            DbUtils.closeQuietly(myRs);
+            DbUtils.closeQuietly(pstmt);
         }
     }
 
@@ -1007,20 +962,8 @@ public class MySQLOperation {
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            DbUtils.closeQuietly(myRs);
+            DbUtils.closeQuietly(pstmt);
         }
     }
 
@@ -1032,11 +975,8 @@ public class MySQLOperation {
         int issue_id = getLastIssueID(myConn, project_id) + 1;
 
         String status = "Open";
-        String createdBy = username;
         Timestamp issue_timestamp;
         issue_timestamp = new java.sql.Timestamp(new Date().getTime());
-        List<Comment> commentList = new ArrayList<>();
-        Issue newIssue = null;
 
         try {
             String SQL_CREATE_ISSUE = "INSERT INTO issues(project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp,url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
@@ -1048,7 +988,7 @@ public class MySQLOperation {
             pstmt.setString(5, status);
             pstmt.setString(6, tag1);
             pstmt.setString(7, descriptionText);
-            pstmt.setString(8, createdBy);
+            pstmt.setString(8, username);
             pstmt.setString(9, assignee);
             pstmt.setTimestamp(10, issue_timestamp);
             pstmt.setString(11, url);
@@ -1057,25 +997,12 @@ public class MySQLOperation {
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            DbUtils.closeQuietly(myRs);
+            DbUtils.closeQuietly(pstmt);
         }
     }
 
     public static void createComment(Connection myConn, int project_id, int issue_id, String username, String text) {
-        Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
 
@@ -1121,20 +1048,8 @@ public class MySQLOperation {
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (myRs != null) {
-                try {
-                    myRs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            DbUtils.closeQuietly(myRs);
+            DbUtils.closeQuietly(pstmt);
         }
     }
 
@@ -1231,11 +1146,11 @@ public class MySQLOperation {
                 String[] temp_tag = {myRs.getString("tag")};
                 String temp_descriptionText = myRs.getString("descriptionText");
                 String createdBy = myRs.getString("createdBy");
-                String asignee = myRs.getString("assignee");
+                String temp_assignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 ArrayList<Comment> comments = getCommentList(myConn, project_id, issue_id);
                 String temp_url = myRs.getString("url");
-                newIssue = new Issue(project_id, temp_issue_id, temp_title, temp_priority, temp_status, temp_tag, temp_descriptionText, createdBy, asignee, issue_timestamp, comments, temp_url);
+                newIssue = new Issue(project_id, temp_issue_id, temp_title, temp_priority, temp_status, temp_tag, temp_descriptionText, createdBy, temp_assignee, issue_timestamp, comments, temp_url);
             }
 
             //update table issues history
@@ -1313,7 +1228,7 @@ public class MySQLOperation {
         if (isOwner) {
             try {
                 String SQL_UPDATE_COMMENTS_HISTORY = "INSERT INTO comments_history(project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                String SQL_UPDATE_COMMNETS = "UPDATE comments SET text = ?, comment_timestamp = ? WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
+                String SQL_UPDATE_COMMENTS = "UPDATE comments SET text = ?, comment_timestamp = ? WHERE project_id = ? AND issue_id = ? AND comment_id = ?";
                 String SQL_GET_LAST_VERSION_ID = "SELECT * FROM comments_history WHERE project_id = ? AND issue_id = ? AND comment_id = ? ORDER BY version_id DESC";
 
                 //get last version id
@@ -1340,7 +1255,7 @@ public class MySQLOperation {
                 pstmt.execute();
 
                 //update table projects
-                pstmt = myConn.prepareStatement(SQL_UPDATE_COMMNETS);
+                pstmt = myConn.prepareStatement(SQL_UPDATE_COMMENTS);
                 pstmt.setString(1, newText);
 
                 Timestamp currentTimestamp = new Timestamp(new Date().getTime());
@@ -1435,10 +1350,10 @@ public class MySQLOperation {
                 String[] tag = {myRs.getString("tag")};
                 String descriptionText = myRs.getString("descriptionText");
                 String createdBy = myRs.getString("createdBy");
-                String asignee = myRs.getString("assignee");
+                String assignee = myRs.getString("assignee");
                 Timestamp issue_timestamp = myRs.getTimestamp("issue_timestamp");
                 String url = myRs.getString("url");
-                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, asignee, issue_timestamp, url);
+                Issue_History newIssueHistory = new Issue_History(project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url);
                 issueList.add(newIssueHistory);
             }
 
@@ -1594,9 +1509,7 @@ public class MySQLOperation {
         List<Project> projects = getProjectList(myConn);
         List<User> users = getUserList(myConn);
         History history = getHistoryList(myConn);
-        Database db = new Database(projects, users, history);
-
-        return db;
+        return new Database(projects, users, history);
     }
 
     public static void resetDatabase(Connection myConn) {
@@ -1753,21 +1666,21 @@ public class MySQLOperation {
             if (myRs.next()) {
                 return true;
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
                 }
             }
             if (myRs != null) {
                 try {
                     myRs.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
                 }
             }
         }
