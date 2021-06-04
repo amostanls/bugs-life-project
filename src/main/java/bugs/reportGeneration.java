@@ -1,5 +1,6 @@
 package bugs;
 
+import home.Controller;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
@@ -43,7 +44,9 @@ public class reportGeneration {
     }
 
     public List<Project> getProjectlist() {  //base on the date to get the projects list
-        projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
+        //projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
+        Controller.setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.getConnection()));
+        projectList=Controller.getFinalProjectList();
         List<Project> newProjectList = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             if (projectList.get(i).getProject_timestamp().compareTo(startTime) >= 0 || projectList.get(i).getProject_timestamp().compareTo(endTime) <= 0) {
@@ -251,5 +254,7 @@ public class reportGeneration {
         System.out.println(reportGeneration.toString());
 
     }
+
+
 
 }

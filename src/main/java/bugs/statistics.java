@@ -1,5 +1,6 @@
 package bugs;
 
+import home.Controller;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
@@ -10,11 +11,13 @@ import tech.tablesaw.plotly.api.TimeSeriesPlot;
 import java.util.*;
 
 public class statistics {
+    private static List<Project> projectList= null;
     public statistics() {
     }
 
     public List<Project> getProject() {
-        List<Project> projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
+        //List<Project> projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
+        projectList=Controller.getFinalProjectList();
         return projectList;
     }
 

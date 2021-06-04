@@ -2,6 +2,7 @@ package home;
 
 import bugs.reportGeneration;
 
+import bugs.statistics;
 import com.jfoenix.controls.JFXSpinner;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -61,6 +62,16 @@ public class reportGenerationController implements Initializable {
 
     }
 
+    @FXML
+    void setStatistics(MouseEvent event){
+        reportDisplay.setText(null);
+        statistics statistic = new statistics();
+        reportDisplay.setText(statistic.showStatic());
+        statistic.tagHTML();
+        statistic.issueStatusHTML();
+        statistic.timeHTML();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -82,6 +93,7 @@ public class reportGenerationController implements Initializable {
                 return new Task<>() {
                     @Override
                     protected String call() throws Exception {
+                        reportDisplay.setText(null);
                         reportGeneration report = new reportGeneration(timestamp, occurrence);  // type Weekly or Monthly
                         return report.toString();
 
