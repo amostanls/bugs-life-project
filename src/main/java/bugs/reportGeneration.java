@@ -4,12 +4,12 @@ import home.Controller;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Stream;
 
 public class reportGeneration {
+    private  List<Project> projectList;
 
     private Timestamp startTime;
     private Timestamp endTime;
@@ -17,24 +17,24 @@ public class reportGeneration {
 
 
     public reportGeneration(Timestamp time, String date) {
-        Calendar c = Calendar.getInstance();
+        Calendar c=Calendar.getInstance();
         c.setTime(time);
-        type = date;
-        if (date.equals("Weekly")) {
-            c.add(Calendar.DATE, 7);
-            Timestamp newTime = new Timestamp(c.getTime().getTime());
+        type=date;
+        if (date.equals("Weekly")){
+            c.add(Calendar.DATE,7);
+            Timestamp newTime=new Timestamp(c.getTime().getTime());
             setStartTime(time);
             setEndTime(newTime);
             setType(date);
-        } else if (date.equals("Monthly")) {
-            c.add(Calendar.MONTH, 1);
-            Timestamp newTime = new Timestamp(c.getTime().getTime());
+        }else if(date.equals("Weekly")) {
+            c.add(Calendar.MONTH,1);
+            Timestamp newTime=new Timestamp(c.getTime().getTime());
             setStartTime(time);
             setEndTime(newTime);
             setType(date);
-        } else {
-            c.add(Calendar.YEAR, 1);
-            Timestamp newTime = new Timestamp(c.getTime().getTime());
+        }else {
+            c.add(Calendar.YEAR,1);
+            Timestamp newTime=new Timestamp(c.getTime().getTime());
             setStartTime(time);
             setEndTime(newTime);
             setType(date);
@@ -51,8 +51,8 @@ public class reportGeneration {
 
     public List<Project> getProjectlist() {  //base on the date to get the projects list
         //projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
-        //Controller.setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.getConnection()));
-        List<Project> projectList = Controller.getFinalProjectList();
+        Controller.setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.getConnection()));
+        projectList=Controller.getFinalProjectList();
         List<Project> newProjectList = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             if (projectList.get(i).getProject_timestamp().compareTo(startTime) >= 0 || projectList.get(i).getProject_timestamp().compareTo(endTime) <= 0) {
@@ -64,12 +64,12 @@ public class reportGeneration {
 
 
     public List<Issue> getIssue() {
-        List<Project> projectList = Controller.getFinalProjectList();
+
         List<Issue> newIssue = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             List<Issue> list = projectList.get(i).getIssues();
             for (int j = 0; j < list.size(); j++) {
-                if (list.get(j).getTimestamp().compareTo(startTime) >= 0 && list.get(j).getTimestamp().compareTo(endTime) <= 0) {
+                if (list.get(j).getTimestamp().compareTo(startTime) >= 0 && list.get(j).getTimestamp().compareTo(endTime) <=0) {
                     newIssue.add(list.get(j));
                 }
             }
@@ -110,13 +110,13 @@ public class reportGeneration {
         int resovled = 0;
         int unresovled = 0;
         int inProgress = 0;
-        int other = 0;
-        int closed = 0;
-        int whatever = 0;
-        int open = 0;
+       // int other = 0;
+        int closed=0;
+     //   int whatever=0;
+        int open=0;
         String str = "";
-        str += "\t\t\t\t\t" + getType() + " Report" + "\t\t\t\t\t" + "\n\n"; //title
-        str += "Start time: " + startTime.toLocalDateTime().toLocalDate() + " End time: " + endTime.toLocalDateTime().toLocalDate() + "\n\n";
+         str += "\t\t\t\t\t" + getType()+ " Report" + "\t\t\t\t\t" + "\n\n"; //title
+        str+="Start time: "+startTime.toLocalDateTime().toLocalDate()+" End time: "+endTime.toLocalDateTime().toLocalDate()+"\n\n";
         String performance = showTopTeamPerformer();
         str += performance + "\n";
         str += "This week has " + projects.size() + " projects in process" + "\n\n";
@@ -131,42 +131,36 @@ public class reportGeneration {
         List<String> list3 = new ArrayList<>();
         List<String> list4 = new ArrayList<>();
         List<String> list5 = new ArrayList<>();
-        List<String> list6 = new ArrayList<>();
         for (int i = 0; i < issue.size(); i++) { //issue comment react
             if (issue.get(i).getStatus().equalsIgnoreCase("closed")) {
-                list5.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
+                list5.add("Project "+issue.get(i).getProject_id()+"-Issue "+issue.get(i).getIssue_id());
                 closed++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("whatever")) {
-                list6.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
-                whatever++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress")) {
-                list3.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") ) {
+                list3.add("Project "+issue.get(i).getProject_id()+"-Issue "+issue.get(i).getIssue_id());
                 inProgress++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("open")) {
+            }else if (issue.get(i).getStatus().equalsIgnoreCase("open") ) {
                 list4.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
                 open++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("resolved")) {
+            }else if (issue.get(i).getStatus().equalsIgnoreCase("resolved") ) {
                 list1.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
                 resovled++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved")) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved") ) {
                 list2.add("Project " + issue.get(i).getProject_id() + "-Issue " + issue.get(i).getIssue_id());
                 unresovled++;
-            } else other++;
+            }
         }
-        str += "resolved issues in this " + getType() + ": " + resovled + "\n" + "which is " + list1.toString() + "\n";
-        str += "unresolved issues in this " + getType() + ": " + unresovled + "\n" + "which is " + list2.toString() + "\n";
-        str += "in progress issues in this " + getType() + ": " + inProgress + "\n" + "which is " + list3.toString() + "\n";
-        str += "open issues in this " + getType() + ": " + open + "\n" + "which is " + list4.toString() + "\n";
-        str += "closed issues in this " + getType() + ": " + closed + "\n" + "which is " + list5.toString() + "\n";
-        //str += "whatever issues in this "+getType()+": " + whatever + "\n" + "which is " + list6.toString() + "\n";
-        //str += "Other: " + other + "\n";
+        str += "resolved issues in this "+getType()+": " + resovled + "\n" + "which is " + list1.toString() + "\n";
+        str += "unresolved issues in this "+getType()+": " + unresovled + "\n" + "which is " + list2.toString() + "\n";
+        str += "in progress issues in this "+getType()+": " + inProgress + "\n" + "which is " + list3.toString() + "\n";
+        str += "open issues in this "+getType()+": " + open + "\n" + "which is " + list4.toString() + "\n";
+        str += "closed issues in this "+getType()+": " + closed + "\n" + "which is " + list5.toString() + "\n";
         str += "\n----------USER ACTIVITY-----------" + "\n";
-        str += "\n---ISSUE---" + "\n";
+        str+="\n---ISSUE---"+"\n";
         Map<String, Integer> map = getUserMap();
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             str += entry.getKey() + "----Issues created----" + entry.getValue() + "\n";
         }
-        str += "\n---COMMENT---" + "\n";
+        str+="\n---COMMENT---"+"\n";
         Map<String, Integer> map1 = getCommentUserMap();
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             str += entry.getKey() + "----Comment Created----" + entry.getValue() + "\n";
@@ -184,7 +178,7 @@ public class reportGeneration {
                 }
             }
             str += "----" + "total " + count + " reaction in this comment----" + "\n";
-            str += "Issue created om " + issue.get(i).getTimestamp() + "\n\n";
+            str += "Issue created om "+issue.get(i).getTimestamp()+"\n\n";
             count = 0;
 
         }
@@ -268,7 +262,8 @@ public class reportGeneration {
     }
 
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args)  {
 
         String date = "2019-08-01 00:00:00";   // user type date
         Timestamp timestamp = Timestamp.valueOf(date);
@@ -276,6 +271,7 @@ public class reportGeneration {
         System.out.println(reportGeneration.toString());
 
     }
+
 
 
 }

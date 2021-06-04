@@ -83,6 +83,8 @@ url VARCHAR(2083),
 email VARCHAR(40)
 );
 
+CREATE TABLE comments_reactions (hash INT, reactions VARCHAR(20));
+
 ALTER TABLE users ADD UNIQUE(userid);
 ALTER TABLE users ADD UNIQUE(username);
 
@@ -441,7 +443,84 @@ public class MySQLOperation {
         }
     }
 
-    public static void reactHappy(int project_id, int issue_id, int comment_id) throws Exception {
+    public static int hash(int a, int b, int c, int d) {
+        return a*100000+b*1000+c*100+d;
+    }
+
+    public static void reacting(int user_id, int project_id, int issue_id, int comment_id, String reaction) throws Exception {
+        Connection myConn = getConnection();
+        String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = ?";
+        PreparedStatement updateCount = myConn.prepareStatement(incHappyCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.setString(4, reaction.toLowerCase());
+        updateCount.execute();
+
+        //confirm it was drop first
+        int hashval = hash(user_id, project_id, issue_id, comment_id);
+        String INSERT_reaction = "INSERT INTO comments_reactions (hash, reactions) VALUE (?,?)";
+        PreparedStatement update_reaction = myConn.prepareStatement(INSERT_reaction, Statement.RETURN_GENERATED_KEYS);
+        update_reaction.setInt(1,hashval);
+        update_reaction.setString(2, reaction);
+        update_reaction.execute();
+    }
+
+    public static void delreacting(int user_id, int project_id, int issue_id, int comment_id, String reaction) throws Exception {
+        Connection myConn = getConnection();
+        String decHappyCount = "UPDATE react SET count = count - 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = ?";
+        PreparedStatement updateCount = myConn.prepareStatement(decHappyCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.setString(4, reaction.toLowerCase());
+        updateCount.execute();
+
+        //gonna drop value
+        int hashval = hash(user_id,project_id, issue_id, comment_id);
+        String del = "DELETE FROM comments_reactions WHERE hash = ?";
+        PreparedStatement updateDel = myConn.prepareStatement(del, Statement.RETURN_GENERATED_KEYS);
+        updateDel.setInt(1, hashval);
+        updateDel.execute();
+    }
+
+    public static String getReaction(Connection myConn, int user_id, int project_id, int issue_id, int comment_id) {
+        PreparedStatement pstmt = null;
+        ResultSet myRs = null;
+        int hashval = hash(user_id,project_id, issue_id, comment_id);
+        try {
+            String SQL_GET_REACTION = "SELECT * FROM comments_reactions WHERE hash = ?";
+            pstmt = myConn.prepareStatement(SQL_GET_REACTION);
+            pstmt.setInt(1, hashval);
+            myRs = pstmt.executeQuery();
+
+            //get parameter for creating issue object
+            if (myRs.next()) {
+                return myRs.getString("reactions");
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void reactHappy(int user_id, int project_id, int issue_id, int comment_id) throws Exception {
         Connection myConn = getConnection();
         String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'happy'";
         PreparedStatement updateCount = myConn.prepareStatement(incHappyCount, Statement.RETURN_GENERATED_KEYS);
@@ -449,12 +528,43 @@ public class MySQLOperation {
         updateCount.setInt(2, issue_id);
         updateCount.setInt(3, comment_id);
         updateCount.execute();
+//        String INSERT_reaction = "INSERT INTO comments_reactions (hash, reactions) VALUE (?,?)";
+//        PreparedStatement update_reaction = myConn.prepareStatement(INSERT_reaction, Statement.RETURN_GENERATED_KEYS);
+//        update_reaction.setInt(1,hash(user_id, comment_id));
+//        update_reaction.setString(2, "Happy");
+//        update_reaction.execute();
     }
 
-    public static void reactAngry(int project_id, int issue_id, int comment_id) throws Exception {
+    public static void reactAngry(int user_id, int project_id, int issue_id, int comment_id) throws Exception {
         Connection myConn = getConnection();
-        String incHappyCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'angry'";
-        PreparedStatement updateCount = myConn.prepareStatement(incHappyCount, Statement.RETURN_GENERATED_KEYS);
+        String incAngryCount = "UPDATE react SET count = count + 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'angry'";
+        PreparedStatement updateCount = myConn.prepareStatement(incAngryCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.execute();
+//        String INSERT_reaction = "INSERT INTO comments_reactions (hash, reactions) VALUE (?,?)";
+//        PreparedStatement update_reaction = myConn.prepareStatement(INSERT_reaction, Statement.RETURN_GENERATED_KEYS);
+//        update_reaction.setInt(1,hash(user_id, comment_id));
+//        update_reaction.setString(2, "Happy");
+//        update_reaction.execute();
+    }
+
+    public static void delreactHappy(int user_id, int project_id, int issue_id, int comment_id) throws Exception {
+        Connection myConn = getConnection();
+        String decHappyCount = "UPDATE react SET count = count - 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'happy'";
+        PreparedStatement updateCount = myConn.prepareStatement(decHappyCount, Statement.RETURN_GENERATED_KEYS);
+        updateCount.setInt(1, project_id);
+        updateCount.setInt(2, issue_id);
+        updateCount.setInt(3, comment_id);
+        updateCount.execute();
+        //drop value
+    }
+
+    public static void delreactAngry(int user_id, int project_id, int issue_id, int comment_id) throws Exception {
+        Connection myConn = getConnection();
+        String decAngryCount = "UPDATE react SET count = count - 1 WHERE project_id = ? AND issue_id = ? AND comment_id = ? AND reaction = 'angry'";
+        PreparedStatement updateCount = myConn.prepareStatement(decAngryCount, Statement.RETURN_GENERATED_KEYS);
         updateCount.setInt(1, project_id);
         updateCount.setInt(2, issue_id);
         updateCount.setInt(3, comment_id);
