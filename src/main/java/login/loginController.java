@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import static home.Controller.setFinalProjectList;
 import static home.main.myRunnable;
+import static home.main.t;
 import static login.registerController.isValidEmail;
 
 public class loginController implements Initializable {
@@ -131,7 +132,12 @@ public class loginController implements Initializable {
         if (emailAddress != null && emailAddress.length() != 0) {
             if (isValidEmail(emailAddress)) {
                 if (MySQLOperation.isRegisteredEmail(MySQLOperation.getConnection(), emailAddress)) {
-                    String verificationCode = Mail.resetPassword(emailAddress);
+
+                    MyRunnableEmail runEmail=new MyRunnableEmail(emailAddress);
+                    Thread emailThread=new Thread(runEmail);
+                    emailThread.start();
+
+
                     TextInputDialog emailCode = new TextInputDialog();
                     emailCode.setTitle("Email verification");
                     emailCode.getDialogPane().setHeaderText("Sending email to " + emailAddress);
@@ -139,9 +145,12 @@ public class loginController implements Initializable {
 
                     emailCode.showAndWait();
 
-                    //System.out.println(verificationCode);
-
                     TextField codeInput = emailCode.getEditor();
+
+                    emailThread.join();
+                    String verificationCode = runEmail.getVerificationCode();
+
+
                     //System.out.println(codeInput.getText());
                     if (codeInput.getText() != null && codeInput.getText().length() != 0) {
                         if (verificationCode.equals(codeInput.getText())) {
@@ -198,5 +207,7 @@ public class loginController implements Initializable {
     public static void setResetEmail(String resetEmail) {
         loginController.resetEmail = resetEmail;
     }
+
+
 }
 

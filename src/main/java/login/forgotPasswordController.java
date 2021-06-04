@@ -62,12 +62,18 @@ public class forgotPasswordController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Update Successful");
             alert.showAndWait();
-            newPasswordField.clear();
-            confirmPasswordField.clear();
+
             ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
 
 
         }
+        clean();
+    }
+
+    private void clean(){
+        oldPasswordField.clear();
+        newPasswordField.clear();
+        confirmPasswordField.clear();
     }
 
 

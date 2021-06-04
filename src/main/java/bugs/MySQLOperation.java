@@ -976,7 +976,7 @@ public class MySQLOperation {
             pstmt.setString(2, user.getUsername());
             pstmt.setInt(3, user.getUserid());
             pstmt.execute();
-            System.out.println(newPassword + " " + user.getUsername() + " " + user.getUserid());
+
 
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
