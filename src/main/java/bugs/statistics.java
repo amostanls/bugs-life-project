@@ -140,7 +140,7 @@ public class statistics {
         List<Issue> issue = getIssue();
         List<String> checkList = new ArrayList<>();
         for (int i = 0; i < issue.size(); i++) {
-            checkList.add(issue.get(i).getTags());
+            checkList.add(issue.get(i).getTags().trim());
         }
         return checkList;
     }
@@ -302,15 +302,13 @@ public class statistics {
         int resovled = 0;
         int unresovled = 0;
         int inProgress = 0;
-        int other = 0;
+        //int other = 0;
         int closed=0;
-        int whatever=0;
+        //int whatever=0;
         int open=0;
         for (int i = 0; i < issue.size(); i++) {
             if (issue.get(i).getStatus().equalsIgnoreCase("closed")) {
                 closed++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("whatever")) {
-                whatever++;
             } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") ) {
                 inProgress++;
             }else if (issue.get(i).getStatus().equalsIgnoreCase("open") ) {
@@ -319,11 +317,21 @@ public class statistics {
                 resovled++;
             } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved") ) {
                 unresovled++;
-            }else other++;
+            }
         }
-        int num[] = {resovled,unresovled,inProgress,open,closed,whatever,other};
-        Table table1 = Table.create("Issue status").addColumns(StringColumn.create("status", status), IntColumn.create("number of issue", num));
-        str+=table1.toString();
+        int num[] = {resovled,unresovled,inProgress,open,closed};
+//        Table table1 = Table.create("Issue status").addColumns(StringColumn.create("status", status), IntColumn.create("number of issue", num));
+//        str+=table1.toString();
+        str+="  issue statistics"+"\n";
+        String start=String.format("%-25s |%-3s|","issue status","number");
+        str+= "-------------------------------------------"+"\n";
+        String res=String.format("%-25s | %3d  |","resolved issues is",num[0]);
+
+        String unr=String.format("%-25s | %3d  |","unresovled issue is",num[1]);
+        String ipr=String.format("%-25s | %3d  |","in progress issue is",num[2]);
+        String ope=String.format("%-25s | %3d  |","open issue is",num[3]);
+        String clos=String.format("%-25s | %3d  |","closed issue is",num[4]);
+        str+=start+"\n"+res+"\n"+unr+"\n"+ipr+"\n"+ope+"\n"+clos+"\n";
         return str;
     }
 
@@ -333,15 +341,13 @@ public class statistics {
         int resovled = 0;
         int unresovled = 0;
         int inProgress = 0;
-        int other = 0;
+       // int other = 0;
         int closed=0;
-        int whatever=0;
+       // int whatever=0;
         int open=0;
         for (int i = 0; i < issue.size(); i++) {
             if (issue.get(i).getStatus().equalsIgnoreCase("closed")) {
                 closed++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("whatever")) {
-                whatever++;
             } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") ) {
                 inProgress++;
             }else if (issue.get(i).getStatus().equalsIgnoreCase("open") ) {
@@ -350,9 +356,9 @@ public class statistics {
                 resovled++;
             } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved") ) {
                 unresovled++;
-            }else other++;
+            }
         }
-        int num[] = {resovled,unresovled,inProgress,open,closed,whatever,other};
+        int num[] = {resovled,unresovled,inProgress,open,closed};
         Table table1 = Table.create("Issue status").addColumns(StringColumn.create("status", status), IntColumn.create("number of issue", num));
         Plot.show(
                 HorizontalBarPlot.create(
