@@ -6,12 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -42,10 +44,10 @@ public class projectHistoryController implements Initializable {
             //update project history
             if(projectTable.getSelectionModel().getSelectedItem()!=null){
                 MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
-                ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
-
+                Stage currentStage=((Stage)(((TableView)event.getSource()).getScene().getWindow()));
+                //currentStage.close();
+                currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
             }
-
         }
     }
 

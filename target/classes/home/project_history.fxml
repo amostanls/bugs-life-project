@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.projectHistoryController">
+<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.projectHistoryController">
    <children>
       <TableView fx:id="projectTable" layoutX="50.0" layoutY="162.0" onMouseClicked="#changeToVersion" prefHeight="528.0" prefWidth="1030.0" stylesheets="@tablestyle.css">
          <columns>
-            <TableColumn fx:id="project_id" prefWidth="233.0" text="ID" />
-            <TableColumn fx:id="project_name" prefWidth="193.0" text="Project Name" />
-            <TableColumn fx:id="project_version" prefWidth="360.0" text="Version" />
+            <TableColumn fx:id="project_version" prefWidth="176.0" text="Version" />
+            <TableColumn fx:id="project_id" prefWidth="193.0" text="ID" />
+            <TableColumn fx:id="project_name" prefWidth="417.0" text="Project Name" />
             <TableColumn fx:id="project_timestamp" prefWidth="243.0" text="TimeStamp" />
          </columns>
       </TableView>

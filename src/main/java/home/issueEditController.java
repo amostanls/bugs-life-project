@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.controlsfx.control.CheckComboBox;
 
 import java.net.URL;
@@ -135,7 +136,10 @@ public class issueEditController implements Initializable {
                     updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
                     System.out.println("NO URL");
                     clean();
-                    ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+                    Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+                    //currentStage.close();
+                    currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                    //((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
                 }
 
 

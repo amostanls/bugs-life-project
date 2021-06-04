@@ -59,7 +59,7 @@
                         <Insets />
                      </HBox.margin>
                      <image>
-                        <Image url="@user.png" />
+                        <Image url="@../images/user.png" />
                      </image>
                   </ImageView>
                   <TextField fx:id="usernameField" prefHeight="96.0" prefWidth="278.0" promptText="Enter username" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;">
@@ -76,7 +76,7 @@
                         <Insets />
                      </HBox.margin>
                      <image>
-                        <Image url="@key1.png" />
+                        <Image url="@../images/key1.png" />
                      </image>
                   </ImageView>
                   <PasswordField fx:id="passwordField" prefHeight="125.0" prefWidth="313.0" promptText="Enter password" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;" />
@@ -102,7 +102,7 @@
                      <graphic>
                         <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@forgot.png" />
+                              <Image url="@../images/forgot.png" />
                            </image>
                         </ImageView>
                      </graphic>

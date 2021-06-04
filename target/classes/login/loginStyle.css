@@ -1,4 +1,4 @@
 .root{
-    -fx-background-image: url('lowPolyLandscape.jpg');
+    -fx-background-image: url('/images/lowPolyLandscapeBlue.jpg');
     -fx-background-size: cover;
 }

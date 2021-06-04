@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,7 +45,10 @@ public class commentAddController implements Initializable {
             //System.out.println(Controller.getSelectedProjectId()+" "+name);
             MySQLOperation.createComment(MySQLOperation.getConnection(),getSelectedProjectId(),getSelectedIssueId(),getUsername(),comment);
             clean();
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+            //currentStage.close();
+            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }
     }
 

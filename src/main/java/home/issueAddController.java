@@ -131,8 +131,10 @@ public class issueAddController implements Initializable {
             }
 
             clean();
-
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+            //currentStage.close();
+            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
 //            FXMLLoader loader = (FXMLLoader) (getClass().getResource("issue.fxml"));
 //            //FXMLLoader loader= new FXMLLoader(getClass().getResource("issue.fxml"));
 //            loader.load();

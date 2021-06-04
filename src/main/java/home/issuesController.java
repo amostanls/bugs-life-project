@@ -97,6 +97,7 @@ public class issuesController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+            stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(issuesController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -112,7 +113,7 @@ public class issuesController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-
+            stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -127,6 +128,7 @@ public class issuesController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+            stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }

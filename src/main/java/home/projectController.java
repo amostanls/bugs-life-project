@@ -80,6 +80,7 @@ public class projectController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+            stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -94,6 +95,7 @@ public class projectController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+            stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -108,6 +110,7 @@ public class projectController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+            stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
 
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,7 +130,7 @@ public class projectController implements Initializable {
     public void switchToIssues(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {//Checking double click
             int selectedID = 0;
-            if(projectTable.getSelectionModel().getSelectedItem()!=null){
+            if (projectTable.getSelectionModel().getSelectedItem() != null) {
                 try {
                     selectedID = projectTable.getSelectionModel().getSelectedItem().getProject_id();
                 } catch (NullPointerException e) {
@@ -216,10 +219,10 @@ public class projectController implements Initializable {
     }
 
     private void projectTableBackGroundTask() {
-        backGroundThread = new Service<Void>() {
+        backGroundThread = new Service<>() {
             @Override
             protected Task<Void> createTask() {
-                return new Task<Void>() {
+                return new Task<>() {
                     @Override
                     protected Void call() throws Exception {
                         Controller.updateTable();

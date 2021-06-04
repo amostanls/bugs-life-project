@@ -7,11 +7,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.input.*;
+import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,7 +39,10 @@ public class commentReactController implements Initializable {
     void setHappyBtn(MouseEvent event) throws Exception {
         //
         MySQLOperation.reactHappy(getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId());
-        ((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
+        Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
+        //currentStage.close();
+        currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+        //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
         //JOptionPane.showMessageDialog(null, "Reacted Happy to comment "+getSelectedCommentId());
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
@@ -50,7 +55,10 @@ public class commentReactController implements Initializable {
     void setAngryBtn(MouseEvent event) throws Exception {
         //
         MySQLOperation.reactAngry(getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId());
-        ((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
+        Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
+        //currentStage.close();
+        currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+        //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
         //JOptionPane.showMessageDialog(null, "Reacted Angry to comment "+getSelectedCommentId());
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);

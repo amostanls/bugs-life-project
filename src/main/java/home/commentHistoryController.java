@@ -6,12 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,7 +47,10 @@ public class commentHistoryController implements Initializable {
                 Comment_History comment = commentTable.getSelectionModel().getSelectedItem();
                 if(comment!=null){
                     MySQLOperation.updateComment(MySQLOperation.getConnection(), Controller.getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), comment.getComment_id(), comment.getText());
-                    ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+                    //((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+                    Stage currentStage=((Stage)(((TableView)event.getSource()).getScene().getWindow()));
+                    //currentStage.close();
+                    currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
                 }
             }
 
@@ -74,7 +79,7 @@ public class commentHistoryController implements Initializable {
         commentVersion.setCellValueFactory(new PropertyValueFactory<>("version_id"));
         commentId.setCellValueFactory(new PropertyValueFactory<>("comment_id"));
         commentText.setCellValueFactory(new PropertyValueFactory<>("text"));
-        commentTimestamp.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
+        commentTimestamp.setCellValueFactory(new PropertyValueFactory<>("comment_timestamp"));
         commentUser.setCellValueFactory(new PropertyValueFactory<>("user"));
         setCommentTable();
     }

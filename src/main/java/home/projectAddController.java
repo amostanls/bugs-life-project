@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,8 +37,9 @@ public class projectAddController implements Initializable {
             //System.out.println(Controller.getSelectedProjectId()+" "+name);
             MySQLOperation.createProject(MySQLOperation.getConnection(),name);
             clean();
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
-
+            Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+            //currentStage.close();
+            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }
     }
 

@@ -60,7 +60,7 @@
                         <Insets />
                      </HBox.margin>
                      <image>
-                        <Image url="@mail.png" />
+                        <Image url="@../images/mail.png" />
                      </image>
                   </ImageView>
                   <TextField fx:id="emailField" prefHeight="96.0" prefWidth="278.0" promptText="Enter email" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;">
@@ -78,7 +78,7 @@
                         <Insets />
                      </HBox.margin>
                      <image>
-                        <Image url="@user.png" />
+                        <Image url="@../images/user.png" />
                      </image>
                   </ImageView>
                   <TextField fx:id="usernameField" prefHeight="96.0" prefWidth="278.0" promptText="Enter username" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;">
@@ -95,7 +95,7 @@
                         <Insets />
                      </HBox.margin>
                      <image>
-                        <Image url="@key1.png" />
+                        <Image url="@../images/key1.png" />
                      </image>
                   </ImageView>
                   <PasswordField fx:id="passwordField" prefHeight="125.0" prefWidth="313.0" promptText="Enter password" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;" />
@@ -116,7 +116,7 @@
                         <Insets />
                      </HBox.margin>
                      <image>
-                        <Image url="@lock.png" />
+                        <Image url="@../images/lock.png" />
                      </image>
                   </ImageView>
                   <PasswordField fx:id="secretField" prefHeight="125.0" prefWidth="313.0" promptText="Enter secret" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;" />

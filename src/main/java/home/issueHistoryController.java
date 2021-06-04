@@ -6,12 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -63,7 +65,10 @@ public class issueHistoryController implements Initializable {
                 Issue_History issue = issueTable.getSelectionModel().getSelectedItem();
 
                 MySQLOperation.updateIssue(MySQLOperation.getConnection(), issue.getProject_id(), issue.getIssue_id(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getAssignee(),issue.getUrl());
-                ((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+                //((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
+                Stage currentStage=((Stage)(((TableView)event.getSource()).getScene().getWindow()));
+                //currentStage.close();
+                currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
 
             }
 
@@ -87,7 +92,7 @@ public class issueHistoryController implements Initializable {
         issueStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         issueTag.setCellValueFactory(new PropertyValueFactory<>("tags"));
         issuePriority.setCellValueFactory(new PropertyValueFactory<>("priority"));
-        issueTime.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
+        issueTime.setCellValueFactory(new PropertyValueFactory<>("issue_timestamp"));
         issueAssignee.setCellValueFactory(new PropertyValueFactory<>("assignee"));
         issueCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         issueImageURL.setCellValueFactory(new PropertyValueFactory<>("url"));
