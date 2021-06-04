@@ -15,12 +15,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static home.Controller.getSelectedCommentId;
@@ -123,41 +128,64 @@ public class settingsController implements Initializable {
 
     @FXML
     void importJSON(MouseEvent event) throws Exception {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("JSON Files", "*.json")
-        );
-//        JFileChooser jfc = new JFileChooser();
-//        jfc.showDialog(null, "Please Select the File");
-//        jfc.setVisible(true);
-        try {
+        ButtonType localButton = new ButtonType("Import from local file");
+        ButtonType URLButton = new ButtonType("Import from url");
 
-            File filename = fileChooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
-            //File filename = jfc.getSelectedFile();
-            importBackgroundTask(filename);
-            System.out.println("File name " + filename.getName());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"",localButton,URLButton);
+        alert.setTitle("Import JSON");
+        alert.setHeaderText("Please select the type of import you want");
+        alert.setContentText("Please select : ");
 
-        } catch (NullPointerException e) {
-            System.out.println("No file selected");
-        }
+        Window window = alert.getDialogPane().getScene().getWindow();
+        window.setOnCloseRequest(e -> alert.hide());
+        Optional<ButtonType> result = alert.showAndWait();
+        result.ifPresent(res->{
+            if (res.equals(localButton)) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("JSON Files", "*.json")
+                );
+                try {
 
-//        TextInputDialog td = new TextInputDialog();
-//        td.setTitle("Import JSON");
-//        td.getDialogPane().setHeaderText("Make sure the values inside JSON file does not conflict with existing data\n\n" +
-//                "Instead, you may consider to reset the Database, use Initialise database button");
-//        td.getDialogPane().setContentText("Enter your file URL : ");
-//        td.showAndWait();
-//        TextField input = td.getEditor();
-//        if (input.getText() != null && input.getText().toString().length() != 0) {
-//            MySQLOperation.updateDatabaseFromUrl(MySQLOperation.getConnection(), input.getText());
-//
-//        }
+                    File filename = fileChooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
+                    //File filename = jfc.getSelectedFile();
+                    System.out.println(filename);
+                    if(filename!=null){
+                        importBackgroundTask(filename);
+                    }
+                    System.out.println("File name " + filename.getName());
+
+                } catch (NullPointerException e) {
+                    System.out.println("No file selected");
+                }
+            } else if (res.equals(URLButton)) {
+                TextInputDialog td = new TextInputDialog();
+                td.setTitle("Import JSON");
+                td.getDialogPane().setHeaderText("Make sure the values inside JSON file does not conflict with existing data\n\n" +
+                        "Instead, you may consider to reset the Database, use Initialise database button");
+                td.getDialogPane().setContentText("Enter your file URL : ");
+                td.showAndWait();
+                TextField input = td.getEditor();
+                if (input.getText() != null && input.getText().toString().length() != 0) {
+                    try {
+                        MySQLOperation.updateDatabaseFromUrl(MySQLOperation.getConnection(), input.getText());
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+
     }
 
     @FXML
     void exportJSON(MouseEvent event) throws Exception {
         //do stuff
-        Controller.updateTable();
+
         TextInputDialog td = new TextInputDialog();
         td.setTitle("Export JSON");
         td.getDialogPane().setHeaderText("Make sure the file name is unique");
@@ -292,7 +320,7 @@ public class settingsController implements Initializable {
 
     }
 
-    private void initializeDatabaseBackgroundTask(){
+    private void initializeDatabaseBackgroundTask() {
         backGroundThread = new Service<>() {
             @Override
             protected Task<Void> createTask() {

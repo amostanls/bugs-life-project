@@ -1,5 +1,6 @@
 package bugs;
 
+import home.Controller;
 import javafx.scene.chart.BarChart;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.StringColumn;
@@ -15,6 +16,8 @@ import tech.tablesaw.plotly.components.Layout;
 import java.util.*;
 
 public class statistics {
+
+    private  List<Project> projectList=Controller.getFinalProjectList();
     public statistics() {
     }
    public String User(){
@@ -116,12 +119,13 @@ public class statistics {
    }
 
     public List<Project> getProject() {
-        List<Project> projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
+        projectList= Controller.getFinalProjectList();
+        //List<Project> projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
         return projectList;
     }
 
     public List<Issue> getIssue() {
-        List<Project> projectList = getProject();
+        //List<Project> projectList = getProject();
         List<Issue> issuesList = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             List<Issue> issues = projectList.get(i).getIssues();

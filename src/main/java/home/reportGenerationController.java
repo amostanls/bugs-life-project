@@ -70,12 +70,13 @@ public class reportGenerationController implements Initializable {
         statistic.tagHTML();
         statistic.issueStatusHTML();
         statistic.timeHTML();
+        statistic.UserHTML();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        String[] list = {"Weekly", "Monthly"};
+        String[] list = {"Weekly", "Monthly","Yearly"};
         reportType.getItems().addAll(list);
         reportType.setValue(list[0]);
 
