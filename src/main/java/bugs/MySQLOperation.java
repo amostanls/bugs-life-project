@@ -1012,8 +1012,6 @@ public class MySQLOperation {
         comment_timestamp = new java.sql.Timestamp(new Date().getTime());
 
         try {
-            myConn = getConnection();
-
             //create new comment row
             String SQL_CREATE_ISSUE = "INSERT INTO comments(project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?,?,?,?,?,?)";
             pstmt = myConn.prepareStatement(SQL_CREATE_ISSUE);
