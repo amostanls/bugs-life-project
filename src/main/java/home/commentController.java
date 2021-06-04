@@ -1,6 +1,8 @@
 package home;
 
+import bugs.Comment;
 import bugs.Issue;
+import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
 
 import javafx.concurrent.Service;
@@ -32,8 +34,8 @@ import java.util.logging.Logger;
 import static home.Controller.*;
 
 public class commentController implements Initializable {
-
-    private static Service<Void> backGroundThread;
+    Issue issue_temp = null;
+    private static Service<ArrayList<Comment>> backGroundThread;
 
     @FXML
     private StackPane stackPane;
@@ -167,6 +169,7 @@ public class commentController implements Initializable {
             alert.showAndWait();
         }
     }
+
     @FXML
     void imageView(MouseEvent event) throws Exception {
         try {
@@ -184,6 +187,7 @@ public class commentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setIssue_temp();
         isEditable(false);
 
         setTextField();
@@ -203,15 +207,19 @@ public class commentController implements Initializable {
         issueComment.setEditable(b);
     }
 
-    public void setTextField() {
+    private void setIssue_temp() {
         ArrayList<Issue> issueList = getFinalProjectList().get(getSelectedProjectId() - 1).getIssues();
         //Issue issue_temp = getFinalProjectList().get(getSelectedProjectId()-1).getIssues().get(getSelectedIssueId()-1);
-        Issue issue_temp = null;
+
         for (int i = 0; i < issueList.size(); i++) {
             if (issueList.get(i).getIssue_id() == getSelectedIssueId()) {
                 issue_temp = issueList.get(i);
             }
         }
+    }
+
+    public void setTextField() {
+
         issueID.setText(issue_temp.getIssue_id() + "");
         issueStatus.setText(issue_temp.getStatus());
         issueTag.setText(issue_temp.getTags() + "");
@@ -225,7 +233,6 @@ public class commentController implements Initializable {
         issueDesc.setText(issue_temp.getDescriptionText() + "");
 
         issueComment.setText(issue_temp.printComment());
-
 
 
     }
@@ -248,44 +255,46 @@ public class commentController implements Initializable {
         for (int i = 0; i < issueList.size(); i++) {
             if (issueList.get(i).getIssue_id() == getSelectedIssueId()) issue_temp = issueList.get(i);
         }
-        if(issue_temp.getComments().size()>0) return true;
+        if (issue_temp.getComments().size() > 0) return true;
         return false;
     }
 
-    private void commentBackGroundTask(){
-        backGroundThread = new Service<Void>() {
+    private void commentBackGroundTask() {
+        backGroundThread = new Service<>() {
             @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
+            protected Task<ArrayList<Comment>> createTask() {
+                return new Task<>() {
                     @Override
-                    protected Void call() throws Exception {
-                        Controller.updateTable();
-                        return null;
+                    protected ArrayList<Comment> call() throws Exception {
+                        return MySQLOperation.getCommentList(MySQLOperation.getConnection(), getSelectedProjectId(), getSelectedIssueId());
+//                        Controller.updateTable();
+//                        return null;
                     }
                 };
             }
         };
         backGroundThread.setOnSucceeded(workerStateEvent -> {
             try {
+                issue_temp.setComments(backGroundThread.getValue());
                 setTextField();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
 
-        Region veil=new Region();
+        Region veil = new Region();
         veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4);");
         //veil.setStyle("-fx-background-radius: 30 30 0 0");
-        veil.setPrefSize(1030,590);
+        veil.setPrefSize(1030, 590);
 
-        ProgressIndicator p =new ProgressIndicator();
-        p.setMaxSize(100,100);
+        ProgressIndicator p = new ProgressIndicator();
+        p.setMaxSize(100, 100);
 
         p.progressProperty().bind(backGroundThread.progressProperty());
         veil.visibleProperty().bind(backGroundThread.runningProperty());
         p.visibleProperty().bind(backGroundThread.runningProperty());
 
-        stackPane.getChildren().addAll(veil,p);
+        stackPane.getChildren().addAll(veil, p);
         backGroundThread.start();
     }
 }

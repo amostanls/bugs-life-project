@@ -1,6 +1,8 @@
 package home;
 
 import bugs.Issue;
+import bugs.MySQLOperation;
+import bugs.Project;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +27,10 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Array;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +44,7 @@ public class issuesController implements Initializable {
 
     private boolean isEditing = false;
     private boolean isChange = false;
-    private static Service<Void> backGroundThread;
+    private static Service<ArrayList<Issue>> backGroundThread;
 
     @FXML
     private StackPane stackPane;
@@ -240,20 +245,23 @@ public class issuesController implements Initializable {
     }
 
     public void issueTableBackGroundTask() {
-        backGroundThread = new Service<Void>() {
+        backGroundThread = new Service<>() {
             @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
+            protected Task<ArrayList<Issue>> createTask() {
+                return new Task<>() {
                     @Override
-                    protected Void call() throws Exception {
-                        Controller.updateTable();
-                        return null;
+                    protected ArrayList<Issue> call() throws Exception {
+                         return MySQLOperation.getIssueListByPriority(MySQLOperation.getConnection(),getSelectedProjectId());
+//                        Controller.updateTable();
+//                        return null;
                     }
                 };
             }
         };
         backGroundThread.setOnSucceeded(workerStateEvent -> {
             try {
+                List<Project> temp_project_list=getFinalProjectList();
+                temp_project_list.get(getSelectedProjectId()-1).setIssues(backGroundThread.getValue());
                 setIssueTable();
                 searchIssues();
             } catch (Exception e) {
