@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.reportGenerationController">
+<AnchorPane prefHeight="768.0" prefWidth="1126.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.reportGenerationController">
    <children>
       <Label layoutX="39.0" layoutY="23.0" prefHeight="17.0" prefWidth="308.0" text="Report Generation">
          <font>
@@ -27,5 +27,10 @@
             <TextArea fx:id="reportDisplay" editable="false" prefHeight="568.0" prefWidth="1030.0" promptText="Please select starting date and type of report to be generated" />
          </children>
       </StackPane>
+      <JFXButton fx:id="st" layoutX="757.0" layoutY="105.0" onMouseClicked="#setGenerate" prefHeight="39.0" prefWidth="193.0" style="-fx-background-color: #2e856e; -fx-text-fill: white;" text="Statistical Data">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>
