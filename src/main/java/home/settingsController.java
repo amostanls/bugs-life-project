@@ -261,7 +261,7 @@ public class settingsController implements Initializable {
                 return new Task<>() {
                     @Override
                     protected Void call() throws Exception {
-                        MySQLOperation.exportJavaObjectAsJson(MySQLOperation.getConnection(), MySQLOperation.getDatabase(MySQLOperation.getConnection()), filename);
+                        MySQLOperation.exportJavaObjectAsJson(MySQLOperation.getDatabase(MySQLOperation.getConnection()), filename);
                         return null;
                     }
                 };
