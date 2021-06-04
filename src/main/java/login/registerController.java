@@ -95,6 +95,9 @@ public class registerController implements Initializable {
             errorBox("Wrong secret code");
         } else if (!isValidEmail(email)) {
             errorBox("Invalid email address");
+        } else if (MySQLOperation.isRegisteredEmail(MySQLOperation.getConnection(), email)) {
+            errorBox("This email had been used.\nPlease use another email address");
+
         } else {
 
             String verificationCode = Mail.authorization(email);
@@ -108,7 +111,7 @@ public class registerController implements Initializable {
             if (input.getText() != null && input.getText().toString().length() != 0) {
                 if (verificationCode.equals(input.getText())) {
                     String sha256hex = DigestUtils.sha256Hex(password);
-                    MySQLOperation.registerUser(MySQLOperation.getConnection(), username, sha256hex, isAdmin,email);
+                    MySQLOperation.registerUser(MySQLOperation.getConnection(), username, sha256hex, isAdmin, email);
                     //JOptionPane.showMessageDialog(null,"Register Successful");
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText(null);
@@ -129,8 +132,7 @@ public class registerController implements Initializable {
                         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, e);
                     }
                     ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-                }
-                else {
+                } else {
                     errorBox("Wrong verification code");
                 }
 

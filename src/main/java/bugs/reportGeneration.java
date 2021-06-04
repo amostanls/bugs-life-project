@@ -120,7 +120,7 @@ public class reportGeneration {
             } else if (issue.get(i).getStatus().equalsIgnoreCase("whatever")) {
                 list2.add(issue.get(i).getIssue_id());
                 unresovled++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") || issue.get(i).getStatus().equalsIgnoreCase("open")) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") || issue.get(i).getStatus().equalsIgnoreCase("Open")) {
                 list3.add(issue.get(i).getIssue_id());
                 inProgress++;
             } else other++;

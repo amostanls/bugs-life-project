@@ -103,7 +103,6 @@ public class settingsController implements Initializable {
                         alert.showAndWait();
                     }
 
-
                 }
             }
 
