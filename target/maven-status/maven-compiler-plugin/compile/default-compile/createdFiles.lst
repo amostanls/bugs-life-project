@@ -1,6 +1,6 @@
 bugs/authentication.class
-bugs/MyRunnable.class
 home/commentHistoryController.class
+bugs/MyRunnable.class
 login/loginController.class
 bugs/util.class
 home/settingsController$1.class
@@ -8,11 +8,11 @@ home/projectController.class
 bugs/React.class
 bugs/Database.class
 home/reportGenerationController.class
-home/commentAddController.class
 home/issueImageViewController.class
+home/commentAddController.class
 bugs/Json.class
-bugs/Project.class
 home/commentReactController.class
+bugs/Project.class
 home/commentEditController.class
 home/settingsController$3$1.class
 home/issuesController$1.class
@@ -26,10 +26,10 @@ home/settingsController$2.class
 home/commentController$1.class
 bugs/Tag.class
 home/settingsController$2$1.class
-bugs/Page_main.class
 home/settingsController.class
-bugs/Project_History.class
+bugs/Page_main.class
 home/issuesController$1$1.class
+bugs/Project_History.class
 home/reportGenerationController$1.class
 bugs/Page_comment.class
 home/issueEditController.class
@@ -41,8 +41,8 @@ login/forgotPasswordController.class
 home/reportGenerationController$1$1.class
 home/FxmlLoader.class
 home/issuesController.class
-bugs/statistics.class
 home/Controller.class
+bugs/statistics.class
 home/settingsController$1$1.class
 home/issueAddController.class
 bugs/Page_project.class
@@ -57,8 +57,8 @@ bugs/MyRunnableUsers.class
 bugs/Page_issue.class
 home/issueHistoryController.class
 bugs/reportGeneration.class
-bugs/History.class
 home/main.class
+bugs/History.class
 home/projectController$1.class
 bugs/Mail$2.class
 bugs/Issue_History.class
