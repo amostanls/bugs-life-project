@@ -1755,7 +1755,7 @@ public class MySQLOperation {
     public static boolean isRegisteredEmail(Connection myConn, String email) {
         Statement stmt = null;
         ResultSet myRs = null;
-        String SQL_CHECK_EMAIL = "SELECT * FROM users WHERE email = '"+email+"'";
+        String SQL_CHECK_EMAIL = "SELECT email FROM users WHERE email = '"+email+"'";
 
         try {
             stmt = myConn.createStatement();
@@ -1786,7 +1786,7 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println(isRegisteredEmail(getConnection(), "rotabite987@gmai.com"));
+        System.out.println(isRegisteredEmail(getConnection(), "rotabite987@gmail.com"));
     }
 
 }
