@@ -163,7 +163,7 @@ public class MySQLOperation {
     }
 
     //Return absolute path of exported file as string
-    public static String exportJavaObjectsAsJson(Connection myConn, List objects, String fileName) {
+    public static String exportJavaObjectAsJson(Object objects, String fileName) {
         fileName += ".json";
         ObjectMapper om = Json.getDefaultOM();
         try {
@@ -173,16 +173,6 @@ public class MySQLOperation {
         }
         Path pathOfResultFile = Paths.get(fileName);
         return pathOfResultFile.toAbsolutePath().toString();
-    }
-
-    public static void exportJavaObjectAsJson(Connection myConn, Object objects, String fileName) {
-        fileName += ".json";
-        ObjectMapper om = Json.getDefaultOM();
-        try {
-            om.writerWithDefaultPrettyPrinter().writeValue(new File(fileName), objects);
-        } catch (IOException ex) {
-            Logger.getLogger(Json.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public static void importJsonFileToDataBase(Connection myConn, File jsonFile) throws IOException, SQLException {
@@ -1784,9 +1774,4 @@ public class MySQLOperation {
 
         return false;
     }
-
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println(isRegisteredEmail(getConnection(), "rotabite987@gmail.com"));
-    }
-
 }
