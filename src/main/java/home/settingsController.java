@@ -3,12 +3,16 @@ package home;
 import bugs.Mail;
 import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,7 +23,14 @@ import java.net.URL;
 import java.sql.Connection;
 import java.util.ResourceBundle;
 
+import static home.Controller.getSelectedCommentId;
+
 public class settingsController implements Initializable {
+
+    private static Service<Void> backGroundThread;
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     private TextField usernameDisplay;
@@ -121,13 +132,11 @@ public class settingsController implements Initializable {
 //        jfc.setVisible(true);
         try {
 
-            File filename=fileChooser.showOpenDialog(((Node)event.getTarget()).getScene().getWindow());
+            File filename = fileChooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
             //File filename = jfc.getSelectedFile();
-
+            importBackgroundTask(filename);
             System.out.println("File name " + filename.getName());
 
-
-            MySQLOperation.importJsonFileToDataBase(MySQLOperation.getConnection(), filename);
         } catch (NullPointerException e) {
             System.out.println("No file selected");
         }
@@ -156,7 +165,7 @@ public class settingsController implements Initializable {
         td.showAndWait();
         TextField input = td.getEditor();
         if (input.getText() != null && input.getText().toString().length() != 0) {
-            MySQLOperation.exportJavaObjectAsJson(MySQLOperation.getConnection(), MySQLOperation.getDatabase(MySQLOperation.getConnection()), input.getText());
+            exportBackgroundTask(input.getText());
 
         }
 
@@ -179,13 +188,9 @@ public class settingsController implements Initializable {
             td.showAndWait();
             TextField input = td.getEditor();
             if (input.getText() != null && input.getText().toString().length() != 0 && input.getText().equalsIgnoreCase("confirm")) {
-                MySQLOperation.resetDatabase(MySQLOperation.getConnection());
-                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-                alert1.setHeaderText(null);
-                alert1.setContentText("Initialise successful");
-                alert1.showAndWait();
+                //MySQLOperation.resetDatabase(MySQLOperation.getConnection());
+                initializeDatabaseBackgroundTask();
             }
-
         }
     }
 
@@ -210,4 +215,118 @@ public class settingsController implements Initializable {
         exportJsonBtn.setVisible(b);
         initializeDatabaseBtn.setVisible(b);
     }
+
+    private void importBackgroundTask(File filename) {
+        backGroundThread = new Service<>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        MySQLOperation.importJsonFileToDataBase(MySQLOperation.getConnection(), filename);
+                        return null;
+                    }
+                };
+            }
+        };
+        backGroundThread.setOnSucceeded(workerStateEvent -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("File Import Complete");
+            alert.showAndWait();
+        });
+        Region veil = new Region();
+        veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4);");
+        //veil.setStyle("-fx-background-radius: 30 30 0 0");
+        veil.setPrefSize(1030, 530);
+
+        //JFXSpinner p=new JFXSpinner();
+
+        ProgressIndicator p = new ProgressIndicator();
+        p.setMaxSize(100, 100);
+
+        p.progressProperty().bind(backGroundThread.progressProperty());
+        veil.visibleProperty().bind(backGroundThread.runningProperty());
+        p.visibleProperty().bind(backGroundThread.runningProperty());
+
+        stackPane.getChildren().addAll(veil, p);
+        backGroundThread.start();
+
+    }
+
+    private void exportBackgroundTask(String filename) {
+        backGroundThread = new Service<>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        MySQLOperation.exportJavaObjectAsJson(MySQLOperation.getConnection(), MySQLOperation.getDatabase(MySQLOperation.getConnection()), filename);
+                        return null;
+                    }
+                };
+            }
+        };
+        backGroundThread.setOnSucceeded(workerStateEvent -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("File Export Complete");
+            alert.showAndWait();
+        });
+        Region veil = new Region();
+        veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4);");
+        //veil.setStyle("-fx-background-radius: 30 30 0 0");
+        veil.setPrefSize(1030, 530);
+
+        //JFXSpinner p=new JFXSpinner();
+
+        ProgressIndicator p = new ProgressIndicator();
+        p.setMaxSize(100, 100);
+
+        p.progressProperty().bind(backGroundThread.progressProperty());
+        veil.visibleProperty().bind(backGroundThread.runningProperty());
+        p.visibleProperty().bind(backGroundThread.runningProperty());
+
+        stackPane.getChildren().addAll(veil, p);
+        backGroundThread.start();
+
+    }
+
+    private void initializeDatabaseBackgroundTask(){
+        backGroundThread = new Service<>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        MySQLOperation.resetDatabase(MySQLOperation.getConnection());
+                        return null;
+                    }
+                };
+            }
+        };
+        backGroundThread.setOnSucceeded(workerStateEvent -> {
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+            alert1.setHeaderText(null);
+            alert1.setContentText("Initialise successful");
+            alert1.showAndWait();
+        });
+        Region veil = new Region();
+        veil.setStyle("-fx-background-color:rgba(205,205,205, 0.4);");
+        //veil.setStyle("-fx-background-radius: 30 30 0 0");
+        veil.setPrefSize(1030, 530);
+
+        //JFXSpinner p=new JFXSpinner();
+
+        ProgressIndicator p = new ProgressIndicator();
+        p.setMaxSize(100, 100);
+
+        p.progressProperty().bind(backGroundThread.progressProperty());
+        veil.visibleProperty().bind(backGroundThread.runningProperty());
+        p.visibleProperty().bind(backGroundThread.runningProperty());
+
+        stackPane.getChildren().addAll(veil, p);
+        backGroundThread.start();
+    }
+
 }

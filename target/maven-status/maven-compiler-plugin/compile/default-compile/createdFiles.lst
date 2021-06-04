@@ -2,7 +2,9 @@ bugs\Page_main.class
 home\projectController$1$1.class
 bugs\Issue_History.class
 bugs\Tag.class
+home\settingsController$2.class
 home\commentEditController.class
+home\settingsController$2$1.class
 bugs\Json.class
 home\Controller.class
 home\FxmlLoader.class
@@ -19,6 +21,8 @@ login\registerController.class
 home\commentController$1$1.class
 home\issuesController$1.class
 login\loginController.class
+home\settingsController$3$1.class
+home\settingsController$1.class
 bugs\MyRunnableUsers.class
 home\commentAddController.class
 home\commentHistoryController.class
@@ -29,6 +33,7 @@ bugs\React.class
 home\issueHistoryController.class
 bugs\Mail$2.class
 home\issueImageViewController.class
+home\settingsController$3.class
 bugs\Mail.class
 bugs\MySQLOperation.class
 bugs\Page_comment.class
@@ -48,6 +53,7 @@ bugs\Database.class
 home\reportGenerationController$1$1.class
 home\reportGenerationController.class
 home\projectController.class
+home\settingsController$1$1.class
 bugs\History.class
 bugs\Page_react.class
 bugs\Comment.class
