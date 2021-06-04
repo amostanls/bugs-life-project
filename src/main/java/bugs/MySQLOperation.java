@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.control.Alert;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.File;
 import java.io.IOException;
@@ -1753,31 +1752,41 @@ public class MySQLOperation {
         }
     }
 
+    public static boolean isRegisteredEmail(Connection myConn, String email) {
+        Statement stmt = null;
+        ResultSet myRs = null;
+        String SQL_CHECK_EMAIL = "SELECT * FROM users WHERE email = '"+email+"'";
+
+        try {
+            stmt = myConn.createStatement();
+            myRs = stmt.executeQuery(SQL_CHECK_EMAIL);
+            if (myRs.next()) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+            if (myRs != null) {
+                try {
+                    myRs.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static void main(String[] args) throws InterruptedException {
-        resetDatabase(getConnection());
-//        ArrayList<Project> projects;
-//
-//        //Getting the projects list
-//        MyRunnable myRunnable = new MyRunnable();
-//        Thread t = new Thread(myRunnable);
-//        t.start();
-//
-//        //run anything at the same time
-//        System.out.println("hahahahha");
-//        System.out.print("Enter: ");
-//        Scanner sc = new Scanner(System.in);
-//        sc.nextLine();
-//        System.out.println("lol");
-//        System.out.println("Continue");
-//
-//        //to make sure it complete the run before next action is being taken
-//        t.join();
-//
-//        //assign the projects
-//        projects = myRunnable.getProjects();
-//        System.out.println(projects.get(0).getName());
-
-
+        System.out.println(isRegisteredEmail(getConnection(), "rotabite987@gmai.com"));
     }
 
 }
