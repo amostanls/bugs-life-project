@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>User performance statistics</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id='target' ></div>
+        <script>
+        var target_target = document.getElementById('target');
+        var layout = {
+    title: 'User performance statistics',
+    height: 700,
+    width: 900,
+    showlegend: true,
+
+
+};
+
+var trace0 =
+{
+x: ["jhoe","btan","liew","ang"],
+y: [2.0, 3.0, 0.0, 1.0],
+showlegend: true,
+orientation: 'v',
+xaxis: 'x',
+yaxis: 'y',
+type: 'bar',
+name: 'total assign',
+};
+var trace1 =
+{
+x: ["jhoe","btan","liew","ang"],
+y: [1.0, 3.0, 1.0, 1.0],
+showlegend: true,
+orientation: 'v',
+xaxis: 'x',
+yaxis: 'y',
+type: 'bar',
+name: 'total create',
+};
+
+        var data = [ trace0, trace1];
+Plotly.newPlot(target_target, data, layout);            </script>
+
+</body>
+</html>
