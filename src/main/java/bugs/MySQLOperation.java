@@ -404,6 +404,15 @@ public class MySQLOperation {
                         updateReact.setInt(5, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("count").asInt());
                         updateReact.addBatch();
 
+                        if (l == node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").size() - 1 && !node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("reaction").asText().equals("thumbsUp")) {
+                            updateReact.setInt(1, node.get("projects").get(i).get("id").asInt());
+                            updateReact.setInt(2, node.get("projects").get(i).get("issues").get(j).get("id").asInt());
+                            updateReact.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                            updateReact.setString(4, "thumbsUp");
+                            updateReact.setInt(5, 0);
+                            updateReact.addBatch();
+                        }
+
                         if (i == node.get("projects").size() - 1) {
                             updateProject.executeBatch();
                             updateComment.executeBatch();
@@ -1163,6 +1172,16 @@ public class MySQLOperation {
             pstmt.setInt(5, 0);
             pstmt.execute();
 
+            //create new react thumbs up row for the comment
+            String SQL_CREATE_REACT_THUMBS_UP = "INSERT INTO react(project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)";
+            pstmt = myConn.prepareStatement(SQL_CREATE_REACT_THUMBS_UP);
+            pstmt.setInt(1, project_id);
+            pstmt.setInt(2, issue_id);
+            pstmt.setInt(3, comment_id);
+            pstmt.setString(4, "thumbsUp");
+            pstmt.setInt(5, 0);
+            pstmt.execute();
+
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -1838,9 +1857,9 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) throws SQLException, IOException {
-//        initializedDatabase();
-        exportJavaObjectAsJson(getDatabase(getConnection()), "newDB");
         resetDatabase(getConnection());
-        importJsonFileToDataBase(getConnection(),new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newDB.json"));
+        initializedDatabase();
+//        exportJavaObjectAsJson(getDatabase(getConnection()), "newDB");
+//        importJsonFileToDataBase(getConnection(),new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newDB.json"));
     }
 }
