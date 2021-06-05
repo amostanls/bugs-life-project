@@ -29,6 +29,7 @@ SELECT * FROM users;
 SELECT * FROM projects_history;
 SELECT * FROM issues_history;
 SELECT * FROM comments_history;
+DROP TABLE comments_reactions;
 DROP TABLE projects_history;
 DROP TABLE issues_history;
 DROP TABLE comments_history;
@@ -278,10 +279,12 @@ public class MySQLOperation {
         String INSERT_PROJECT_HISTORY = "INSERT INTO projects_history (project_id, version_id, name, originalTime) VALUE (?,?,?,?)";
         String INSERT_ISSUE_HISTORY = "INSERT INTO issues_history (project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
         String INSERT_COMMENT_HISTORY = "INSERT INTO comments_history (project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";  //6
+        String INSERT_COMMENTS_REACTIONS = "INSERT INTO comments_reactions (hash, reactions) VALUES (?,?)";
 
         PreparedStatement updateProjectHistory = myConn.prepareStatement(INSERT_PROJECT_HISTORY, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement updateIssueHistory = myConn.prepareStatement(INSERT_ISSUE_HISTORY, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement updateCommentHistory = myConn.prepareStatement(INSERT_COMMENT_HISTORY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateCommentsReactions = myConn.prepareStatement(INSERT_COMMENTS_REACTIONS, Statement.RETURN_GENERATED_KEYS);
 
         for (int i = 0; i < node.get("histories").get("project_histories").size(); i++) {
             updateProjectHistory.setInt(1, node.get("histories").get("projects_histories").get(i).get("project_id").asInt());
@@ -328,6 +331,13 @@ public class MySQLOperation {
             updateCommentHistory.addBatch();
         }
         updateCommentHistory.executeBatch();
+
+        for (int i = 0; i < node.get("comments_reactions").size(); i++) {
+            updateCommentsReactions.setInt(1,node.get("comments_reactions").get(i).get("hash").asInt());
+            updateCommentsReactions.setString(2,node.get("comments_reactions").get(i).get("reaction").asText());
+            updateCommentsReactions.addBatch();
+        }
+        updateCommentsReactions.executeBatch();
     }
 
     public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, IOException{
@@ -1613,11 +1623,36 @@ public class MySQLOperation {
         return history;
     }
 
+    public static ArrayList<Comments_Reaction> getCommentsReactionsList(Connection myConn) {
+        Statement stmt = null;
+        ResultSet myRs = null;
+        ArrayList<Comments_Reaction> comments_reactions = new ArrayList<>();
+
+        String SQL_GET_COMMENTS_REACTIONS_LIST = "SELECT * FROM comments_reactions";
+
+        try {
+            stmt = myConn.createStatement();
+            myRs = stmt.executeQuery(SQL_GET_COMMENTS_REACTIONS_LIST);
+            while (myRs.next()) {
+                int hash = myRs.getInt("hash");
+                String reactions = myRs.getString("reactions");
+                comments_reactions.add(new Comments_Reaction(hash, reactions));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(myRs);
+            DbUtils.closeQuietly(stmt);
+        }
+        return comments_reactions;
+    }
+
     public static Database getDatabase(Connection myConn) {
         List<Project> projects = getProjectList(myConn);
         List<User> users = getUserList(myConn);
         History history = getHistoryList(myConn);
-        return new Database(projects, users, history);
+        List<Comments_Reaction> comments_reactions = getCommentsReactionsList(myConn);
+        return new Database(projects, users, history, comments_reactions);
     }
 
     public static void resetDatabase(Connection myConn) {
@@ -1634,6 +1669,7 @@ public class MySQLOperation {
                 "SELECT * FROM projects_history;\n" +
                 "SELECT * FROM issues_history;\n" +
                 "SELECT * FROM comments_history;\n" +
+                "DROP TABLE comments_reactions;\n" +
                 "DROP TABLE projects_history;\n" +
                 "DROP TABLE issues_history;\n" +
                 "DROP TABLE comments_history;\n" +
@@ -1733,6 +1769,11 @@ public class MySQLOperation {
                 "CONSTRAINT pic_fk\n" +
                 "    FOREIGN KEY pic_fkx (project_id, issue_id, comment_id)\n" +
                 "    REFERENCES comments (project_id, issue_id, comment_id)\n" +
+                ");\n"+
+                "\n"+
+                "CREATE TABLE comments_reactions (\n" +
+                "hash INT(11) NOT NULL,\n" +
+                "reactions VARCHAR(20)\n" +
                 ");";
 
         try {
@@ -1794,5 +1835,12 @@ public class MySQLOperation {
         }
 
         return false;
+    }
+
+    public static void main(String[] args) throws SQLException, IOException {
+//        initializedDatabase();
+        exportJavaObjectAsJson(getDatabase(getConnection()), "newDB");
+        resetDatabase(getConnection());
+        importJsonFileToDataBase(getConnection(),new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newDB.json"));
     }
 }

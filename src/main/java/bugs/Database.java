@@ -17,11 +17,13 @@ public class Database implements Serializable{
     private List<Project> projects;
     private List<User> users;
     private History histories;
+    private List<Comments_Reaction> comments_reactions;
 
-    public Database(List<Project> projects, List<User> users, History histories) {
+    public Database(List<Project> projects, List<User> users, History histories, List<Comments_Reaction> comments_reactions) {
         this.projects = projects;
         this.users = users;
         this.histories = histories;
+        this.comments_reactions = comments_reactions;
     }
 
     public List<User> getUsers() {
@@ -46,5 +48,13 @@ public class Database implements Serializable{
 
     public void setHistories(History histories) {
         this.histories = histories;
+    }
+
+    public List<Comments_Reaction> getComments_reactions() {
+        return comments_reactions;
+    }
+
+    public void setComments_reactions(List<Comments_Reaction> comments_reactions) {
+        this.comments_reactions = comments_reactions;
     }
 }
