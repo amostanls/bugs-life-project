@@ -40,7 +40,7 @@ public class commentReactController implements Initializable {
         if (hasReacted != null && hasReacted.equals("happy")) {//ask user whether want to remove it?
             promptUserToRemoveReaction("happy", event);
         } else {
-            MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "Happy");
+            MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "happy");
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
             currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -59,7 +59,7 @@ public class commentReactController implements Initializable {
         if (hasReacted != null && hasReacted.equals("angry")) {//ask user whether want to remove it?
             promptUserToRemoveReaction("angry", event);
         } else {
-            MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "Angry");
+            MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "angry");
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
             currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -70,6 +70,25 @@ public class commentReactController implements Initializable {
             alert.showAndWait();
         }
     }
+
+    @FXML
+    void setThumbsUpBtn(MouseEvent event) throws Exception {
+        String hasReacted = check_reacted();
+        if (hasReacted != null && hasReacted.equals("thumbsup")) {//ask user whether want to remove it?
+            promptUserToRemoveReaction("thumbsup", event);
+        } else {
+            MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "thumbsup");
+            Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
+            //currentStage.close();
+            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Reacted Thumbs Up to comment " + getSelectedCommentId());
+            alert.showAndWait();
+        }
+    }
+
 
     String check_reacted() {
         //check if the user has reacted before

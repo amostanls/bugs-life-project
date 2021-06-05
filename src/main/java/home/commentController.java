@@ -135,6 +135,7 @@ public class commentController implements Initializable {
                 stage.initStyle(StageStyle.UTILITY);
                 //stage.initStyle(StageStyle.UNDECORATED);
                 stage.show();
+
                 stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
             } catch (IOException ex) {
                 Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
