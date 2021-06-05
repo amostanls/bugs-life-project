@@ -495,7 +495,7 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            if (myRs.next()) {
+            if (myRs.next()){
                 return myRs.getString("reactions");
             }
 

@@ -266,6 +266,7 @@ public class commentController implements Initializable {
                 return new Task<>() {
                     @Override
                     protected ArrayList<Comment> call() throws Exception {
+
                         return MySQLOperation.getCommentList(MySQLOperation.getConnection(), getSelectedProjectId(), getSelectedIssueId());
 //                        Controller.updateTable();
 //                        return null;
@@ -276,6 +277,7 @@ public class commentController implements Initializable {
         backGroundThread.setOnSucceeded(workerStateEvent -> {
             try {
                 issue_temp.setComments(backGroundThread.getValue());
+
                 setTextField();
             } catch (Exception e) {
                 e.printStackTrace();

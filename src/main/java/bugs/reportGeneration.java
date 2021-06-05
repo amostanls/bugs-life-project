@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class reportGeneration {
-    private  List<Project> projectList;
 
     private Timestamp startTime;
     private Timestamp endTime;
@@ -51,8 +50,9 @@ public class reportGeneration {
 
     public List<Project> getProjectlist() {  //base on the date to get the projects list
         //projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
-        Controller.setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.getConnection()));
-        projectList=Controller.getFinalProjectList();
+//        Controller.setFinalProjectList(MySQLOperation.getProjectList(MySQLOperation.getConnection()));
+//        projectList=Controller.getFinalProjectList();
+        List<Project> projectList = Controller.getFinalProjectList();
         List<Project> newProjectList = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             if (projectList.get(i).getProject_timestamp().compareTo(startTime) >= 0 || projectList.get(i).getProject_timestamp().compareTo(endTime) <= 0) {
@@ -64,7 +64,7 @@ public class reportGeneration {
 
 
     public List<Issue> getIssue() {
-
+        List<Project> projectList = Controller.getFinalProjectList();
         List<Issue> newIssue = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             List<Issue> list = projectList.get(i).getIssues();
