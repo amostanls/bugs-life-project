@@ -7,10 +7,7 @@ import bugs.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.input.*;
@@ -39,80 +36,66 @@ public class commentReactController implements Initializable {
 
     @FXML
     void setHappyBtn(MouseEvent event) throws Exception {
-        String reacted = check_reacted(event);
-        if(reacted!=null&&reacted.equals("Happy")) {
-            Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
+        String hasReacted = check_reacted();
+        if (hasReacted.equals("happy")) {//ask user whether want to remove it?
+            promptUserToRemoveReaction("happy", event);
+        } else {
+            MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "Happy");
+            Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
             currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
             //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
-            //JOptionPane.showMessageDialog(null, "Reacted Happy to comment "+getSelectedCommentId());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            alert.setContentText("Removed 'Happy'");
+            alert.setContentText("Reacted Happy to comment " + getSelectedCommentId());
             alert.showAndWait();
-            return;
         }
-        MySQLOperation.reacting(getCurrentUser().getUserid(),getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId(),"Happy");
-        Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
-        //currentStage.close();
-        currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-        //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
-        //JOptionPane.showMessageDialog(null, "Reacted Happy to comment "+getSelectedCommentId());
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText("Reacted Happy to comment "+getSelectedCommentId());
-        alert.showAndWait();
 
     }
 
     @FXML
     void setAngryBtn(MouseEvent event) throws Exception {
-        String reacted=check_reacted(event);
-        if(reacted!=null&&reacted.equals("Angry")) {
-            Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
+        String hasReacted = check_reacted();
+        if (hasReacted.equals("angry")) {//ask user whether want to remove it?
+            promptUserToRemoveReaction("angry", event);
+        } else {
+            MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "Angry");
+            Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
             currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
             //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
-            //JOptionPane.showMessageDialog(null, "Reacted Happy to comment "+getSelectedCommentId());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            alert.setContentText("Removed 'Angry'");
+            alert.setContentText("Reacted Angry to comment " + getSelectedCommentId());
             alert.showAndWait();
-            return;
         }
-        MySQLOperation.reacting(getCurrentUser().getUserid(),getSelectedProjectId(),getSelectedIssueId(),getSelectedCommentId(), "Angry");
-        Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
-        //currentStage.close();
-        currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-        //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
-        //JOptionPane.showMessageDialog(null, "Reacted Angry to comment "+getSelectedCommentId());
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText("Reacted Angry to comment "+getSelectedCommentId());
-        alert.showAndWait();
     }
 
-    String check_reacted(MouseEvent event)throws Exception {
+    String check_reacted() {
         //check if the user has reacted before
-        User user = getCurrentUser();
-        int userid = user.getUserid();
-        int projid = getSelectedProjectId();
-        int issueid = getSelectedIssueId();
-        int commentid = getSelectedCommentId();
-        String reacted = MySQLOperation.getReaction(MySQLOperation.getConnection(), userid, projid, issueid, commentid);
-        if(reacted!=null) {
-            //reacted, prompt the user a window to notify the user this comment has been reacted
-            //react the same to remove
-            Stage currentStage=((Stage)(((ImageView)event.getSource()).getScene().getWindow()));
+        String reacted = MySQLOperation.getReaction(MySQLOperation.getConnection(), getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId());//this line might take some time
+        if (reacted != null) {
+            return reacted;//has previous reaction
+        } else {
+            return null;//no previous reaction
+        }
+    }
+
+    void promptUserToRemoveReaction(String reaction, MouseEvent event) throws Exception {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("You have reacted " + getSelectedCommentId() + " with " + reaction.toUpperCase());
+        alert.setContentText("Do you want to remove it?");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            MySQLOperation.delreacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), reaction);
+            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+            alert2.setHeaderText(null);
+            alert2.setContentText("Removed " + reaction.toUpperCase());
+            alert2.showAndWait();
+            Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
             currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText(null);
-            alert.setContentText("You have reacted "+commentid+" with "+reacted+"\nReact again to remove.");
-            alert.showAndWait();
-            MySQLOperation.delreacting(userid, projid, issueid, commentid, reacted);
         }
-        return reacted;
     }
 
     @Override
@@ -131,7 +114,7 @@ public class commentReactController implements Initializable {
 
     private void getCommentSelection(ActionEvent actionEvent) {
         selection_id = commentSelection.getSelectionModel().getSelectedIndex();
-        setSelectedCommentId(selection_id+1);
+        setSelectedCommentId(selection_id + 1);
         //System.out.println(getSelectedCommentId());
         commentField.setText(possible_comments.get(selection_id).getText());
     }
