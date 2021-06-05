@@ -17,115 +17,104 @@ import java.util.*;
 
 public class statistics {
 
-    private  List<Project> projectList=Controller.getFinalProjectList();
+    private List<Project> projectList = Controller.getFinalProjectList();;
+    private List<User> userList= MySQLOperation.getUserList(MySQLOperation.getConnection());
+
     public statistics() {
+        //this.projectList= Controller.getFinalProjectList();
+        //this.userList = MySQLOperation.getUserList(MySQLOperation.getConnection());
     }
-   public String User(){
-        String str="";
-    List<String> user=new ArrayList<>();
-    user.add("jhoe");
-    user.add("btan");
-    user.add("liew");
-    user.add("ang");
-    List<String> assign=new ArrayList<>();
-    assign.add("0");
-    assign.add("0");
-    assign.add("0");
-    assign.add("0");
-       List<String> create=new ArrayList<>();
-       create.add("0");
-       create.add("0");
-       create.add("0");
-       create.add("0");
-       List<Issue> issues=getIssue();
-       for (int i = 0; i < issues.size(); i++) {
-           if (issues.get(i).getAssignee().equalsIgnoreCase("jhoe")){
-               assign.set(0,String.valueOf(Integer.valueOf(assign.get(0))+1));
-           }else if (issues.get(i).getAssignee().equalsIgnoreCase("btan")){
-               assign.set(1,String.valueOf(Integer.valueOf(assign.get(1))+1));
-           }else if (issues.get(i).getAssignee().equalsIgnoreCase("liew")){
-               assign.set(2,String.valueOf(Integer.valueOf(assign.get(2))+1));
-           }else if (issues.get(i).getAssignee().equalsIgnoreCase("ang")){
-               assign.set(3,String.valueOf(Integer.valueOf(assign.get(3))+1));
-           }
-           if (issues.get(i).getCreatedBy().equalsIgnoreCase("jhoe")){
-               create.set(0,String.valueOf(Integer.valueOf(assign.get(0))+1));
-           }else if (issues.get(i).getCreatedBy().equalsIgnoreCase("btan")){
-               create.set(1,String.valueOf(Integer.valueOf(assign.get(1))+1));
-           }else if (issues.get(i).getCreatedBy().equalsIgnoreCase("liew")){
-               create.set(2,String.valueOf(Integer.valueOf(assign.get(2))+1));
-           }else if (issues.get(i).getCreatedBy().equalsIgnoreCase("ang")){
-               create.set(3,String.valueOf(Integer.valueOf(assign.get(3))+1));
-           }
-       }
-       Table table = Table.create("User performance statistics").addColumns(StringColumn.create("User", user), StringColumn.create("total assign", assign),StringColumn.create("total create",create));
-       str += table.toString();
-       return str;
 
-   }
-   public void UserHTML(){
+    public String User() {
+        String str = "";
 
-       String str="";
-       List<String> user=new ArrayList<>();
-       user.add("jhoe");
-       user.add("btan");
-       user.add("liew");
-       user.add("ang");
-       List<String> assign=new ArrayList<>();
-       assign.add("0");
-       assign.add("0");
-       assign.add("0");
-       assign.add("0");
-       List<String> create=new ArrayList<>();
-       create.add("0");
-       create.add("0");
-       create.add("0");
-       create.add("0");
-       List<Issue> issues=getIssue();
-       for (int i = 0; i < issues.size(); i++) {
-           if (issues.get(i).getAssignee().equalsIgnoreCase("jhoe")){
-               assign.set(0,String.valueOf(Integer.valueOf(assign.get(0))+1));
-           }else if (issues.get(i).getAssignee().equalsIgnoreCase("btan")){
-               assign.set(1,String.valueOf(Integer.valueOf(assign.get(1))+1));
-           }else if (issues.get(i).getAssignee().equalsIgnoreCase("liew")){
-               assign.set(2,String.valueOf(Integer.valueOf(assign.get(2))+1));
-           }else if (issues.get(i).getAssignee().equalsIgnoreCase("ang")){
-               assign.set(3,String.valueOf(Integer.valueOf(assign.get(3))+1));
-           }
-           if (issues.get(i).getCreatedBy().equalsIgnoreCase("jhoe")){
-               create.set(0,String.valueOf(Integer.valueOf(assign.get(0))+1));
-           }else if (issues.get(i).getCreatedBy().equalsIgnoreCase("btan")){
-               create.set(1,String.valueOf(Integer.valueOf(assign.get(1))+1));
-           }else if (issues.get(i).getCreatedBy().equalsIgnoreCase("liew")){
-               create.set(2,String.valueOf(Integer.valueOf(assign.get(2))+1));
-           }else if (issues.get(i).getCreatedBy().equalsIgnoreCase("ang")){
-               create.set(3,String.valueOf(Integer.valueOf(assign.get(3))+1));
-           }
-       }
-       int as[]=new int[4];
-       int cr[]=new int[4];
-       for (int i = 0; i < assign.size(); i++) {
-           as[i]= Integer.parseInt(assign.get(i));
-       }for (int i = 0; i < create.size(); i++) {
-           cr[i]= Integer.parseInt(create.get(i));
-       }
-       Table table = Table.create("User performance statistics").addColumns(StringColumn.create("User", user), IntColumn.create("total assign", as),IntColumn.create("total create",cr));
+        List<String> user = new ArrayList<>();
+        List<String> assign = new ArrayList<>();
+        List<String> create = new ArrayList<>();
+
+        for (int i = 0; i < userList.size(); i++) {
+            user.add(userList.get(i).getUsername());
+            assign.add("0");
+            create.add("0");
+        }
+
+        List<Issue> issues = getIssue();
+
+        for (int i = 0; i < issues.size(); i++) {//go through all issues
+
+            for (int j = 0; j < user.size(); j++) {//go through user list
+                //get assignee
+                if (issues.get(i).getAssignee() != null && issues.get(i).getAssignee().equalsIgnoreCase(user.get(j))) {
+                    System.out.println(issues.get(i).getAssignee());
+                    System.out.println(user.get(j));
+                    assign.set(j, String.valueOf(Integer.valueOf(assign.get(j)) + 1));
+                }
+                //get created by
+                if (issues.get(i).getCreatedBy().equalsIgnoreCase(user.get(j))) {
+                    create.set(j, String.valueOf(Integer.valueOf(assign.get(j)) + 1));
+                }
+            }
+        }
+        Table table = Table.create("User performance statistics").addColumns(StringColumn.create("User", user), StringColumn.create("total assign", assign), StringColumn.create("total create", create));
+        str += table.toString();
+        return str;
+    }
+
+    public void UserHTML() {
+
+        List<String> user = new ArrayList<>();
+        List<String> assign = new ArrayList<>();
+        List<String> create = new ArrayList<>();
+
+        for (int i = 0; i < userList.size(); i++) {
+            user.add(userList.get(i).getUsername());
+            assign.add("0");
+            create.add("0");
+        }
+
+        List<Issue> issues = getIssue();
+
+        for (int i = 0; i < issues.size(); i++) {//go through all issues
+
+            for (int j = 0; j < user.size(); j++) {//go through user list
+                //get assignee
+                if (issues.get(i).getAssignee() != null && issues.get(i).getAssignee().equalsIgnoreCase(user.get(j))) {
+                    System.out.println(issues.get(i).getAssignee());
+                    System.out.println(user.get(j));
+                    assign.set(j, String.valueOf(Integer.valueOf(assign.get(j)) + 1));
+                }
+                //get created by
+                if (issues.get(i).getCreatedBy().equalsIgnoreCase(user.get(j))) {
+                    create.set(j, String.valueOf(Integer.valueOf(assign.get(j)) + 1));
+                }
+            }
+        }
+
+        int as[] = new int[user.size()];
+        int cr[] = new int[user.size()];
+        for (int i = 0; i < assign.size(); i++) {
+            as[i] = Integer.parseInt(assign.get(i));
+        }
+        for (int i = 0; i < create.size(); i++) {
+            cr[i] = Integer.parseInt(create.get(i));
+        }
+        Table table = Table.create("User Performance Statistics").addColumns(StringColumn.create("User", user), IntColumn.create("Total Assigned", as), IntColumn.create("Total Created", cr));
         Plot.show(
                 VerticalBarPlot.create(
                         "User performance statistics",
-                        table, "User",Layout.BarMode.GROUP, "total assign","total create"));
+                        table, "User", Layout.BarMode.GROUP, "Total Assigned", "Total Created"));
 
 
-   }
+    }
 
     public List<Project> getProject() {
-        projectList= Controller.getFinalProjectList();
+        projectList = Controller.getFinalProjectList();
         //List<Project> projectList = MySQLOperation.getProjectList(MySQLOperation.getConnection());
         return projectList;
     }
 
     public List<Issue> getIssue() {
-        //List<Project> projectList = getProject();
+        List<Project> projectList = getProject();
         List<Issue> issuesList = new ArrayList<>();
         for (int i = 0; i < projectList.size(); i++) {
             List<Issue> issues = projectList.get(i).getIssues();
@@ -296,74 +285,74 @@ public class statistics {
     }
 
     public String issueStatus() {
-        String str="";
+        String str = "";
         List<Issue> issue = getIssue();
-        String status[] = {"resolved", "unresolved", "in progress", "open","closed","whatever","other"};
+        String status[] = {"Resolved", "Unresolved", "In Progress", "Open", "Closed"};
         int resovled = 0;
         int unresovled = 0;
         int inProgress = 0;
         //int other = 0;
-        int closed=0;
+        int closed = 0;
         //int whatever=0;
-        int open=0;
+        int open = 0;
         for (int i = 0; i < issue.size(); i++) {
             if (issue.get(i).getStatus().equalsIgnoreCase("closed")) {
                 closed++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress")) {
                 inProgress++;
-            }else if (issue.get(i).getStatus().equalsIgnoreCase("open") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("open")) {
                 open++;
-            }else if (issue.get(i).getStatus().equalsIgnoreCase("resolved") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("resolved")) {
                 resovled++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved")) {
                 unresovled++;
             }
         }
-        int num[] = {resovled,unresovled,inProgress,open,closed};
-//        Table table1 = Table.create("Issue status").addColumns(StringColumn.create("status", status), IntColumn.create("number of issue", num));
-//        str+=table1.toString();
-        str+="  issue statistics"+"\n";
-        String start=String.format("%-25s |%-3s|","issue status","number");
-        str+= "-------------------------------------------"+"\n";
-        String res=String.format("%-25s | %3d  |","resolved issues is",num[0]);
-
-        String unr=String.format("%-25s | %3d  |","unresovled issue is",num[1]);
-        String ipr=String.format("%-25s | %3d  |","in progress issue is",num[2]);
-        String ope=String.format("%-25s | %3d  |","open issue is",num[3]);
-        String clos=String.format("%-25s | %3d  |","closed issue is",num[4]);
-        str+=start+"\n"+res+"\n"+unr+"\n"+ipr+"\n"+ope+"\n"+clos+"\n";
+        int num[] = {resovled, unresovled, inProgress, open, closed};
+        Table table1 = Table.create("Issue Status").addColumns(StringColumn.create("Status", status), IntColumn.create("Number of issue", num));
+        str+=table1.toString();
+//        str += "  issue statistics" + "\n";
+//        String start = String.format("%-25s |%-3s|", "issue status", "number");
+//        str += "-------------------------------------------" + "\n";
+//        String res = String.format("%-25s | %3d  |", "resolved issues is", num[0]);
+//
+//        String unr = String.format("%-25s | %3d  |", "unresovled issue is", num[1]);
+//        String ipr = String.format("%-25s | %3d  |", "in progress issue is", num[2]);
+//        String ope = String.format("%-25s | %3d  |", "open issue is", num[3]);
+//        String clos = String.format("%-25s | %3d  |", "closed issue is", num[4]);
+//        str += start + "\n" + res + "\n" + unr + "\n" + ipr + "\n" + ope + "\n" + clos + "\n";
         return str;
     }
 
     public void issueStatusHTML() {
         List<Issue> issue = getIssue();
-        String status[] = {"resolved", "unresolved", "in progress", "open","closed","whatever","other"};
+        String status[] = {"Resolved", "Unresolved", "In Progress", "Open", "Closed"};
         int resovled = 0;
         int unresovled = 0;
         int inProgress = 0;
-       // int other = 0;
-        int closed=0;
-       // int whatever=0;
-        int open=0;
+        // int other = 0;
+        int closed = 0;
+        // int whatever=0;
+        int open = 0;
         for (int i = 0; i < issue.size(); i++) {
             if (issue.get(i).getStatus().equalsIgnoreCase("closed")) {
                 closed++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("In Progress")) {
                 inProgress++;
-            }else if (issue.get(i).getStatus().equalsIgnoreCase("open") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("open")) {
                 open++;
-            }else if (issue.get(i).getStatus().equalsIgnoreCase("resolved") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("resolved")) {
                 resovled++;
-            } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved") ) {
+            } else if (issue.get(i).getStatus().equalsIgnoreCase("unresolved")) {
                 unresovled++;
             }
         }
-        int num[] = {resovled,unresovled,inProgress,open,closed};
-        Table table1 = Table.create("Issue status").addColumns(StringColumn.create("status", status), IntColumn.create("number of issue", num));
+        int num[] = {resovled, unresovled, inProgress, open, closed};
+        Table table1 = Table.create("Issue Status").addColumns(StringColumn.create("Status", status), IntColumn.create("Number of Issues", num));
         Plot.show(
                 HorizontalBarPlot.create(
-                        "Issue status",
-                        table1, "status", "number of issue"));
+                        "Issue Status",
+                        table1, "Status", "Number of Issues"));
     }
 
     public String tag() {
@@ -375,7 +364,7 @@ public class statistics {
             list1.add(entry.getKey());
             list2.add(String.valueOf(entry.getValue()));
         }
-        Table table = Table.create("Tag").addColumns(StringColumn.create("Tag name", list1), StringColumn.create("number of issue", list2));
+        Table table = Table.create("Tag").addColumns(StringColumn.create("Tag name", list1), StringColumn.create("Number of Issues", list2));
         str += table.toString();
         return str;
     }
@@ -389,11 +378,11 @@ public class statistics {
             list1.add(entry.getKey());
             list2.add(String.valueOf(entry.getValue()));
         }
-        Table table = Table.create("Tag").addColumns(StringColumn.create("Tag name", list1), StringColumn.create("number of issue", list2));
+        Table table = Table.create("Tag").addColumns(StringColumn.create("Tag name", list1), StringColumn.create("Number of Issues", list2));
         Plot.show(
                 TimeSeriesPlot.create(
                         "Tag",//折线图名称
-                        table, "Tag name", "number of issue"));
+                        table, "Tag name", "Number of Issues"));
     }
 
     public String showStatic() {
@@ -407,12 +396,12 @@ public class statistics {
         String time = time();
         str += time;
         str += "\n" + "\n";
-        String user=User();
-        str+=user;
+        String user = User();
+        str += user;
         return str;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         statistics statistic = new statistics();
 
         System.out.println(statistic.showStatic());
@@ -449,10 +438,12 @@ public class statistics {
                     statistic.UserHTML();
                     System.out.println("wait");
                     count++;
-                    break ;
-                case 5 :
+                    break;
+                case 5:
                     break m;
             }
         }
     }
+
+     */
 }

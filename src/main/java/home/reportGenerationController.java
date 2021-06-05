@@ -64,7 +64,7 @@ public class reportGenerationController implements Initializable {
 
     @FXML
     void setStatistics(MouseEvent event) {
-        reportDisplay.setText(null);
+        reportDisplay.setText("Generating statistical report\n Please wait...");
         statistics statistic = new statistics();
         reportDisplay.setText(statistic.showStatic());
         statistic.tagHTML();
@@ -79,7 +79,7 @@ public class reportGenerationController implements Initializable {
         String[] list = {"Weekly", "Monthly","Yearly"};
         reportType.getItems().addAll(list);
         reportType.setValue(list[0]);
-
+        reportDisplay.setStyle("-fx-font-family: monospace");
 
         //System.out.println(reportGeneration.toString());
 
@@ -132,4 +132,6 @@ public class reportGenerationController implements Initializable {
         stackPane.getChildren().addAll(veil, label, p);
         backGroundThread.start();
     }
+
+
 }

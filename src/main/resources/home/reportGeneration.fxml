@@ -24,7 +24,7 @@
       </JFXButton>
       <StackPane fx:id="stackPane" layoutX="37.0" layoutY="159.0" prefHeight="561.0" prefWidth="1052.0">
          <children>
-            <TextArea fx:id="reportDisplay" editable="false" prefHeight="568.0" prefWidth="1030.0" promptText="Please select starting date and type of report to be generated" />
+            <TextArea fx:id="reportDisplay" editable="false" prefHeight="568.0" prefWidth="1030.0" promptText="Please select starting date and type of report to be generated" StackPane.alignment="TOP_LEFT" />
          </children>
       </StackPane>
       <JFXButton fx:id="st" layoutX="757.0" layoutY="105.0" onMouseClicked="#setStatistics" prefHeight="39.0" prefWidth="193.0" style="-fx-background-color: #2e856e; -fx-text-fill: white;" text="Statistical Data">
