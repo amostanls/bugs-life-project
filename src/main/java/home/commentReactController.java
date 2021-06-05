@@ -37,7 +37,7 @@ public class commentReactController implements Initializable {
     @FXML
     void setHappyBtn(MouseEvent event) throws Exception {
         String hasReacted = check_reacted();
-        if (hasReacted.equals("happy")) {//ask user whether want to remove it?
+        if (hasReacted != null && hasReacted.equals("happy")) {//ask user whether want to remove it?
             promptUserToRemoveReaction("happy", event);
         } else {
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "Happy");
@@ -56,7 +56,7 @@ public class commentReactController implements Initializable {
     @FXML
     void setAngryBtn(MouseEvent event) throws Exception {
         String hasReacted = check_reacted();
-        if (hasReacted.equals("angry")) {//ask user whether want to remove it?
+        if (hasReacted != null && hasReacted.equals("angry")) {//ask user whether want to remove it?
             promptUserToRemoveReaction("angry", event);
         } else {
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "Angry");

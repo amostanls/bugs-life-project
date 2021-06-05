@@ -50,6 +50,7 @@ home\issuesController.class
 login\forgotPasswordController.class
 home\main.class
 home\reportGenerationController$1.class
+bugs\Comments_Reaction.class
 bugs\Database.class
 home\reportGenerationController$1$1.class
 home\reportGenerationController.class
