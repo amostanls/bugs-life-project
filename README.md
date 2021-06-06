@@ -31,6 +31,13 @@ In MySQLOperation class, comment the part that you don't want to use.
 
 For online database, make sure you have a stable internet connection.
 
+
+Link to database is: https://remotemysql.com/phpmyadmin/index.php?db=5peJ8pFLLQ&target=db_structure.php
+
+Username : 5peJ8pFLLQ
+
+Password : ZduHT4WFmd563gE
+
 # Important Operations
 
 In the admin function, after initialising the database, make sure to import data before exiting the application
