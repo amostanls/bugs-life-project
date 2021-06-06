@@ -131,7 +131,7 @@ public class settingsController implements Initializable {
         ButtonType localButton = new ButtonType("Import from local file");
         ButtonType URLButton = new ButtonType("Import from url");
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,"",localButton,URLButton);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "", localButton, URLButton);
         alert.setTitle("Import JSON");
         alert.setHeaderText("Please select the type of import you want");
         alert.setContentText("Please select : ");
@@ -139,7 +139,7 @@ public class settingsController implements Initializable {
         Window window = alert.getDialogPane().getScene().getWindow();
         window.setOnCloseRequest(e -> alert.hide());
         Optional<ButtonType> result = alert.showAndWait();
-        result.ifPresent(res->{
+        result.ifPresent(res -> {
             if (res.equals(localButton)) {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.getExtensionFilters().addAll(
@@ -150,7 +150,7 @@ public class settingsController implements Initializable {
                     File filename = fileChooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
                     //File filename = jfc.getSelectedFile();
                     System.out.println(filename);
-                    if(filename!=null){
+                    if (filename != null) {
                         importBackgroundTask(filename);
                     }
                     System.out.println("File name " + filename.getName());
