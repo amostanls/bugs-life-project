@@ -25,7 +25,7 @@ public class reportGeneration {
             setStartTime(time);
             setEndTime(newTime);
             setType(date);
-        }else if(date.equals("Weekly")) {
+        }else if(date.equals("Monthly")) {
             c.add(Calendar.MONTH,1);
             Timestamp newTime=new Timestamp(c.getTime().getTime());
             setStartTime(time);

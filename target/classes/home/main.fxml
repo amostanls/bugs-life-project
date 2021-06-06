@@ -52,7 +52,7 @@
                         <Insets left="60.0" />
                      </padding>
                   </JFXButton>
-                  <JFXButton alignment="BASELINE_LEFT" layoutX="10.0" layoutY="467.0" onMouseClicked="#changeLog" prefHeight="63.0" prefWidth="248.0" text="Report Generation">
+                  <JFXButton alignment="BASELINE_LEFT" layoutX="10.0" layoutY="467.0" onMouseClicked="#reportGeneration" prefHeight="63.0" prefWidth="248.0" text="Report Generation">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>

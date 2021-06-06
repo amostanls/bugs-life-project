@@ -1,8 +1,13 @@
 ### bugs-life-project
 
 # Project for WIA1002
+*  Created by : Amos Tan Li Sheng, Tan Wei Lok, Tay Qi Xiang, and Zhang Xiang
 
 ***Very important, finish reading before start using the application***
+
+### The secret code for admin is 'bugs'
+
+### Please make sure you have an active email account for registration
 
 # JavaFX
 
@@ -16,46 +21,27 @@ If you have problem starting JavaFX, make sure to run Plugins -> clean -> clean:
 Also, you can set run configurations to simplify the process.
 
 For Intellij, Go To Run -> Edit Configuration -> Add new configuration -> Select Maven ->Set VM arguments ->javafx:run
+![image](https://user-images.githubusercontent.com/18496769/120916704-9448e300-c69a-11eb-916d-00ebe38ce2d3.png)
+
 
 # Database Option
-
-You can also choose to use local database(fast) or online database(slow)
 
 In MySQLOperation class, comment the part that you don't want to use.
 ![image](https://user-images.githubusercontent.com/18496769/119681217-64474780-be31-11eb-9e92-6febd090798d.png)
 
 For online database, make sure you have a stable internet connection.
 
-### The following only work on Windows.
 
-For local database, follow the steps below.
+Link to database is: https://remotemysql.com/phpmyadmin/index.php?db=5peJ8pFLLQ&target=db_structure.php
 
-1. Download XAMPP for your reespective OS and install it.
-   https://www.apachefriends.org/index.html
-   ![image](https://user-images.githubusercontent.com/18496769/119681848-f2233280-be31-11eb-880a-d4503f2ccc08.png)
+Username : 5peJ8pFLLQ
 
-2. Open XAMPP and start Apache web service and MySQL
+Password : ZduHT4WFmd563gE
 
-   ![image](https://user-images.githubusercontent.com/18496769/119682309-51814280-be32-11eb-8080-217147b639ad.png)
+# Important Operations
 
-3. Go to http://localhost/phpmyadmin/index.php?route=/server/databases
+In the admin function, after initialising the database, make sure to import data before exiting the application
 
-![image](https://user-images.githubusercontent.com/18496769/119682707-a02edc80-be32-11eb-99fc-c2a2d7b3cadb.png)
-
-4. Create Database with name ***"bugs_life"***, click create
- 
-![image](https://user-images.githubusercontent.com/18496769/119682957-d1a7a800-be32-11eb-8e65-d4300867fefb.png)
-
-5. Select bugs_life database and choose import
-   Then, select **"bugs_life.sql"**
-   
-   This file can be found in this github page.
-   
-    ![image](https://user-images.githubusercontent.com/18496769/119683304-10d5f900-be33-11eb-9231-2cbb7ee869bf.png)
-   
-6. Click Go (At the bottom right of the screen)
-
-8. You are good to go! Local Database have been set up!
 
 
    

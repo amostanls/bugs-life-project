@@ -32,8 +32,6 @@ public class Controller implements Initializable {
     private static String urlImage = null;
 
 
-
-
     @FXML
     private Label usernameDisplay;
 
@@ -42,7 +40,6 @@ public class Controller implements Initializable {
 
     @FXML
     private ImageView userImage;
-
 
 
     public static BorderPane staticBorderPane;
@@ -96,7 +93,7 @@ public class Controller implements Initializable {
     }*/
 
     @FXML
-    void changeLog(MouseEvent event) {
+    void reportGeneration(MouseEvent event) {
         Pane view = new FxmlLoader().getPage("reportGeneration");
         mainPane.setCenter(view);
         new FadeInRight(view).play();
@@ -155,7 +152,7 @@ public class Controller implements Initializable {
         userImage.setFitHeight(180);
         userImage.setPreserveRatio(true);
         urlImage = Controller.getCurrentUser().getUrl();
-        if (urlImage != null ) {
+        if (urlImage != null) {
             Image image = new Image(urlImage);
             if (!image.isError()) {
                 userImage.setImage(image);
