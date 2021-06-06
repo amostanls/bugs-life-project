@@ -57,6 +57,14 @@
                   <Image url="@../images/angryEmoji.png" />
                </image>
             </ImageView>
+            <ImageView fitHeight="70.0" fitWidth="70.0" layoutX="332.0" layoutY="10.0" onMouseClicked="#setThumbsUpBtn" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/thumbs_up.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
+            </ImageView>
          </children>
          <padding>
             <Insets bottom="10.0" />
