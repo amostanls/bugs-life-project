@@ -104,6 +104,8 @@ public class commentReactController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("You have reacted " + getSelectedCommentId() + " with " + reaction.toUpperCase());
         alert.setContentText("Do you want to remove it?");
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.setAlwaysOnTop(true);
 
         if (alert.showAndWait().get() == ButtonType.OK) {
             MySQLOperation.delreacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), reaction);
@@ -112,6 +114,7 @@ public class commentReactController implements Initializable {
             alert2.setContentText("Removed " + reaction.toUpperCase());
             alert2.showAndWait();
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
+
             //currentStage.close();
             currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }

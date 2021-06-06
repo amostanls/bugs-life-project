@@ -37,7 +37,7 @@
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <JFXButton fx:id="editBtn" onMouseClicked="#setEdit" prefHeight="65.0" prefWidth="84.0" style="-fx-border-color: black; -fx-border-width: 3pt; -fx-border-radius: 50;" text="Edit">
+                  <JFXButton fx:id="editBtn" onMouseClicked="#setEdit" prefHeight="65.0" prefWidth="98.0" style="-fx-border-color: black; -fx-border-width: 3pt; -fx-border-radius: 50;" text="Edit">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
