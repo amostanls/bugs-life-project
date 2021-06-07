@@ -41,17 +41,6 @@ public class ChatClientController implements Runnable, Initializable {
     private TextField chatField;
 
     @FXML
-    void backToHome(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("tempPage.fxml"));
-        Stage primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        primaryStage.setTitle("temp");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
-        ChatClientController.closeClient();
-        primaryStage.show();
-    }
-
-    @FXML
     void enterChat(ActionEvent event) throws IOException {
         String chat = chatField.getText();
         pw.println(name + " > " + chat);
