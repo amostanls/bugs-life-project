@@ -21,12 +21,14 @@ If you have problem starting JavaFX, make sure to run Plugins -> clean -> clean:
 Also, you can set run configurations to simplify the process.
 
 For Intellij, Go To Run -> Edit Configuration -> Add new configuration -> Select Maven ->Set VM arguments ->javafx:run
+
 ![image](https://user-images.githubusercontent.com/18496769/120916704-9448e300-c69a-11eb-916d-00ebe38ce2d3.png)
 
 
 # Database Option
 
 In MySQLOperation class, comment the part that you don't want to use.
+
 ![image](https://user-images.githubusercontent.com/18496769/119681217-64474780-be31-11eb-9e92-6febd090798d.png)
 
 For online database, make sure you have a stable internet connection.
