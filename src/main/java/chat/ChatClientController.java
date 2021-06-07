@@ -130,8 +130,11 @@ public class ChatClientController implements Runnable, Initializable {
             }
 
             onlineUserArea.clear();
+            onlineUserArea.appendText("User: " + Controller.getUsername() + "\n\n");
             for (String name : clientsName) {
-                onlineUserArea.appendText(name + "\n");
+                if (!name.equals(Controller.getUsername())) {
+                    onlineUserArea.appendText(name + "\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
