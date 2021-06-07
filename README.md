@@ -16,7 +16,7 @@ Go To Maven-> Plugins -> javafx -> javafx:run
 
 If you have problem starting JavaFX, make sure to run Plugins -> clean -> clean:clean
 
-![image](https://user-images.githubusercontent.com/18496769/119246939-4f3e9000-bb75-11eb-9db1-9b2a54c4f3a9.png)
+![image](https://user-images.githubusercontent.com/18496769/120956356-e9403400-c742-11eb-866c-a46a463d44d9.png)
 
 Also, you can set run configurations to simplify the process.
 
