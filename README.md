@@ -38,7 +38,7 @@ Link to database is: https://remotemysql.com/phpmyadmin/index.php?db=5peJ8pFLLQ&
 
 Username : 5peJ8pFLLQ
 
-Password : ZduHT4WFmd563gE
+Password : h6Tpwh3kYW
 
 # Important Operations
 
