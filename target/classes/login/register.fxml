@@ -10,12 +10,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="768.0" prefWidth="800.0" stylesheets="@loginStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.registerController">
+<AnchorPane prefHeight="768.0" prefWidth="800.0" stylesheets="@loginStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.registerController">
    <children>
+      <ChoiceBox fx:id="userTypeSelection" layoutX="312.0" layoutY="139.0" prefHeight="34.0" prefWidth="176.0" />
       <HBox alignment="CENTER" layoutY="10.0" prefHeight="117.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white;" text="Bugs Life" wrappingWidth="162.4828109741211">
@@ -51,87 +53,95 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </HBox>
-      <VBox layoutX="231.0" layoutY="205.0" prefHeight="502.0" prefWidth="338.0">
+      <StackPane fx:id="stackPane" layoutX="143.0" layoutY="182.0" prefHeight="560.0" prefWidth="537.0">
          <children>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="98.0" prefWidth="389.0" style="-fx-border-color: white; -fx-border-width: 0 0 2 0;">
+            <VBox prefHeight="535.0" prefWidth="617.0">
                <children>
-                  <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <image>
-                        <Image url="@../images/mail.png" />
-                     </image>
-                  </ImageView>
-                  <TextField fx:id="emailField" prefHeight="96.0" prefWidth="278.0" promptText="Enter email" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </TextField>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="98.0" prefWidth="389.0">
+                     <children>
+                        <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../images/mail.png" />
+                           </image>
+                        </ImageView>
+                        <TextField fx:id="emailField" prefHeight="95.0" prefWidth="280.0" promptText="Enter email" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt; -fx-border-color: white; -fx-border-width: 0 0 2 0;">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="98.0" prefWidth="503.0">
+                     <children>
+                        <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../images/user.png" />
+                           </image>
+                        </ImageView>
+                        <TextField fx:id="usernameField" prefHeight="95.0" prefWidth="280.0" promptText="Enter username" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt; -fx-border-color: white; -fx-border-width: 0 0 2 0;">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../images/key1.png" />
+                           </image>
+                        </ImageView>
+                        <PasswordField fx:id="passwordField" prefHeight="95.0" prefWidth="280.0" promptText="Enter password" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt; -fx-border-width: 0 0 2 0; -fx-border-color: white;" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="118.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <PasswordField fx:id="passwordConfirmField" prefHeight="95.0" prefWidth="280.0" promptText="Reenter password" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt; -fx-border-width: 0 0 2 0; -fx-border-color: white;">
+                           <HBox.margin>
+                              <Insets left="75.0" />
+                           </HBox.margin>
+                        </PasswordField>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="secretBox" alignment="CENTER" layoutX="10.0" layoutY="118.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="secretIcon" fitHeight="72.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../images/lock.png" />
+                           </image>
+                        </ImageView>
+                        <PasswordField fx:id="secretField" prefHeight="95.0" prefWidth="280.0" promptText="Enter secret" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt; -fx-border-width: 0 0 2 0; -fx-border-color: white;" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXButton fx:id="registerBtn" onAction="#setRegisterBtn" opacity="0.7" prefHeight="68.0" prefWidth="348.0" style="-fx-background-color: #2f2f2f; -fx-background-radius: 100; -fx-text-fill: white;" text="Register">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="59.0" prefWidth="317.0" />
-            <HBox alignment="CENTER" prefHeight="98.0" prefWidth="389.0" style="-fx-border-color: white; -fx-border-width: 0 0 2 0;">
-               <children>
-                  <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <image>
-                        <Image url="@../images/user.png" />
-                     </image>
-                  </ImageView>
-                  <TextField fx:id="usernameField" prefHeight="96.0" prefWidth="278.0" promptText="Enter username" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </TextField>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2 0;">
-               <children>
-                  <ImageView fitHeight="70.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <image>
-                        <Image url="@../images/key1.png" />
-                     </image>
-                  </ImageView>
-                  <PasswordField fx:id="passwordField" prefHeight="125.0" prefWidth="313.0" promptText="Enter password" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;" />
-               </children>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="118.0" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2 0;">
-               <children>
-                  <PasswordField fx:id="passwordConfirmField" prefHeight="89.0" prefWidth="345.0" promptText="Reenter password" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;" />
-               </children>
-            </HBox>
-            <HBox fx:id="secretBox" alignment="CENTER" layoutX="10.0" layoutY="118.0" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2 0;">
-               <children>
-                  <ImageView fx:id="secretIcon" fitHeight="72.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <image>
-                        <Image url="@../images/lock.png" />
-                     </image>
-                  </ImageView>
-                  <PasswordField fx:id="secretField" prefHeight="125.0" prefWidth="313.0" promptText="Enter secret" style="-fx-background-color: transparent; -fx-prompt-text-fill: white; -fx-text-fill: white; -fx-font-size: 12pt;" />
-               </children>
-            </HBox>
-            <JFXButton fx:id="registerBtn" onAction="#setRegisterBtn" opacity="0.7" prefHeight="68.0" prefWidth="348.0" style="-fx-background-color: #2f2f2f; -fx-background-radius: 100; -fx-text-fill: white;" text="Register">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </JFXButton>
-         </children></VBox>
-      <ChoiceBox fx:id="userTypeSelection" layoutX="312.0" layoutY="139.0" prefHeight="34.0" prefWidth="176.0" />
+            </VBox>
+         </children>
+      </StackPane>
    </children>
    <padding>
       <Insets top="5.0" />

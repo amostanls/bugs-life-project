@@ -6,6 +6,8 @@ import bugs.reportGeneration;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -14,7 +16,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -22,16 +26,22 @@ import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static chat.ChatServer.acceptClients;
+import static chat.ChatServer.getPortNumber;
+
 public class main extends Application {
     public static MyRunnable myRunnable = new MyRunnable();
     public static Thread t = new Thread(myRunnable);
+
+    private static Service<Void> backGroundThread;
+
     public static void main(String[] args) {
         launch(args);
-
     }
 
     @Override
@@ -53,12 +63,34 @@ public class main extends Application {
             t.start();
         });
         stage.show();
-
+        chatBackGroundTask();
 
         new FadeIn(root).play();
+
+
     }
 
+    private void chatBackGroundTask() {
+        backGroundThread = new Service<>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        try {
+                            ServerSocket ss = new ServerSocket(getPortNumber());
+                            acceptClients(ss);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+            }
+        };
 
+        backGroundThread.start();
+    }
 
 
 }

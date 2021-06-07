@@ -1,11 +1,14 @@
 package login;
 
 import bugs.Mail;
+import bugs.MyRunnableCode;
 import bugs.MySQLOperation;
 
 import com.jfoenix.controls.JFXButton;
 import home.Controller;
 import home.main;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -27,12 +32,15 @@ import java.util.logging.Logger;
 
 public class registerController implements Initializable {
 
+    private static Service<String> backGroundThread;
+
     @FXML
     private ChoiceBox<String> userTypeSelection;
 
     private final String[] userType = {"Regular User", "Admin"};
     private boolean isAdmin = false;
     private final String secretCode = "bugs";
+
 
     @FXML
     private TextField emailField;
@@ -56,6 +64,10 @@ public class registerController implements Initializable {
     private PasswordField secretField;
 
     @FXML
+    private StackPane stackPane;
+
+
+    @FXML
     private JFXButton registerBtn;
 
     @FXML
@@ -72,7 +84,7 @@ public class registerController implements Initializable {
     }
 
     @FXML
-    void setRegisterBtn(ActionEvent event) {
+    void setRegisterBtn(ActionEvent event) throws InterruptedException {
         String email = emailField.getText();
         String username = usernameField.getText();
 
@@ -99,8 +111,10 @@ public class registerController implements Initializable {
             errorBox("This email had been used.\nPlease use another email address");
 
         } else {
-
-            String verificationCode = Mail.authorization(email);
+            MyRunnableCode code = new MyRunnableCode(email);
+            Thread codeThread = new Thread(code);
+            codeThread.start();
+            //sendCodeBackgroundTask(email);
 
             TextInputDialog td = new TextInputDialog();
             td.setTitle("Email verification");
@@ -109,6 +123,9 @@ public class registerController implements Initializable {
             td.showAndWait();
             TextField input = td.getEditor();
             if (input.getText() != null && input.getText().toString().length() != 0) {
+                codeThread.join();
+                String verificationCode = code.getCode();
+                if (verificationCode == null) System.out.println("Error!!!");
                 if (verificationCode.equals(input.getText())) {
                     String sha256hex = DigestUtils.sha256Hex(password);
                     MySQLOperation.registerUser(MySQLOperation.getConnection(), username, sha256hex, isAdmin, email);
@@ -142,6 +159,7 @@ public class registerController implements Initializable {
         }
 
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

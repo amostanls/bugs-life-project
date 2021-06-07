@@ -4,9 +4,14 @@ import animatefx.animation.FadeInRight;
 import bugs.MySQLOperation;
 import bugs.Project;
 import bugs.User;
+import chat.ChatClientController;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,11 +19,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static chat.ChatServer.acceptClients;
+import static chat.ChatServer.getPortNumber;
 
 
 public class Controller implements Initializable {
@@ -31,6 +42,7 @@ public class Controller implements Initializable {
     private static String username = "";
     private static String urlImage = null;
 
+    private boolean chatIsOpened = false;
 
     @FXML
     private Label usernameDisplay;
@@ -97,6 +109,38 @@ public class Controller implements Initializable {
         Pane view = new FxmlLoader().getPage("reportGeneration");
         mainPane.setCenter(view);
         new FadeInRight(view).play();
+    }
+
+    @FXML
+    void chatBtn(MouseEvent event) throws IOException {
+
+        if (chatIsOpened == false) {
+            try{
+                Parent root = FXMLLoader.load(getClass().getResource("/chat/ChatClient.fxml"));
+                Stage chatStage = new Stage();
+                chatStage.setScene(new Scene(root));
+                chatStage.setResizable(false);
+                chatStage.setTitle("Chat Room");
+                chatStage.setOnCloseRequest(windowEvent -> {
+                    ChatClientController.closeClient();
+                    chatIsOpened = false;
+                });
+                chatIsOpened = true;
+                chatStage.show();
+            }catch (ConnectException e){
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setContentText("Chat server is not running");
+                a.show();
+                System.out.println(e.getStackTrace());
+            }
+
+        }
+        else {
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("Unable to create 2 instances of chat");
+            a.setContentText("You have already open chat");
+            a.show();
+        }
     }
 
     @FXML
