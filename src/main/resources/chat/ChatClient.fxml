@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import com.jfoenix.controls.JFXTextField?>
 <AnchorPane prefHeight="605.0" prefWidth="801.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.ChatClientController">
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="208.0" layoutY="542.0" prefHeight="57.0" prefWidth="397.0">
@@ -49,14 +50,14 @@
       </HBox>
       <Pane layoutY="-4.0" prefHeight="43.0" prefWidth="192.0" style="-fx-background-color: #303138#303138 #303138#303138;">
          <children>
-            <JFXTextArea editable="false" minHeight="40.0" prefHeight="43.0" prefWidth="190.0" style="-fx-text-fill: #ebecf2#ebecf2;" text="Online">
+            <TextField editable="false" minHeight="40.0" prefHeight="43.0" prefWidth="190.0" style=" -fx-background-color: #303138#303138; -fx-text-fill: #ebecf2#ebecf2; -fx-padding: 10" text="Online">
                <font>
                   <Font size="25.0" />
                </font>
                <padding>
                   <Insets left="10.0" top="10.0" />
                </padding>
-            </JFXTextArea>
+            </TextField>
             <FontAwesomeIcon fill="WHITE" glyphName="USER" layoutX="85.0" layoutY="33.0" selectionEnd="0" size="20" />
          </children>
       </Pane>
