@@ -38,8 +38,12 @@ public class commentReactController implements Initializable {
     void setHappyBtn(MouseEvent event) throws Exception {
         String hasReacted = check_reacted();
         if (hasReacted != null && hasReacted.equals("happy")) {//ask user whether want to remove it?
-            promptUserToRemoveReaction("happy", event);
+            promptUserToRemoveReaction(hasReacted, "happy", event);
         } else {
+            if(hasReacted!=null) {
+                //means reacted with another reaction, prompt user whether to remove old one.
+                if(!promptUserToRemoveReaction(hasReacted, "happy", event))return;
+            }
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "happy");
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
@@ -47,7 +51,10 @@ public class commentReactController implements Initializable {
             //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            alert.setContentText("Reacted Happy to comment " + getSelectedCommentId());
+            if(hasReacted!=null&&hasReacted.equals("angry"))hasReacted="Angry";
+            if(hasReacted!=null&&hasReacted.equals("happy"))hasReacted="Happy";
+            if(hasReacted!=null&&hasReacted.equals("thumbsup"))hasReacted="Thumbs Up";
+            alert.setContentText((hasReacted==null?"R":"Removed "+hasReacted+" and r")+"eacted Happy to Comment #" + getSelectedCommentId());
             alert.showAndWait();
         }
 
@@ -57,8 +64,12 @@ public class commentReactController implements Initializable {
     void setAngryBtn(MouseEvent event) throws Exception {
         String hasReacted = check_reacted();
         if (hasReacted != null && hasReacted.equals("angry")) {//ask user whether want to remove it?
-            promptUserToRemoveReaction("angry", event);
+            promptUserToRemoveReaction(hasReacted, "angry", event);
         } else {
+            if(hasReacted!=null) {
+                //means reacted with another reaction, prompt user whether to remove old one.
+                if(!promptUserToRemoveReaction(hasReacted, "angry", event))return;
+            }
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "angry");
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
@@ -66,7 +77,10 @@ public class commentReactController implements Initializable {
             //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            alert.setContentText("Reacted Angry to comment " + getSelectedCommentId());
+            if(hasReacted!=null&&hasReacted.equals("angry"))hasReacted="Angry";
+            if(hasReacted!=null&&hasReacted.equals("happy"))hasReacted="Happy";
+            if(hasReacted!=null&&hasReacted.equals("thumbsup"))hasReacted="Thumbs Up";
+            alert.setContentText((hasReacted==null?"R":"Removed "+hasReacted+" and r")+"eacted Angry to Comment #" + getSelectedCommentId());
             alert.showAndWait();
         }
     }
@@ -75,8 +89,12 @@ public class commentReactController implements Initializable {
     void setThumbsUpBtn(MouseEvent event) throws Exception {
         String hasReacted = check_reacted();
         if (hasReacted != null && hasReacted.equals("thumbsup")) {//ask user whether want to remove it?
-            promptUserToRemoveReaction("thumbsup", event);
+            promptUserToRemoveReaction(hasReacted, "thumbsup", event);
         } else {
+            if(hasReacted!=null) {
+                //means reacted with another reaction, prompt user whether to remove old one.
+                if(!promptUserToRemoveReaction(hasReacted, "thumbsup", event))return;
+            }
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "thumbsup");
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
             //currentStage.close();
@@ -84,7 +102,10 @@ public class commentReactController implements Initializable {
             //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            alert.setContentText("Reacted Thumbs Up to comment " + getSelectedCommentId());
+            if(hasReacted!=null&&hasReacted.equals("angry"))hasReacted="Angry";
+            if(hasReacted!=null&&hasReacted.equals("happy"))hasReacted="Happy";
+            if(hasReacted!=null&&hasReacted.equals("thumbsup"))hasReacted="Thumbs Up";
+            alert.setContentText((hasReacted==null?"R":"Removed "+hasReacted+" and r")+"eacted Thumbs Up to Comment #" + getSelectedCommentId());
             alert.showAndWait();
         }
     }
@@ -100,24 +121,28 @@ public class commentReactController implements Initializable {
         }
     }
 
-    void promptUserToRemoveReaction(String reaction, MouseEvent event) throws Exception {
+    boolean promptUserToRemoveReaction(String reaction, String now, MouseEvent event) throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("You have reacted " + getSelectedCommentId() + " with " + reaction.toUpperCase());
+        alert.setHeaderText("You have reacted Comment #" + getSelectedCommentId() + " with " + reaction.toUpperCase());
         alert.setContentText("Do you want to remove it?");
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
         alertStage.setAlwaysOnTop(true);
 
         if (alert.showAndWait().get() == ButtonType.OK) {
             MySQLOperation.delreacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), reaction);
-            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-            alert2.setHeaderText(null);
-            alert2.setContentText("Removed " + reaction.toUpperCase());
-            alert2.showAndWait();
-            Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
+            if(now.equals(reaction)) {
+                Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                alert2.setHeaderText(null);
+                alert2.setContentText("Removed " + reaction.toUpperCase());
+                alert2.showAndWait();
+                Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
 
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                //currentStage.close();
+                currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            }
+            return true;
         }
+        return false;
     }
 
     @Override

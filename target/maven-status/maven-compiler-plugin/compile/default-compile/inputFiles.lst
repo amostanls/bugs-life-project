@@ -1,55 +1,55 @@
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_project.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\login\registerController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Project_History.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_main.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\React.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\User.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\MyRunnableEmail.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_comment.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\util.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Tag.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\login\loginController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Comment_History.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_react.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Page_issue.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\main.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\chat\chatMain.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectHistoryController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Comment.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\settingsController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueEditController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueImageViewController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\reportGenerationController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\chat\ChatClientController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\MyRunnableCode.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\authentication.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Mail.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Json.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\MyRunnableUsers.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\FxmlLoader.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\History.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueAddController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\MySQLOperation.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\chat\ClientThread.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Comments_Reaction.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\MyRunnable.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issuesController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\issueHistoryController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\chat\ChatServer.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentAddController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Database.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentHistoryController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Issue.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentEditController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Project.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\login\forgotPasswordController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentReactController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\statistics.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\Controller.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\reportGeneration.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\commentController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\chat\tempPageController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectAddController.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\bugs\Issue_History.java
-D:\UM\2020Sem2\WIA 1002\bugs-life-project\src\main\java\home\projectEditController.java
+/home/amos/Documents/bugs-life-project/src/main/java/chat/ClientThread.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/commentReactController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Project.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/issuesController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Database.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/MyRunnableUsers.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/React.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/commentEditController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Tag.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Issue_History.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Comment.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Page_issue.java
+/home/amos/Documents/bugs-life-project/src/main/java/chat/ChatClientController.java
+/home/amos/Documents/bugs-life-project/src/main/java/login/registerController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Page_comment.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/issueImageViewController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/MySQLOperation.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/User.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/commentAddController.java
+/home/amos/Documents/bugs-life-project/src/main/java/login/loginController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/MyRunnable.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/commentHistoryController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/util.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/projectController.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/commentController.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/issueEditController.java
+/home/amos/Documents/bugs-life-project/src/main/java/chat/chatMain.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Comment_History.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Issue.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/authentication.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Page_main.java
+/home/amos/Documents/bugs-life-project/src/main/java/chat/ChatServer.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/issueAddController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Json.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/FxmlLoader.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/settingsController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/History.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/MyRunnableCode.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/issueHistoryController.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/Controller.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Page_react.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/reportGeneration.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/projectHistoryController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Mail.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/main.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Page_project.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/MyRunnableEmail.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Project_History.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/projectAddController.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/projectEditController.java
+/home/amos/Documents/bugs-life-project/src/main/java/chat/tempPageController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/statistics.java
+/home/amos/Documents/bugs-life-project/src/main/java/login/forgotPasswordController.java
+/home/amos/Documents/bugs-life-project/src/main/java/bugs/Comments_Reaction.java
+/home/amos/Documents/bugs-life-project/src/main/java/home/reportGenerationController.java
