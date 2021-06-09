@@ -1,5 +1,7 @@
 package login;
 
+import bugs.Mail;
+import bugs.MyRunnableAuth;
 import bugs.MyRunnableEmail;
 import bugs.MySQLOperation;
 
@@ -107,9 +109,10 @@ public class registerController implements Initializable {
             errorBox("This email had been used.\nPlease use another email address");
 
         } else {
-            MyRunnableEmail emailRun = new MyRunnableEmail(email);
-            Thread emailThread = new Thread(emailRun);
-            emailThread.start();
+
+            MyRunnableAuth authRun = new MyRunnableAuth(email);
+            Thread authThread = new Thread(authRun);
+            authThread.start();
             //sendCodeBackgroundTask(email);
 
             TextInputDialog td = new TextInputDialog();
@@ -119,8 +122,8 @@ public class registerController implements Initializable {
             td.showAndWait();
             TextField input = td.getEditor();
             if (input.getText() != null && input.getText().toString().length() != 0) {
-                emailThread.join();
-                String verificationCode = emailRun.getVerificationCode();
+                authThread.join();
+                String verificationCode = authRun.getVerificationCode();
                 if (verificationCode == null) System.out.println("Error!!!");
                 if (verificationCode.equals(input.getText())) {
                     String sha256hex = DigestUtils.sha256Hex(password);
