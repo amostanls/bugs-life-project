@@ -28,7 +28,7 @@ public class issueImageViewController implements Initializable {
                 issue_temp = issueList.get(i);
             }
         }
-        if (issue_temp.getUrl() == null || issue_temp.getUrl().length() == 0||issue_temp.getUrl().equalsIgnoreCase("null")) {//no image provided
+        if (issue_temp.getUrl() == null || issue_temp.getUrl().length() == 0) {//no image provided
             Label label = new Label("No Image");
             imagePlaceholder.getChildren().add(label);
         } else if (!Controller.isValidURL(issue_temp.getUrl())) {
