@@ -86,7 +86,15 @@ public class ChatClientController implements Runnable, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        getChatClientConnection();
+        //getChatClientConnection
+        try {
+            this.s = new Socket("127.0.0.1", portNumber);
+            //Thread.sleep(1000);
+            server = new Thread(this);
+            server.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setUpChatData() throws IOException {
@@ -105,17 +113,6 @@ public class ChatClientController implements Runnable, Initializable {
             pw.close();
             brServerIn.close();
             server.stop();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getChatClientConnection() {
-        try {
-            this.s = new Socket("127.0.0.1", portNumber);
-            //Thread.sleep(1000);
-            server = new Thread(this);
-            server.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
