@@ -56,7 +56,6 @@ public class ChatClientController implements Runnable, Initializable {
             pw = new PrintWriter(s.getOutputStream(), true);
             brServerIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
-            setId(brServerIn.readLine());
             setUpChatData();
 
             while (!s.isClosed()) {
@@ -90,7 +89,8 @@ public class ChatClientController implements Runnable, Initializable {
         getChatClientConnection();
     }
 
-    public void setUpChatData() {
+    public void setUpChatData() throws IOException {
+        setId(brServerIn.readLine());
         pw.println("A new user is online");
         pw.println(name);
         pw.println(id);
