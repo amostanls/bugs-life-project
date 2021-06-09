@@ -217,7 +217,11 @@ public class MySQLOperation {
                 Timestamp newTs = convertStringTimestampForImport(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
                 updateIssue.setTimestamp(10, newTs);
 
-                updateIssue.setString(11, node.get("projects").get(i).get("issues").get(j).get("url").asText());
+                if (node.get("projects").get(i).get("issues").get(j).get("url").asText().equals("null")) {
+                    updateIssue.setString(11, null);
+                }else {
+                    updateIssue.setString(11, node.get("projects").get(i).get("issues").get(j).get("url").asText());
+                }
                 updateIssue.addBatch();
 
                 //add comments
