@@ -90,19 +90,13 @@ public class ClientThread implements Runnable {
     public void removeClient() {
         String clientName = null;
         int toBeRemoved = -1;
-        int nameTobeRemoved = -1;
         try {
             clientName = br.readLine();
             for (int i = 0; i < clients.size(); i++) {
-//                if (clients.get(i).getName().equals(clientName)) {
                 if (String.valueOf(clients.get(i).getId()).equals(clientName)) {
-//                    clients.get(i).s.close();
-//                    clients.get(i).pw.close();
-//                    clients.get(i).br.close();
                     toBeRemoved = i;
                 }
             }
-
 
             if (toBeRemoved > -1) {
                 clients.remove(toBeRemoved);
