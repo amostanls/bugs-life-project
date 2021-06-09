@@ -112,7 +112,6 @@ public class ChatClientController implements Runnable, Initializable {
             s.close();
             pw.close();
             brServerIn.close();
-            server.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }
