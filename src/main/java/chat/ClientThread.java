@@ -69,10 +69,6 @@ public class ClientThread implements Runnable {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void sendClientsName() {
         for (ClientThread client : clients) {
             client.pw.println("user name");
@@ -88,12 +84,12 @@ public class ClientThread implements Runnable {
     }
 
     public void removeClient() {
-        String clientName = null;
+        String client_id = null;
         int toBeRemoved = -1;
         try {
-            clientName = br.readLine();
+            client_id = br.readLine();
             for (int i = 0; i < clients.size(); i++) {
-                if (String.valueOf(clients.get(i).getId()).equals(clientName)) {
+                if (String.valueOf(clients.get(i).getId()).equals(client_id)) {
                     toBeRemoved = i;
                 }
             }
@@ -104,6 +100,10 @@ public class ClientThread implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public PrintWriter getPw() {
