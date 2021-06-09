@@ -20,6 +20,7 @@ bugs\util.class
 bugs\Mail$1.class
 home\settingsController.class
 home\projectController$1.class
+bugs\MyRunnableAuth.class
 login\registerController.class
 home\commentController$1$1.class
 home\issuesController$1.class
@@ -43,7 +44,6 @@ chat\chatMain.class
 bugs\Mail.class
 bugs\MySQLOperation.class
 bugs\Page_comment.class
-chat\tempPageController.class
 home\projectEditController.class
 bugs\Issue.class
 bugs\MyRunnableEmail.class
@@ -54,7 +54,6 @@ bugs\MyRunnable.class
 home\commentController$1.class
 bugs\reportGeneration.class
 home\issuesController.class
-chat\tempPageController$1.class
 login\forgotPasswordController.class
 home\main.class
 home\reportGenerationController$1.class
