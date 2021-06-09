@@ -56,10 +56,10 @@
           "reaction" : "thumbsUp",
           "count" : 0
         } ],
-        "comment_timestamp" : 1623157563000,
+        "comment_timestamp" : 1565192640000,
         "user" : "amos"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-08-07 23:44:00",
       "tags" : "Frontend "
     }, {
@@ -119,7 +119,7 @@
         "comment_timestamp" : 1565279040000,
         "user" : "ang"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-08-08 23:44:00",
       "tags" : "Backend "
     } ],
@@ -178,20 +178,20 @@
         "comment_timestamp" : 1570507200000,
         "user" : "ang"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-10-08 12:00:00",
       "tags" : "Backend "
     }, {
       "project_id" : 2,
       "issue_id" : 1,
       "title" : "Flash of unstyled content",
-      "priority" : 6,
+      "priority" : 7,
       "status" : "Open",
-      "tag" : [ "cmty:bug-report" ],
+      "tag" : [ "cmty:bug-report " ],
       "descriptionText" : "What is expected ?\nExpected correct scrollspy active link highlighting and all links work.\n\nWhat is actually happening?\nPage jumps to top before smooth scroll, which leads to weird links highlighting. Also, sometimes some links doesn't highlight (like Server Rendered in demo video)\n\nAdditional comments?\nDemonstration - https://imgur.com/a/GGvITVB",
       "createdBy" : "btan",
       "assignee" : "ang",
-      "timestamp" : 1569920400000,
+      "timestamp" : 1623221316000,
       "comments" : [ {
         "comment_id" : 1,
         "text" : "Here is what I am referring to: https://streamable.com/hkyg3 Apologies for not posting a video when creating the issue! ",
@@ -239,8 +239,8 @@
         "user" : "jhoe"
       } ],
       "url" : null,
-      "time" : "2019-10-01 17:00:00",
-      "tags" : "cmty:bug-report "
+      "time" : "2021-06-09 14:48:36",
+      "tags" : "cmty:bug-report  "
     } ],
     "project_timestamp" : 1565192640000,
     "issuesNumber" : 2,
@@ -297,7 +297,7 @@
         "comment_timestamp" : 1567339200000,
         "user" : "ang"
       } ],
-      "url" : null,
+      "url" : "null",
       "time" : "2019-09-01 20:00:00",
       "tags" : "cmty:bug-report "
     } ],
@@ -379,7 +379,21 @@
   } ],
   "histories" : {
     "project_histories" : [ ],
-    "issue_histories" : [ ],
+    "issue_histories" : [ {
+      "project_id" : 2,
+      "issue_id" : 1,
+      "version_id" : 1,
+      "title" : "Flash of unstyled content",
+      "priority" : 6,
+      "status" : "Open",
+      "tag" : [ "cmty:bug-report " ],
+      "tags" : "cmty:bug-report ",
+      "descriptionText" : "What is expected ?\nExpected correct scrollspy active link highlighting and all links work.\n\nWhat is actually happening?\nPage jumps to top before smooth scroll, which leads to weird links highlighting. Also, sometimes some links doesn't highlight (like Server Rendered in demo video)\n\nAdditional comments?\nDemonstration - https://imgur.com/a/GGvITVB",
+      "createdBy" : "btan",
+      "assignee" : "ang",
+      "issue_timestamp" : 1569920400000,
+      "url" : "null"
+    } ],
     "comment_histories" : [ ]
   },
   "comments_reactions" : [ {
