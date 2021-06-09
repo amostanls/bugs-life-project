@@ -37,7 +37,7 @@ public class ChatClientController implements Runnable, Initializable {
     private TextField chatField;
 
     @FXML
-    void enterChat(ActionEvent event) throws IOException {
+    void enterChat(ActionEvent event) {
         String chat = chatField.getText();
         pw.println(name + " > " + chat);
         chatField.clear();
