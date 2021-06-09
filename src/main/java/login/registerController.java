@@ -1,14 +1,11 @@
 package login;
 
-import bugs.Mail;
-import bugs.MyRunnableCode;
+import bugs.MyRunnableEmail;
 import bugs.MySQLOperation;
 
 import com.jfoenix.controls.JFXButton;
-import home.Controller;
 import home.main;
 import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -111,9 +107,9 @@ public class registerController implements Initializable {
             errorBox("This email had been used.\nPlease use another email address");
 
         } else {
-            MyRunnableCode code = new MyRunnableCode(email);
-            Thread codeThread = new Thread(code);
-            codeThread.start();
+            MyRunnableEmail emailRun = new MyRunnableEmail(email);
+            Thread emailThread = new Thread(emailRun);
+            emailThread.start();
             //sendCodeBackgroundTask(email);
 
             TextInputDialog td = new TextInputDialog();
@@ -123,8 +119,8 @@ public class registerController implements Initializable {
             td.showAndWait();
             TextField input = td.getEditor();
             if (input.getText() != null && input.getText().toString().length() != 0) {
-                codeThread.join();
-                String verificationCode = code.getCode();
+                emailThread.join();
+                String verificationCode = emailRun.getVerificationCode();
                 if (verificationCode == null) System.out.println("Error!!!");
                 if (verificationCode.equals(input.getText())) {
                     String sha256hex = DigestUtils.sha256Hex(password);

@@ -26,6 +26,7 @@ import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.Date;
 import java.util.Timer;
@@ -80,6 +81,7 @@ public class main extends Application {
                         try {
                             ServerSocket ss = new ServerSocket(getPortNumber());
                             acceptClients(ss);
+                        } catch (BindException e) {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
