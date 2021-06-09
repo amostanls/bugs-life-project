@@ -17,7 +17,7 @@ public class ChatServer {
         while(true) {
             try {
                 Socket s = ss.accept();
-                System.out.println("Connection Successful\n");
+                //System.out.println("Connection Successful\n");
                 ClientThread client = new ClientThread(s, clients, id);
                 client.getPw().println(id);
                 id++;
