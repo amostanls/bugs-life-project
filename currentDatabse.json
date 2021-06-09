@@ -1,18 +1,18 @@
 {
   "projects" : [ {
     "project_id" : 1,
-    "name" : "new project",
+    "name" : "Nuxtjs",
     "issues" : [ {
       "project_id" : 1,
       "issue_id" : 1,
-      "title" : "new name",
+      "title" : "Can't display the table",
       "priority" : 4,
       "status" : "In Progress",
-      "tag" : [ "Frontend " ],
+      "tag" : [ "Frontend" ],
       "descriptionText" : "Hi, \n\n            I'm receiving the \"Can't display the data because Power BI can't determine the relationship between two or more fields.\" error message and I do not understand why. I have searched the net for help but can't find a post that answers my question.\n\n           It may well be a straight modelling restriction but best to check.\n\n\n   I have two datasources (Sheet 1 and Sheet 2). Both are Excel files.",
       "createdBy" : "jhoe",
       "assignee" : "btan",
-      "timestamp" : 1622596123000,
+      "timestamp" : 1565192640000,
       "comments" : [ {
         "comment_id" : 1,
         "text" : "Please find below links to the two .pbix files I've created in an attempt toconquer this error I'm receiving.",
@@ -22,8 +22,11 @@
         }, {
           "reaction" : "happy",
           "count" : 1
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 1
         } ],
-        "comment_timestamp" : 1622596123000,
+        "comment_timestamp" : 1565192640000,
         "user" : "liew"
       }, {
         "comment_id" : 2,
@@ -34,13 +37,31 @@
         }, {
           "reaction" : "happy",
           "count" : 0
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
         } ],
-        "comment_timestamp" : 1622596123000,
+        "comment_timestamp" : 1565192640000,
         "user" : "ang"
+      }, {
+        "comment_id" : 3,
+        "text" : "this is good",
+        "react" : [ {
+          "reaction" : "angry",
+          "count" : 0
+        }, {
+          "reaction" : "happy",
+          "count" : 0
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
+        } ],
+        "comment_timestamp" : 1623157563000,
+        "user" : "amos"
       } ],
-      "url" : "null",
-      "time" : "2021-06-02 09:08:43",
-      "tags" : "Frontend  "
+      "url" : null,
+      "time" : "2019-08-07 23:44:00",
+      "tags" : "Frontend "
     }, {
       "project_id" : 1,
       "issue_id" : 2,
@@ -57,22 +78,28 @@
         "text" : "I am having the same issue with a disc of photos from Christmas given to me by my sister. I have tried opening all of the photos with all of my available opening options and still get the same message as above poster. ",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 1
+          "count" : 2
         }, {
           "reaction" : "happy",
-          "count" : 2
+          "count" : 4
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
         } ],
         "comment_timestamp" : 1565279040000,
         "user" : "liew"
       }, {
         "comment_id" : 2,
-        "text" : "lad photos of windows 8 & 10 are worst possible application ever develope\n just change default view to \"windows photo viewer\" if you dont have any other application",
+        "text" : "lad photos of windows 8 & 10 are worst possible application ever developed!\n\n                    just change default view to \"windows photo viewer\" if you dont have any other application",
         "react" : [ {
           "reaction" : "angry",
           "count" : 5
         }, {
           "reaction" : "happy",
           "count" : 2
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
         } ],
         "comment_timestamp" : 1565279040000,
         "user" : "btan"
@@ -85,15 +112,18 @@
         }, {
           "reaction" : "happy",
           "count" : 0
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
         } ],
         "comment_timestamp" : 1565279040000,
         "user" : "ang"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-08-08 23:44:00",
       "tags" : "Backend "
     } ],
-    "project_timestamp" : 1622596107000,
+    "project_timestamp" : 1565192640000,
     "issuesNumber" : 2,
     "len_id" : 2,
     "len_title" : 5,
@@ -105,7 +135,7 @@
     "len_createdby" : 9
   }, {
     "project_id" : 2,
-    "name" : "new projecttttt",
+    "name" : "Vuejs",
     "issues" : [ {
       "project_id" : 2,
       "issue_id" : 2,
@@ -126,6 +156,9 @@
         }, {
           "reaction" : "happy",
           "count" : 2
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 1
         } ],
         "comment_timestamp" : 1570507200000,
         "user" : "btan"
@@ -134,15 +167,18 @@
         "text" : "/cc @clarkdo",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 5
+          "count" : 6
         }, {
           "reaction" : "happy",
           "count" : 3
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
         } ],
         "comment_timestamp" : 1570507200000,
         "user" : "ang"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-10-08 12:00:00",
       "tags" : "Backend "
     }, {
@@ -161,10 +197,13 @@
         "text" : "Here is what I am referring to: https://streamable.com/hkyg3 Apologies for not posting a video when creating the issue! ",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 1
+          "count" : 4
         }, {
           "reaction" : "happy",
-          "count" : 2
+          "count" : 3
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 3
         } ],
         "comment_timestamp" : 1569920400000,
         "user" : "liew"
@@ -176,28 +215,34 @@
           "count" : 5
         }, {
           "reaction" : "happy",
-          "count" : 3
+          "count" : 2
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
         } ],
         "comment_timestamp" : 1569920400000,
         "user" : "ang"
       }, {
         "comment_id" : 3,
-        "text" : "no!",
+        "text" : "Thanks for everything",
         "react" : [ {
           "reaction" : "angry",
           "count" : 1
         }, {
           "reaction" : "happy",
           "count" : 2
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 2
         } ],
         "comment_timestamp" : 1569920400000,
         "user" : "jhoe"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-10-01 17:00:00",
       "tags" : "cmty:bug-report "
     } ],
-    "project_timestamp" : 1622599184000,
+    "project_timestamp" : 1565192640000,
     "issuesNumber" : 2,
     "len_id" : 2,
     "len_title" : 5,
@@ -211,36 +256,6 @@
     "project_id" : 3,
     "name" : "Reactjs",
     "issues" : [ {
-      "project_id" : 3,
-      "issue_id" : 2,
-      "title" : "New title",
-      "priority" : 5,
-      "status" : "Open",
-      "tag" : [ "" ],
-      "descriptionText" : "Hahahaha",
-      "createdBy" : "Lok",
-      "assignee" : "",
-      "timestamp" : 1622539555000,
-      "comments" : [ ],
-      "url" : "",
-      "time" : "2021-06-01 17:25:55",
-      "tags" : " "
-    }, {
-      "project_id" : 3,
-      "issue_id" : 3,
-      "title" : "new title",
-      "priority" : 2,
-      "status" : "Open",
-      "tag" : [ "Frontend Backend " ],
-      "descriptionText" : "asdf",
-      "createdBy" : "tay",
-      "assignee" : "",
-      "timestamp" : 1622558171000,
-      "comments" : [ ],
-      "url" : "",
-      "time" : "2021-06-01 22:36:11",
-      "tags" : "Frontend Backend  "
-    }, {
       "project_id" : 3,
       "issue_id" : 1,
       "title" : "Flash of unstyled content",
@@ -256,13 +271,13 @@
         "text" : "To: https://streamable.com/hkyg3 Apologies for not posting a video when creating the issue!",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 1
+          "count" : 4
         }, {
           "reaction" : "happy",
-          "count" : 2
+          "count" : 3
         }, {
           "reaction" : "thumbsUp",
-          "count" : 5
+          "count" : 7
         } ],
         "comment_timestamp" : 1567339200000,
         "user" : "liew"
@@ -275,144 +290,19 @@
         }, {
           "reaction" : "happy",
           "count" : 2
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 1
         } ],
         "comment_timestamp" : 1567339200000,
         "user" : "ang"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-09-01 20:00:00",
       "tags" : "cmty:bug-report "
     } ],
     "project_timestamp" : 1565192640000,
-    "issuesNumber" : 3,
-    "len_id" : 2,
-    "len_title" : 5,
-    "len_status" : 6,
-    "len_tag" : 3,
-    "len_priority" : 8,
-    "len_time" : 4,
-    "len_assignee" : 8,
-    "len_createdby" : 9
-  }, {
-    "project_id" : 4,
-    "name" : "New Project",
-    "issues" : [ {
-      "project_id" : 4,
-      "issue_id" : 9,
-      "title" : "test refersh",
-      "priority" : 9,
-      "status" : "Open",
-      "tag" : [ "" ],
-      "descriptionText" : "eae",
-      "createdBy" : "tay",
-      "assignee" : "",
-      "timestamp" : 1622560635000,
-      "comments" : [ ],
-      "url" : "",
-      "time" : "2021-06-01 23:17:15",
-      "tags" : " "
-    }, {
-      "project_id" : 4,
-      "issue_id" : 8,
-      "title" : "testing final",
-      "priority" : 8,
-      "status" : "Open",
-      "tag" : [ "" ],
-      "descriptionText" : "test",
-      "createdBy" : "tay",
-      "assignee" : "",
-      "timestamp" : 1622560527000,
-      "comments" : [ ],
-      "url" : "",
-      "time" : "2021-06-01 23:15:27",
-      "tags" : " "
-    }, {
-      "project_id" : 4,
-      "issue_id" : 7,
-      "title" : "fasdf",
-      "priority" : 5,
-      "status" : "Open",
-      "tag" : [ "" ],
-      "descriptionText" : "asdf",
-      "createdBy" : "tay",
-      "assignee" : "",
-      "timestamp" : 1622560488000,
-      "comments" : [ ],
-      "url" : "",
-      "time" : "2021-06-01 23:14:48",
-      "tags" : " "
-    }, {
-      "project_id" : 4,
-      "issue_id" : 6,
-      "title" : "dsaf",
-      "priority" : 4,
-      "status" : "Open",
-      "tag" : [ "" ],
-      "descriptionText" : "afds",
-      "createdBy" : "tay",
-      "assignee" : "",
-      "timestamp" : 1622560324000,
-      "comments" : [ ],
-      "url" : "",
-      "time" : "2021-06-01 23:12:04",
-      "tags" : " "
-    }, {
-      "project_id" : 4,
-      "issue_id" : 3,
-      "title" : "qwerty",
-      "priority" : 3,
-      "status" : "Open",
-      "tag" : [ "" ],
-      "descriptionText" : "qwerty",
-      "createdBy" : "tay",
-      "assignee" : "",
-      "timestamp" : 1622558954000,
-      "comments" : [ ],
-      "url" : "",
-      "time" : "2021-06-01 22:49:14",
-      "tags" : " "
-    }, {
-      "project_id" : 4,
-      "issue_id" : 1,
-      "title" : "New issue",
-      "priority" : 2,
-      "status" : "Open",
-      "tag" : [ "" ],
-      "descriptionText" : "I have no idea.",
-      "createdBy" : "jhoe",
-      "assignee" : "",
-      "timestamp" : 1622415437000,
-      "comments" : [ {
-        "comment_id" : 1,
-        "text" : "new comm",
-        "react" : [ {
-          "reaction" : "angry",
-          "count" : 0
-        }, {
-          "reaction" : "happy",
-          "count" : 0
-        } ],
-        "comment_timestamp" : 1622415437000,
-        "user" : "btan"
-      }, {
-        "comment_id" : 2,
-        "text" : "new comment 12",
-        "react" : [ {
-          "reaction" : "angry",
-          "count" : 0
-        }, {
-          "reaction" : "happy",
-          "count" : 0
-        } ],
-        "comment_timestamp" : 1622415437000,
-        "user" : "btan"
-      } ],
-      "url" : "",
-      "time" : "2021-05-31 06:57:17",
-      "tags" : " "
-    } ],
-    "project_timestamp" : 1622415397000,
-    "issuesNumber" : 6,
+    "issuesNumber" : 1,
     "len_id" : 2,
     "len_title" : 5,
     "len_status" : 6,
@@ -456,99 +346,62 @@
     "email" : null
   }, {
     "userid" : 5,
-    "username" : "Lok",
-    "password" : "22d710ec5e78a06a1dbb8aa3aadf063d3894e760b5e6c01b1360c0f73448e28e",
+    "username" : "amos",
+    "password" : "c5b56ba66ef19c981e81d072138edde4540cf28aecdeadd62d27fc10b205adb4",
     "name" : null,
     "admin" : true,
     "url" : null,
-    "email" : null
+    "email" : "tanamos@live.com"
   }, {
     "userid" : 6,
-    "username" : "normal",
-    "password" : "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-    "name" : null,
-    "admin" : false,
-    "url" : null,
-    "email" : null
-  }, {
-    "userid" : 7,
-    "username" : "33",
+    "username" : "Zhang Xiang",
     "password" : "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
     "name" : null,
     "admin" : false,
     "url" : null,
-    "email" : null
+    "email" : "3393906183@qq.com"
   }, {
-    "userid" : 8,
+    "userid" : 7,
     "username" : "tay",
     "password" : "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
     "name" : null,
     "admin" : true,
+    "url" : "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
+    "email" : "tayqixiang@gmail.com"
+  }, {
+    "userid" : 8,
+    "username" : "lok",
+    "password" : "6ac82c4fb78c5cdfc8af9ff81f7f9f21ecb7a8cf1f7f1dfa5b204f8fc7e34b46",
+    "name" : null,
+    "admin" : true,
     "url" : null,
-    "email" : null
+    "email" : "rotabite987@gmail.com"
   } ],
   "histories" : {
-    "project_histories" : [ {
-      "project_id" : 2,
-      "version_id" : 1,
-      "name" : "Vuejs",
-      "originalTime" : 1565192640000
-    } ],
-    "issue_histories" : [ {
-      "project_id" : 1,
-      "issue_id" : 1,
-      "version_id" : 1,
-      "title" : "Can't display the table",
-      "priority" : 4,
-      "status" : "In Progress",
-      "tag" : [ "" ],
-      "tags" : "",
-      "descriptionText" : "Hi, \n\n            I'm receiving the \"Can't display the data because Power BI can't determine the relationship between two or more fields.\" error message and I do not understand why. I have searched the net for help but can't find a post that answers my question.\n\n           It may well be a straight modelling restriction but best to check.\n\n\n   I have two datasources (Sheet 1 and Sheet 2). Both are Excel files.",
-      "createdBy" : "jhoe",
-      "assignee" : "btan",
-      "issue_timestamp" : 1565192640000,
-      "url" : "null"
-    } ],
-    "comment_histories" : [ {
-      "project_id" : 1,
-      "issue_id" : 2,
-      "comment_id" : 2,
-      "version_id" : 1,
-      "text" : "lad photos of windows 8 & 10 are worst possible application ever developed!\n\n                    just change default view to \"windows photo viewer\" if you dont have any other application",
-      "comment_timestamp" : 1565279040000,
-      "user" : "btan"
-    }, {
-      "project_id" : 2,
-      "issue_id" : 1,
-      "comment_id" : 3,
-      "version_id" : 1,
-      "text" : "Thanks for everything",
-      "comment_timestamp" : 1569920400000,
-      "user" : "jhoe"
-    }, {
-      "project_id" : 4,
-      "issue_id" : 1,
-      "comment_id" : 1,
-      "version_id" : 1,
-      "text" : "new comment",
-      "comment_timestamp" : 1622544477000,
-      "user" : "btan"
-    }, {
-      "project_id" : 4,
-      "issue_id" : 1,
-      "comment_id" : 1,
-      "version_id" : 2,
-      "text" : "new comment dsafasd",
-      "comment_timestamp" : 1622544509000,
-      "user" : "btan"
-    }, {
-      "project_id" : 4,
-      "issue_id" : 1,
-      "comment_id" : 2,
-      "version_id" : 1,
-      "text" : "new comment",
-      "comment_timestamp" : 1622548447000,
-      "user" : "btan"
-    } ]
-  }
+    "project_histories" : [ ],
+    "issue_histories" : [ ],
+    "comment_histories" : [ ]
+  },
+  "comments_reactions" : [ {
+    "hash" : 502101,
+    "reaction" : "angry"
+  }, {
+    "hash" : 501101,
+    "reaction" : "thumbsup"
+  }, {
+    "hash" : 503101,
+    "reaction" : "angry"
+  }, {
+    "hash" : 502202,
+    "reaction" : "angry"
+  }, {
+    "hash" : 502201,
+    "reaction" : "thumbsup"
+  }, {
+    "hash" : 501201,
+    "reaction" : "happy"
+  }, {
+    "hash" : 502103,
+    "reaction" : "thumbsup"
+  } ]
 }
