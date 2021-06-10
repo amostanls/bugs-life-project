@@ -208,16 +208,7 @@ public class MySQLOperation {
                 updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
                 updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
                 updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
-                String tagArrToString = null;
-
-                for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).withArray("tag").size(); k++) {
-                    if (k != node.get("projects").get(i).get("issues").get(j).withArray("tag").size() - 1) {
-                        tagArrToString += node.get("projects").get(i).get("issues").get(j).withArray("tag").get(k).toString() + " ";
-                    } else {
-                        tagArrToString += node.get("projects").get(i).get("issues").get(j).withArray("tag").get(k).toString();
-                    }
-                }
-                updateIssue.setString(6, tagArrToString);
+                updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).withArray("tag").get(0).asText());
                 updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
                 updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
                 updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
@@ -1819,75 +1810,27 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) throws SQLException, IOException {
-        Connection myConn = getConnection();
+//        Connection myConn = getConnection();
         File json = new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newestDatabase.json");
         JsonNode node = Json.parseFile(json);
-        String INSERT_PROJECT_HISTORY = "INSERT INTO projects_history (project_id, version_id, name, originalTime) VALUE (?,?,?,?)";
-        String INSERT_ISSUE_HISTORY = "INSERT INTO issues_history (project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
-        String INSERT_COMMENT_HISTORY = "INSERT INTO comments_history (project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";  //6
-        String INSERT_COMMENTS_REACTIONS = "INSERT INTO comments_reactions (hash, reactions) VALUES (?,?)";
 
-        PreparedStatement updateProjectHistory = myConn.prepareStatement(INSERT_PROJECT_HISTORY, Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement updateIssueHistory = myConn.prepareStatement(INSERT_ISSUE_HISTORY, Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement updateCommentHistory = myConn.prepareStatement(INSERT_COMMENT_HISTORY, Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement updateCommentsReactions = myConn.prepareStatement(INSERT_COMMENTS_REACTIONS, Statement.RETURN_GENERATED_KEYS);
+        int i = 4;
+        int j = 1;
 
-        for (int i = 0; i < node.get("histories").get("project_histories").size(); i++) {
-            updateProjectHistory.setInt(1, node.get("histories").get("project_histories").get(i).get("project_id").asInt());
-            updateProjectHistory.setInt(2, node.get("histories").get("project_histories").get(i).get("version_id").asInt());
-            updateProjectHistory.setString(3, node.get("histories").get("project_histories").get(i).get("name").asText());
-
-            Timestamp newTimestamp = convertStringTimestampForImport(node.get("histories").get("project_histories").get(i).get("originalTime").asText());
-            updateProjectHistory.setTimestamp(4, newTimestamp);
-            updateProjectHistory.addBatch();
-        }
-        updateProjectHistory.executeBatch();
-        System.out.println("updateProjectHistory Successfully");
-
-        for (int i = 0; i < node.get("histories").get("issue_histories").size(); i++) {
-            updateIssueHistory.setInt(1, node.get("histories").get("issue_histories").get(i).get("project_id").asInt());
-            updateIssueHistory.setInt(2, node.get("histories").get("issue_histories").get(i).get("issue_id").asInt());
-            updateIssueHistory.setInt(3, node.get("histories").get("issue_histories").get(i).get("version_id").asInt());
-            updateIssueHistory.setString(4, node.get("histories").get("issue_histories").get(i).get("title").asText());
-            updateIssueHistory.setInt(5, node.get("histories").get("issue_histories").get(i).get("priority").asInt());
-            updateIssueHistory.setString(6, node.get("histories").get("issue_histories").get(i).get("status").asText());
-            updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).get("tag").asText());
-            updateIssueHistory.setString(8, node.get("histories").get("issue_histories").get(i).get("descriptionText").asText());
-            updateIssueHistory.setString(9, node.get("histories").get("issue_histories").get(i).get("createdBy").asText());
-            updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());
-            Timestamp newTS = convertStringTimestampForImport(node.get("histories").get("issue_histories").get(i).get("issue_timestamp").asText());
-            updateIssueHistory.setTimestamp(11, newTS);
-            if (node.get("histories").get("issue_histories").get(i).get("url").asText().equals("null")) {
-                updateIssueHistory.setString(12, null);
-            }else {
-                updateIssueHistory.setString(12, node.get("histories").get("issue_histories").get(i).get("url").asText());
+        String tagArrToString = null;
+        for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).withArray("tag").size(); k++) {
+            if (node.get("projects").get(i).get("issues").get(j).withArray("tag").size() == 0) {
+                tagArrToString = null;
+                break;
+            } else {
+                tagArrToString = "";
             }
-            updateIssueHistory.addBatch();
+            if (k != node.get("projects").get(i).get("issues").get(j).withArray("tag").size() - 1) {
+                tagArrToString += node.get("projects").get(i).get("issues").get(j).withArray("tag").get(k).asText() + " ";
+            } else {
+                tagArrToString += node.get("projects").get(i).get("issues").get(j).withArray("tag").get(k).asText();
+            }
         }
-        updateIssueHistory.executeBatch();
-        System.out.println("updateIssueHistory Successfully");
-
-        for (int i = 0; i < node.get("histories").get("comment_histories").size(); i++) {
-            updateCommentHistory.setInt(1, node.get("histories").get("comment_histories").get(i).get("project_id").asInt());
-            updateCommentHistory.setInt(2, node.get("histories").get("comment_histories").get(i).get("issue_id").asInt());
-            updateCommentHistory.setInt(3, node.get("histories").get("comment_histories").get(i).get("comment_id").asInt());
-            updateCommentHistory.setInt(4, node.get("histories").get("comment_histories").get(i).get("version_id").asInt());
-            updateCommentHistory.setString(5, node.get("histories").get("comment_histories").get(i).get("text").asText());
-            Timestamp comment_timestamp = convertStringTimestampForImport(node.get("histories").get("comment_histories").get(i).get("comment_timestamp").asText());
-            updateCommentHistory.setTimestamp(6, comment_timestamp);
-            updateCommentHistory.setString(7, node.get("histories").get("comment_histories").get(i).get("user").asText());
-            updateCommentHistory.addBatch();
-        }
-        updateCommentHistory.executeBatch();
-        System.out.println("updateCommentHistory Successfully");
-
-        for (int i = 0; i < node.get("comments_reactions").size(); i++) {
-            updateCommentsReactions.setInt(1,node.get("comments_reactions").get(i).get("hash").asInt());
-            updateCommentsReactions.setString(2,node.get("comments_reactions").get(i).get("reaction").asText());
-            updateCommentsReactions.addBatch();
-        }
-        updateCommentsReactions.executeBatch();
-        System.out.println("updateCommentsReactions Successfully");
-
+        System.out.println(tagArrToString);
     }
 }
