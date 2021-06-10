@@ -208,7 +208,7 @@ public class MySQLOperation {
                 updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
                 updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
                 updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
-                if (node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals(" ")  || node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals("null")) {
+                if (node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals(" ")  || node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals("null ")) {
                     updateIssue.setString(6, null);
                 } else {
                     updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).get("tags").asText());
