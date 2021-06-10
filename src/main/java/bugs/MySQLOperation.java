@@ -208,10 +208,19 @@ public class MySQLOperation {
                 updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
                 updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
                 updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
-                updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).withArray("tag").get(0).asText());
+                if (node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals(" ")) {
+                    updateIssue.setString(6, null);
+                } else {
+                    updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).get("tags").asText());
+                }
+
                 updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
                 updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
-                updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
+                if (node.get("projects").get(i).get("issues").get(j).get("assignee").asText().equals("")) {
+                    updateIssue.setString(9, null);
+                } else {
+                    updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
+                }
 
                 //convert string timestamp to timestamp
                 Timestamp newTs = convertStringTimestampForImport(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
@@ -219,7 +228,7 @@ public class MySQLOperation {
 
                 if (node.get("projects").get(i).get("issues").get(j).get("url").asText().equals("null")) {
                     updateIssue.setString(11, null);
-                }else {
+                } else {
                     updateIssue.setString(11, node.get("projects").get(i).get("issues").get(j).get("url").asText());
                 }
                 updateIssue.addBatch();
@@ -264,7 +273,7 @@ public class MySQLOperation {
             updateUser.setBoolean(4, node.get("users").get(i).get("admin").asBoolean());
             if (node.get("users").get(i).get("url").asText().equals("null")) {
                 updateUser.setString(5, null);
-            }else {
+            } else {
                 updateUser.setString(5, node.get("users").get(i).get("url").asText());
             }
             if (node.get("users").get(i).get("email").asText().equals("null")) {
@@ -308,15 +317,23 @@ public class MySQLOperation {
             updateIssueHistory.setString(4, node.get("histories").get("issue_histories").get(i).get("title").asText());
             updateIssueHistory.setInt(5, node.get("histories").get("issue_histories").get(i).get("priority").asInt());
             updateIssueHistory.setString(6, node.get("histories").get("issue_histories").get(i).get("status").asText());
-            updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).withArray("tag").get(0).asText());
+            if (node.get("histories").get("issue_histories").get(i).get("tags").asText().equals(" ")) {
+                updateIssueHistory.setString(7, null);
+            } else {
+                updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).get("tags").asText());
+            }
             updateIssueHistory.setString(8, node.get("histories").get("issue_histories").get(i).get("descriptionText").asText());
             updateIssueHistory.setString(9, node.get("histories").get("issue_histories").get(i).get("createdBy").asText());
-            updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());
+            if (node.get("histories").get("issue_histories").get(i).get("assignee").asText().equals("")) {
+                updateIssueHistory.setString(10, null);
+            } else {
+                updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());
+            }
             Timestamp newTS = convertStringTimestampForImport(node.get("histories").get("issue_histories").get(i).get("issue_timestamp").asText());
             updateIssueHistory.setTimestamp(11, newTS);
             if (node.get("histories").get("issue_histories").get(i).get("url").asText().equals("null")) {
                 updateIssueHistory.setString(12, null);
-            }else {
+            } else {
                 updateIssueHistory.setString(12, node.get("histories").get("issue_histories").get(i).get("url").asText());
             }
             updateIssueHistory.addBatch();
@@ -337,14 +354,14 @@ public class MySQLOperation {
         updateCommentHistory.executeBatch();
 
         for (int i = 0; i < node.get("comments_reactions").size(); i++) {
-            updateCommentsReactions.setInt(1,node.get("comments_reactions").get(i).get("hash").asInt());
-            updateCommentsReactions.setString(2,node.get("comments_reactions").get(i).get("reaction").asText());
+            updateCommentsReactions.setInt(1, node.get("comments_reactions").get(i).get("hash").asInt());
+            updateCommentsReactions.setString(2, node.get("comments_reactions").get(i).get("reaction").asText());
             updateCommentsReactions.addBatch();
         }
         updateCommentsReactions.executeBatch();
     }
 
-    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, IOException{
+    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, IOException {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parseUrl(jsonUrl);
 
@@ -467,7 +484,7 @@ public class MySQLOperation {
     }
 
     public static int hash(int a, int b, int c, int d) {
-        return a*100000+b*1000+c*100+d;
+        return a * 100000 + b * 1000 + c * 100 + d;
     }
 
     public static void reacting(int user_id, int project_id, int issue_id, int comment_id, String reaction) throws Exception {
@@ -484,7 +501,7 @@ public class MySQLOperation {
         int hashval = hash(user_id, project_id, issue_id, comment_id);
         String INSERT_reaction = "INSERT INTO comments_reactions (hash, reactions) VALUE (?,?)";
         PreparedStatement update_reaction = myConn.prepareStatement(INSERT_reaction, Statement.RETURN_GENERATED_KEYS);
-        update_reaction.setInt(1,hashval);
+        update_reaction.setInt(1, hashval);
         update_reaction.setString(2, reaction);
         update_reaction.execute();
     }
@@ -500,7 +517,7 @@ public class MySQLOperation {
         updateCount.execute();
 
         //gonna drop value
-        int hashval = hash(user_id,project_id, issue_id, comment_id);
+        int hashval = hash(user_id, project_id, issue_id, comment_id);
         String del = "DELETE FROM comments_reactions WHERE hash = ?";
         PreparedStatement updateDel = myConn.prepareStatement(del, Statement.RETURN_GENERATED_KEYS);
         updateDel.setInt(1, hashval);
@@ -510,7 +527,7 @@ public class MySQLOperation {
     public static String getReaction(Connection myConn, int user_id, int project_id, int issue_id, int comment_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        int hashval = hash(user_id,project_id, issue_id, comment_id);
+        int hashval = hash(user_id, project_id, issue_id, comment_id);
         try {
             String SQL_GET_REACTION = "SELECT * FROM comments_reactions WHERE hash = ?";
             pstmt = myConn.prepareStatement(SQL_GET_REACTION);
@@ -518,7 +535,7 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            if (myRs.next()){
+            if (myRs.next()) {
                 return myRs.getString("reactions");
             }
 
@@ -977,7 +994,7 @@ public class MySQLOperation {
         return null;
     }
 
-    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin,String email) {
+    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin, String email) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -991,7 +1008,7 @@ public class MySQLOperation {
             pstmt.setString(2, username);
             pstmt.setString(3, password);
             pstmt.setBoolean(4, isAdmin);
-            pstmt.setString(5,email);
+            pstmt.setString(5, email);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -1741,8 +1758,8 @@ public class MySQLOperation {
                 "CONSTRAINT pic_fk\n" +
                 "    FOREIGN KEY pic_fkx (project_id, issue_id, comment_id)\n" +
                 "    REFERENCES comments (project_id, issue_id, comment_id)\n" +
-                ");\n"+
-                "\n"+
+                ");\n" +
+                "\n" +
                 "CREATE TABLE comments_reactions (\n" +
                 "hash INT(11) NOT NULL,\n" +
                 "reactions VARCHAR(20)\n" +
@@ -1779,7 +1796,7 @@ public class MySQLOperation {
     public static boolean isRegisteredEmail(Connection myConn, String email) {
         Statement stmt = null;
         ResultSet myRs = null;
-        String SQL_CHECK_EMAIL = "SELECT email FROM users WHERE email = '"+email+"'";
+        String SQL_CHECK_EMAIL = "SELECT email FROM users WHERE email = '" + email + "'";
 
         try {
             stmt = myConn.createStatement();
@@ -1810,27 +1827,189 @@ public class MySQLOperation {
     }
 
     public static void main(String[] args) throws SQLException, IOException {
-//        Connection myConn = getConnection();
-        File json = new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newestDatabase.json");
-        JsonNode node = Json.parseFile(json);
+        Connection myConn = getConnection();
+        resetDatabase(myConn);
+        File jsonFile = new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newestDatabase.json");
+        JsonNode node = Json.parseFile(jsonFile);
 
-        int i = 4;
-        int j = 1;
+        String INSERT_PROJECT = "INSERT INTO projects (project_id, name, project_timestamp) VALUE (?,?,?)";
+        String INSERT_ISSUE = "INSERT INTO issues (project_id, issue_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String INSERT_COMMENT = "INSERT INTO comments (project_id, issue_id, comment_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?)";
+        String INSERT_REACT = "INSERT INTO react (project_id, issue_id, comment_id, reaction, count) VALUES (?, ?, ?, ?, ?)";
+        String INSERT_USER = "INSERT INTO users (userid, username, password, admin, url, email) VALUES (?, ?, ?, ?, ?, ?)";
 
-        String tagArrToString = null;
-        for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).withArray("tag").size(); k++) {
-            if (node.get("projects").get(i).get("issues").get(j).withArray("tag").size() == 0) {
-                tagArrToString = null;
-                break;
-            } else {
-                tagArrToString = "";
-            }
-            if (k != node.get("projects").get(i).get("issues").get(j).withArray("tag").size() - 1) {
-                tagArrToString += node.get("projects").get(i).get("issues").get(j).withArray("tag").get(k).asText() + " ";
-            } else {
-                tagArrToString += node.get("projects").get(i).get("issues").get(j).withArray("tag").get(k).asText();
+        PreparedStatement updateProject = myConn.prepareStatement(INSERT_PROJECT, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateIssue = myConn.prepareStatement(INSERT_ISSUE, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateComment = myConn.prepareStatement(INSERT_COMMENT, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateReact = myConn.prepareStatement(INSERT_REACT, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateUser = myConn.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+
+        //add projects
+        for (int i = 0; i < node.get("projects").size(); i++) {
+            updateProject.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+            updateProject.setString(2, node.get("projects").get(i).get("name").asText());
+
+            Timestamp newTimestamp = convertStringTimestampForImport(node.get("projects").get(i).get("project_timestamp").asText());
+            updateProject.setTimestamp(3, newTimestamp);
+            updateProject.addBatch();
+
+            //add issues
+            for (int j = 0; j < node.get("projects").get(i).get("issues").size(); j++) {
+                updateIssue.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+                updateIssue.setInt(2, node.get("projects").get(i).get("issues").get(j).get("issue_id").asInt());
+                updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
+                updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
+                updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
+                if (node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals(" ")) {
+                    updateIssue.setString(6, null);
+                } else {
+                    updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).get("tags").asText());
+                }
+
+                updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
+                updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
+                if (node.get("projects").get(i).get("issues").get(j).get("assignee").asText().equals("")) {
+                    updateIssue.setString(9, null);
+                } else {
+                    updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
+                }
+
+                //convert string timestamp to timestamp
+                Timestamp newTs = convertStringTimestampForImport(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                updateIssue.setTimestamp(10, newTs);
+
+                if (node.get("projects").get(i).get("issues").get(j).get("url").asText().equals("null")) {
+                    updateIssue.setString(11, null);
+                } else {
+                    updateIssue.setString(11, node.get("projects").get(i).get("issues").get(j).get("url").asText());
+                }
+                updateIssue.addBatch();
+
+                //add comments
+                for (int k = 0; k < node.get("projects").get(i).get("issues").get(j).get("comments").size(); k++) {
+                    updateComment.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+                    updateComment.setInt(2, node.get("projects").get(i).get("issues").get(j).get("issue_id").asInt());
+                    updateComment.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                    updateComment.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("text").asText());
+
+                    newTs = convertStringTimestampForImport(node.get("projects").get(i).get("issues").get(j).get("timestamp").asText());
+                    updateComment.setTimestamp(5, newTs);
+                    updateComment.setString(6, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("user").asText());
+                    updateComment.addBatch();
+
+                    //add react
+                    for (int l = 0; l < node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").size(); l++) {
+                        updateReact.setInt(1, node.get("projects").get(i).get("project_id").asInt());
+                        updateReact.setInt(2, node.get("projects").get(i).get("issues").get(j).get("issue_id").asInt());
+                        updateReact.setInt(3, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("comment_id").asInt());
+                        updateReact.setString(4, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("reaction").asText());
+                        updateReact.setInt(5, node.get("projects").get(i).get("issues").get(j).get("comments").get(k).get("react").get(l).get("count").asInt());
+                        updateReact.addBatch();
+
+                        if (i == node.get("projects").size() - 1) {
+                            updateProject.executeBatch();
+                            updateComment.executeBatch();
+                            updateIssue.executeBatch();
+                            updateReact.executeBatch();
+                        }
+                    }
+                }
             }
         }
-        System.out.println(tagArrToString);
+
+        //add user information
+        for (int i = 0; i < node.get("users").size(); i++) {
+            updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
+            updateUser.setString(2, node.get("users").get(i).get("username").asText());
+            updateUser.setString(3, node.get("users").get(i).get("password").asText());
+            updateUser.setBoolean(4, node.get("users").get(i).get("admin").asBoolean());
+            if (node.get("users").get(i).get("url").asText().equals("null")) {
+                updateUser.setString(5, null);
+            } else {
+                updateUser.setString(5, node.get("users").get(i).get("url").asText());
+            }
+            if (node.get("users").get(i).get("email").asText().equals("null")) {
+                updateUser.setString(6, null);
+            } else {
+                updateUser.setString(6, node.get("users").get(i).get("email").asText());
+            }
+            updateUser.addBatch();
+
+            if (i == node.get("users").size() - 1) {
+                updateUser.executeBatch();
+            }
+        }
+
+        //Add history table
+        String INSERT_PROJECT_HISTORY = "INSERT INTO projects_history (project_id, version_id, name, originalTime) VALUE (?,?,?,?)";
+        String INSERT_ISSUE_HISTORY = "INSERT INTO issues_history (project_id, issue_id, version_id, title, priority, status, tag, descriptionText, createdBy, assignee, issue_timestamp, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //10
+        String INSERT_COMMENT_HISTORY = "INSERT INTO comments_history (project_id, issue_id, comment_id, version_id, text, comment_timestamp, user) VALUES (?, ?, ?, ?, ?, ?, ?)";  //6
+        String INSERT_COMMENTS_REACTIONS = "INSERT INTO comments_reactions (hash, reactions) VALUES (?,?)";
+
+        PreparedStatement updateProjectHistory = myConn.prepareStatement(INSERT_PROJECT_HISTORY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateIssueHistory = myConn.prepareStatement(INSERT_ISSUE_HISTORY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateCommentHistory = myConn.prepareStatement(INSERT_COMMENT_HISTORY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement updateCommentsReactions = myConn.prepareStatement(INSERT_COMMENTS_REACTIONS, Statement.RETURN_GENERATED_KEYS);
+
+        for (int i = 0; i < node.get("histories").get("project_histories").size(); i++) {
+            updateProjectHistory.setInt(1, node.get("histories").get("project_histories").get(i).get("project_id").asInt());
+            updateProjectHistory.setInt(2, node.get("histories").get("project_histories").get(i).get("version_id").asInt());
+            updateProjectHistory.setString(3, node.get("histories").get("project_histories").get(i).get("name").asText());
+
+            Timestamp newTimestamp = convertStringTimestampForImport(node.get("histories").get("project_histories").get(i).get("originalTime").asText());
+            updateProjectHistory.setTimestamp(4, newTimestamp);
+            updateProjectHistory.addBatch();
+        }
+        updateProjectHistory.executeBatch();
+
+        for (int i = 0; i < node.get("histories").get("issue_histories").size(); i++) {
+            updateIssueHistory.setInt(1, node.get("histories").get("issue_histories").get(i).get("project_id").asInt());
+            updateIssueHistory.setInt(2, node.get("histories").get("issue_histories").get(i).get("issue_id").asInt());
+            updateIssueHistory.setInt(3, node.get("histories").get("issue_histories").get(i).get("version_id").asInt());
+            updateIssueHistory.setString(4, node.get("histories").get("issue_histories").get(i).get("title").asText());
+            updateIssueHistory.setInt(5, node.get("histories").get("issue_histories").get(i).get("priority").asInt());
+            updateIssueHistory.setString(6, node.get("histories").get("issue_histories").get(i).get("status").asText());
+            if (node.get("histories").get("issue_histories").get(i).get("tags").asText().equals(" ")) {
+                updateIssueHistory.setString(7, null);
+            } else {
+                updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).get("tags").asText());
+            }
+            updateIssueHistory.setString(8, node.get("histories").get("issue_histories").get(i).get("descriptionText").asText());
+            updateIssueHistory.setString(9, node.get("histories").get("issue_histories").get(i).get("createdBy").asText());
+            if (node.get("histories").get("issue_histories").get(i).get("assignee").asText().equals("")) {
+                updateIssueHistory.setString(10, null);
+            } else {
+                updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());
+            }
+            Timestamp newTS = convertStringTimestampForImport(node.get("histories").get("issue_histories").get(i).get("issue_timestamp").asText());
+            updateIssueHistory.setTimestamp(11, newTS);
+            if (node.get("histories").get("issue_histories").get(i).get("url").asText().equals("null")) {
+                updateIssueHistory.setString(12, null);
+            } else {
+                updateIssueHistory.setString(12, node.get("histories").get("issue_histories").get(i).get("url").asText());
+            }
+            updateIssueHistory.addBatch();
+        }
+        updateIssueHistory.executeBatch();
+
+        for (int i = 0; i < node.get("histories").get("comment_histories").size(); i++) {
+            updateCommentHistory.setInt(1, node.get("histories").get("comment_histories").get(i).get("project_id").asInt());
+            updateCommentHistory.setInt(2, node.get("histories").get("comment_histories").get(i).get("issue_id").asInt());
+            updateCommentHistory.setInt(3, node.get("histories").get("comment_histories").get(i).get("comment_id").asInt());
+            updateCommentHistory.setInt(4, node.get("histories").get("comment_histories").get(i).get("version_id").asInt());
+            updateCommentHistory.setString(5, node.get("histories").get("comment_histories").get(i).get("text").asText());
+            Timestamp comment_timestamp = convertStringTimestampForImport(node.get("histories").get("comment_histories").get(i).get("comment_timestamp").asText());
+            updateCommentHistory.setTimestamp(6, comment_timestamp);
+            updateCommentHistory.setString(7, node.get("histories").get("comment_histories").get(i).get("user").asText());
+            updateCommentHistory.addBatch();
+        }
+        updateCommentHistory.executeBatch();
+
+        for (int i = 0; i < node.get("comments_reactions").size(); i++) {
+            updateCommentsReactions.setInt(1, node.get("comments_reactions").get(i).get("hash").asInt());
+            updateCommentsReactions.setString(2, node.get("comments_reactions").get(i).get("reaction").asText());
+            updateCommentsReactions.addBatch();
+        }
+        updateCommentsReactions.executeBatch();
     }
 }
