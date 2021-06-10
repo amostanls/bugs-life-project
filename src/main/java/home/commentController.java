@@ -81,14 +81,21 @@ public class commentController implements Initializable {
     @FXML
     void setAddComment(MouseEvent event) throws Exception {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("comment_add.fxml"));
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("comment_add.fxml"));
+            Parent parent=loader.load();
+
+            commentAddController commentAdd=loader.getController();
+            commentAdd.setCommentController(this);
+
+            //Parent parent = FXMLLoader.load(getClass().getResource("comment_add.fxml"));
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
+            //stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -98,14 +105,20 @@ public class commentController implements Initializable {
     void setEdit(MouseEvent event) throws Exception {
         if (havePreviousComment()) {
             try {
-                Parent parent = FXMLLoader.load(getClass().getResource("comment_edit.fxml"));
+                //Parent parent = FXMLLoader.load(getClass().getResource("comment_edit.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("comment_edit.fxml"));
+                Parent parent=loader.load();
+
+                commentEditController commentEdit=loader.getController();
+                commentEdit.setCommentController(this);
+
                 Scene scene = new Scene(parent);
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.initStyle(StageStyle.UTILITY);
                 //stage.initStyle(StageStyle.UNDECORATED);
                 stage.show();
-                stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
+                //stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
             } catch (IOException ex) {
                 Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -128,7 +141,13 @@ public class commentController implements Initializable {
     void commentReact(MouseEvent event) throws Exception {
         if (haveComment()) {
             try {
-                Parent parent = FXMLLoader.load(getClass().getResource("comment_react.fxml"));
+                //Parent parent = FXMLLoader.load(getClass().getResource("comment_react.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("comment_react.fxml"));
+                Parent parent=loader.load();
+
+                commentReactController commentReact=loader.getController();
+                commentReact.setCommentController(this);
+
                 Scene scene = new Scene(parent);
                 Stage stage = new Stage();
                 stage.setScene(scene);
@@ -136,7 +155,7 @@ public class commentController implements Initializable {
                 //stage.initStyle(StageStyle.UNDECORATED);
                 stage.show();
 
-                stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
+                //stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
             } catch (IOException ex) {
                 Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -152,14 +171,20 @@ public class commentController implements Initializable {
     void changeLogForComment(MouseEvent event) throws Exception {
         if (haveComment()) {
             try {
-                Parent parent = FXMLLoader.load(getClass().getResource("comment_history.fxml"));
+                //Parent parent = FXMLLoader.load(getClass().getResource("comment_history.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("comment_history.fxml"));
+                Parent parent=loader.load();
+
+                commentHistoryController commentHistory=loader.getController();
+                commentHistory.setCommentController(this);
+
                 Scene scene = new Scene(parent);
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.initStyle(StageStyle.UTILITY);
                 //stage.initStyle(StageStyle.UNDECORATED);
                 stage.show();
-                stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
+                //stage.setOnCloseRequest(windowEvent -> commentBackGroundTask());
             } catch (IOException ex) {
                 Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -260,7 +285,7 @@ public class commentController implements Initializable {
         return false;
     }
 
-    private void commentBackGroundTask() {
+    public void commentBackGroundTask() {
         backGroundThread = new Service<>() {
             @Override
             protected Task<ArrayList<Comment>> createTask() {

@@ -73,14 +73,19 @@ public class projectController implements Initializable {
     @FXML
     void getAddView(MouseEvent event) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("project_add.fxml"));
+            //Parent parent = FXMLLoader.load(getClass().getResource("project_add.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project_add.fxml"));
+            Parent parent=loader.load();
+
+            projectAddController projectAdd=loader.getController();
+            projectAdd.setProjectController(this);
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
+            //stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -88,14 +93,20 @@ public class projectController implements Initializable {
 
     void getEditView() {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("project_edit.fxml"));
+            //Parent parent = FXMLLoader.load(getClass().getResource("project_edit.fxml"));
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project_edit.fxml"));
+            Parent parent=loader.load();
+
+            projectEditController projectEdit=loader.getController();
+            projectEdit.setProjectController(this);
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
+            //stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -103,14 +114,20 @@ public class projectController implements Initializable {
 
     void getChangeLogView() {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("project_history.fxml"));
+            //Parent parent = FXMLLoader.load(getClass().getResource("project_history.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project_history.fxml"));
+            Parent parent=loader.load();
+
+            projectHistoryController projectHistory=loader.getController();
+            projectHistory.setProjectController(this);
+
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
+            //stage.setOnCloseRequest(windowEvent -> projectTableBackGroundTask());
 
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
@@ -218,7 +235,7 @@ public class projectController implements Initializable {
 
     }
 
-    private void projectTableBackGroundTask() {
+    public void projectTableBackGroundTask() {
         backGroundThread = new Service<>() {
             @Override
             protected Task<Void> createTask() {

@@ -22,6 +22,7 @@ import static home.Controller.*;
 import static home.Controller.getSelectedIssueId;
 
 public class commentReactController implements Initializable {
+    private commentController cc;
 
     ArrayList<Comment> possible_comments = new ArrayList<>();
     ArrayList<String> comment_list = new ArrayList<>();
@@ -40,21 +41,22 @@ public class commentReactController implements Initializable {
         if (hasReacted != null && hasReacted.equals("happy")) {//ask user whether want to remove it?
             promptUserToRemoveReaction(hasReacted, "happy", event);
         } else {
-            if(hasReacted!=null) {
+            if (hasReacted != null) {
                 //means reacted with another reaction, prompt user whether to remove old one.
-                if(!promptUserToRemoveReaction(hasReacted, "happy", event))return;
+                if (!promptUserToRemoveReaction(hasReacted, "happy", event)) return;
             }
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "happy");
+
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-            //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
+            currentStage.close();
+            cc.commentBackGroundTask();
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            if(hasReacted!=null&&hasReacted.equals("angry"))hasReacted="Angry";
-            if(hasReacted!=null&&hasReacted.equals("happy"))hasReacted="Happy";
-            if(hasReacted!=null&&hasReacted.equals("thumbsup"))hasReacted="Thumbs Up";
-            alert.setContentText((hasReacted==null?"R":"Removed "+hasReacted+" and r")+"eacted Happy to Comment #" + getSelectedCommentId());
+            if (hasReacted != null && hasReacted.equals("angry")) hasReacted = "Angry";
+            if (hasReacted != null && hasReacted.equals("happy")) hasReacted = "Happy";
+            if (hasReacted != null && hasReacted.equals("thumbsup")) hasReacted = "Thumbs Up";
+            alert.setContentText((hasReacted == null ? "R" : "Removed " + hasReacted + " and r") + "eacted Happy to Comment #" + getSelectedCommentId());
             alert.showAndWait();
         }
 
@@ -66,21 +68,22 @@ public class commentReactController implements Initializable {
         if (hasReacted != null && hasReacted.equals("angry")) {//ask user whether want to remove it?
             promptUserToRemoveReaction(hasReacted, "angry", event);
         } else {
-            if(hasReacted!=null) {
+            if (hasReacted != null) {
                 //means reacted with another reaction, prompt user whether to remove old one.
-                if(!promptUserToRemoveReaction(hasReacted, "angry", event))return;
+                if (!promptUserToRemoveReaction(hasReacted, "angry", event)) return;
             }
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "angry");
+
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-            //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
+            currentStage.close();
+            cc.commentBackGroundTask();
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            if(hasReacted!=null&&hasReacted.equals("angry"))hasReacted="Angry";
-            if(hasReacted!=null&&hasReacted.equals("happy"))hasReacted="Happy";
-            if(hasReacted!=null&&hasReacted.equals("thumbsup"))hasReacted="Thumbs Up";
-            alert.setContentText((hasReacted==null?"R":"Removed "+hasReacted+" and r")+"eacted Angry to Comment #" + getSelectedCommentId());
+            if (hasReacted != null && hasReacted.equals("angry")) hasReacted = "Angry";
+            if (hasReacted != null && hasReacted.equals("happy")) hasReacted = "Happy";
+            if (hasReacted != null && hasReacted.equals("thumbsup")) hasReacted = "Thumbs Up";
+            alert.setContentText((hasReacted == null ? "R" : "Removed " + hasReacted + " and r") + "eacted Angry to Comment #" + getSelectedCommentId());
             alert.showAndWait();
         }
     }
@@ -91,21 +94,22 @@ public class commentReactController implements Initializable {
         if (hasReacted != null && hasReacted.equals("thumbsup")) {//ask user whether want to remove it?
             promptUserToRemoveReaction(hasReacted, "thumbsup", event);
         } else {
-            if(hasReacted!=null) {
+            if (hasReacted != null) {
                 //means reacted with another reaction, prompt user whether to remove old one.
-                if(!promptUserToRemoveReaction(hasReacted, "thumbsup", event))return;
+                if (!promptUserToRemoveReaction(hasReacted, "thumbsup", event)) return;
             }
             MySQLOperation.reacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), "thumbsup");
+
             Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-            //((Stage) (((ImageView) event.getSource()).getScene().getWindow())).close();
+            currentStage.close();
+            cc.commentBackGroundTask();
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
-            if(hasReacted!=null&&hasReacted.equals("angry"))hasReacted="Angry";
-            if(hasReacted!=null&&hasReacted.equals("happy"))hasReacted="Happy";
-            if(hasReacted!=null&&hasReacted.equals("thumbsup"))hasReacted="Thumbs Up";
-            alert.setContentText((hasReacted==null?"R":"Removed "+hasReacted+" and r")+"eacted Thumbs Up to Comment #" + getSelectedCommentId());
+            if (hasReacted != null && hasReacted.equals("angry")) hasReacted = "Angry";
+            if (hasReacted != null && hasReacted.equals("happy")) hasReacted = "Happy";
+            if (hasReacted != null && hasReacted.equals("thumbsup")) hasReacted = "Thumbs Up";
+            alert.setContentText((hasReacted == null ? "R" : "Removed " + hasReacted + " and r") + "eacted Thumbs Up to Comment #" + getSelectedCommentId());
             alert.showAndWait();
         }
     }
@@ -130,15 +134,15 @@ public class commentReactController implements Initializable {
 
         if (alert.showAndWait().get() == ButtonType.OK) {
             MySQLOperation.delreacting(getCurrentUser().getUserid(), getSelectedProjectId(), getSelectedIssueId(), getSelectedCommentId(), reaction);
-            if(now.equals(reaction)) {
+            if (now.equals(reaction)) {
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                 alert2.setHeaderText(null);
                 alert2.setContentText("Removed " + reaction.toUpperCase());
                 alert2.showAndWait();
-                Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
 
-                //currentStage.close();
-                currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                Stage currentStage = ((Stage) (((ImageView) event.getSource()).getScene().getWindow()));
+                currentStage.close();
+                cc.commentBackGroundTask();
             }
             return true;
         }
@@ -187,5 +191,9 @@ public class commentReactController implements Initializable {
                 comment_list.add(issue_temp.getComments().get(i).getComment_id() + " - " + issue_temp.getComments().get(i).getText());
 
         }
+    }
+
+    public void setCommentController(commentController commentController) {
+        this.cc = commentController;
     }
 }

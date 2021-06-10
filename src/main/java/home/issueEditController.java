@@ -19,11 +19,7 @@ import static home.Controller.*;
 
 public class issueEditController implements Initializable {
 
-//    @FXML
-//    private TextField issueTag;
-//
-//    @FXML
-//    private TextField issuePriority;
+    private issuesController ic;
 
     @FXML
     private TextField issueTitle;
@@ -31,11 +27,9 @@ public class issueEditController implements Initializable {
     @FXML
     private TextArea issueDesc;
 
-//    @FXML
-//    private TextField issueStatus;
-
     @FXML
     private TextField issueImageURL;
+
     @FXML
     private CheckComboBox<String> issueTag;
 
@@ -108,7 +102,7 @@ public class issueEditController implements Initializable {
             alert.showAndWait();
         } else {
             //connect to database
-            if (Objects.equals(tag, issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && Objects.equals(url, issue_temp.getUrl()) && Objects.equals(assignee,issue_temp.getAssignee())) {
+            if (Objects.equals(tag.trim(), issue_temp.getTags().trim()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && Objects.equals(url, issue_temp.getUrl()) && Objects.equals(assignee,issue_temp.getAssignee())) {
                 System.out.println("SAME,no change");//same,no change in data
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
             } else {//exists some changes
@@ -116,9 +110,11 @@ public class issueEditController implements Initializable {
                 if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {//url is not empty
                     if (Controller.isValidURL(issueImageURL.getText())) {//url is valid
                         updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
-                        System.out.println("HAVE URL");
+                        //System.out.println("HAVE URL");
                         clean();
-                        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+                        Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+                        currentStage.close();
+                        ic.issueTableBackGroundTask();
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setHeaderText(null);
@@ -129,11 +125,14 @@ public class issueEditController implements Initializable {
 
                     url = null;
                     updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
-                    System.out.println("NO URL");
+                    //System.out.println("NO URL");
                     clean();
-                    Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+                    Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+                    currentStage.close();
+                    ic.issueTableBackGroundTask();
+                    //Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
                     //currentStage.close();
-                    currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                    //currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
                     //((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
                 }
 
@@ -207,9 +206,6 @@ public class issueEditController implements Initializable {
             }
         }
 
-//        issueStatus.setText(issue_temp.getStatus());
-//        issueTag.setText(issue_temp.getTags() + "");
-//        issuePriority.setText(issue_temp.getPriority() + "");
 
         issueTitle.setText(issue_temp.getTitle() + "");
         if (issue_temp.getUrl() == null) {
@@ -223,6 +219,10 @@ public class issueEditController implements Initializable {
         issueAssignee.setText(issue_temp.getAssignee() + " ");
         issueImageURL.setText(issue_temp.getUrl());
 
+    }
+
+    public void setIssueController(issuesController issueController) {
+        this.ic = issueController;
     }
 
 

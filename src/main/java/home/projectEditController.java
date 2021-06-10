@@ -16,6 +16,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class projectEditController implements Initializable {
+    private projectController pc;
+
     @FXML
     private TextField projectIdField;
 
@@ -42,8 +44,8 @@ public class projectEditController implements Initializable {
                 MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), name);
                 clean();
                 Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
-                //currentStage.close();
-                currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                currentStage.close();
+                pc.projectTableBackGroundTask();
             }
 
 
@@ -64,5 +66,9 @@ public class projectEditController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         projectIdField.setText(Controller.getSelectedProjectId() + "");
         projectNameField.setText(Controller.getFinalProjectList().get(Controller.getSelectedProjectId()-1).getName());
+    }
+
+    public void setProjectController(projectController projectController) {
+        this.pc = projectController;
     }
 }

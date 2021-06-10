@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 import static home.Controller.*;
 
 public class commentAddController implements Initializable {
-
+    private commentController cc;
     @FXML
     private TextArea commentField;
 
@@ -45,10 +45,9 @@ public class commentAddController implements Initializable {
             //System.out.println(Controller.getSelectedProjectId()+" "+name);
             MySQLOperation.createComment(MySQLOperation.getConnection(),getSelectedProjectId(),getSelectedIssueId(),getUsername(),comment);
             clean();
-            //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
-            Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+            currentStage.close();
+            cc.commentBackGroundTask();
         }
     }
 
@@ -60,5 +59,8 @@ public class commentAddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+    public void setCommentController(commentController commentController) {
+        this.cc = commentController;
     }
 }
