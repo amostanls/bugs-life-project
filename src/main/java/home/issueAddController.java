@@ -112,10 +112,6 @@ public class issueAddController implements Initializable {
                     alert.showAndWait();
                 }
             } else {
-                System.out.println(tag);
-                System.out.println(priority);
-                System.out.println(assignee);
-                System.out.println(url);
                 MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), Controller.getUsername(), tag, priority, title, assignee, issueDescription, url);
             }
 

@@ -1,6 +1,7 @@
 package home;
 
 import bugs.Mail;
+import bugs.MyRunnableEmail;
 import bugs.MySQLOperation;
 import com.jfoenix.controls.JFXButton;
 import javafx.concurrent.Service;
@@ -59,7 +60,7 @@ public class settingsController implements Initializable {
     private JFXButton initializeDatabaseBtn;
 
     @FXML
-    void setUpdaterBtn(ActionEvent event) {
+    void setUpdaterBtn(ActionEvent event) throws InterruptedException {
 
 
         String password = newPasswordField.getText();
@@ -93,7 +94,10 @@ public class settingsController implements Initializable {
                 newPasswordField.clear();
                 confirmPasswordField.clear();
             } else {
-                String verificationCode = Mail.resetPassword(Controller.getCurrentUser().getEmail());
+                MyRunnableEmail runEmail=new MyRunnableEmail(Controller.getCurrentUser().getEmail());
+                Thread emailThread=new Thread(runEmail);
+                emailThread.start();
+
 
                 TextInputDialog td = new TextInputDialog();
                 td.setTitle("Email verification");
@@ -101,6 +105,10 @@ public class settingsController implements Initializable {
                 td.getDialogPane().setContentText("Enter the code sent to your email : ");
                 td.showAndWait();
                 TextField input = td.getEditor();
+
+                emailThread.join();
+                String verificationCode = runEmail.getVerificationCode();
+
                 if (input.getText() != null && input.getText().toString().length() != 0) {
                     if (verificationCode.equals(input.getText())) {
                         //connect to database
@@ -129,7 +137,7 @@ public class settingsController implements Initializable {
     @FXML
     void importJSON(MouseEvent event) throws Exception {
         ButtonType localButton = new ButtonType("Import from local file");
-        ButtonType URLButton = new ButtonType("Import from url");
+        ButtonType URLButton = new ButtonType("Import from URL");
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "", localButton, URLButton);
         alert.setTitle("Import JSON");
