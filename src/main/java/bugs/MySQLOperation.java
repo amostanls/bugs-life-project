@@ -308,7 +308,7 @@ public class MySQLOperation {
             updateIssueHistory.setString(4, node.get("histories").get("issue_histories").get(i).get("title").asText());
             updateIssueHistory.setInt(5, node.get("histories").get("issue_histories").get(i).get("priority").asInt());
             updateIssueHistory.setString(6, node.get("histories").get("issue_histories").get(i).get("status").asText());
-            updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).get("tag").asText());
+            updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).get("tag").get(0).asText());
             updateIssueHistory.setString(8, node.get("histories").get("issue_histories").get(i).get("descriptionText").asText());
             updateIssueHistory.setString(9, node.get("histories").get("issue_histories").get(i).get("createdBy").asText());
             updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());
