@@ -37,7 +37,7 @@ public class projectEditController implements Initializable {
             alert.setContentText("Please Fill All DATA");
             alert.showAndWait();
         } else {
-            if (!name.equals(Controller.getFinalProjectList().get(Controller.getSelectedProjectId()).getName())) {
+            if (!name.equals(Controller.getFinalProjectList().get(Controller.getSelectedProjectId()-1).getName())) {
                 //System.out.println(Controller.getSelectedProjectId()+" "+name);
                 MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), name);
                 clean();
@@ -62,8 +62,7 @@ public class projectEditController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         projectIdField.setText(Controller.getSelectedProjectId() + "");
-        projectNameField.setText(Controller.getFinalProjectList().get(Controller.getSelectedProjectId()).getName());
+        projectNameField.setText(Controller.getFinalProjectList().get(Controller.getSelectedProjectId()-1).getName());
     }
 }

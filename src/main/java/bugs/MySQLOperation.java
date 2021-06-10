@@ -1653,14 +1653,14 @@ public class MySQLOperation {
                 "\n" +
                 "CREATE TABLE projects (\n" +
                 "project_id INT PRIMARY KEY AUTO_INCREMENT,\n" +
-                "name VARCHAR(20) NOT NULL,\n" +
+                "name VARCHAR(100) NOT NULL,\n" +
                 "project_timestamp TIMESTAMP NOT NULL);\n" +
                 "\n" +
                 "CREATE TABLE issues (\n" +
                 "project_id INT NOT NULL,\n" +
                 "issue_id INT NOT NULL,\n" +
                 "PRIMARY KEY (project_id, issue_id),\n" +
-                "title VARCHAR(50),\n" +
+                "title VARCHAR(100),\n" +
                 "priority INT,\n" +
                 "status VARCHAR(20),\n" +
                 "tag VARCHAR(100),\n" +
@@ -1675,7 +1675,7 @@ public class MySQLOperation {
                 "issue_id INT NOT NULL,\n" +
                 "comment_id INT NOT NULL,\n" +
                 "PRIMARY KEY (project_id, issue_id, comment_id),\n" +
-                "text VARCHAR(250),\n" +
+                "text VARCHAR(2500),\n" +
                 "comment_timestamp TIMESTAMP,\n" +
                 "user VARCHAR(25));\n" +
                 "\n" +
@@ -1702,7 +1702,7 @@ public class MySQLOperation {
                 "CREATE TABLE projects_history (\n" +
                 "project_id INT NOT NULL,\n" +
                 "version_id INT NOT NULL,\n" +
-                "name VARCHAR(20) NOT NULL,\n" +
+                "name VARCHAR(100) NOT NULL,\n" +
                 "originalTime TIMESTAMP NOT NULL,\n" +
                 "PRIMARY KEY (project_id, originalTime),\n" +
                 "CONSTRAINT project_id_fk\n" +
@@ -1714,7 +1714,7 @@ public class MySQLOperation {
                 "project_id INT NOT NULL,\n" +
                 "issue_id INT NOT NULL,\n" +
                 "version_id INT,\n" +
-                "title VARCHAR(50),\n" +
+                "title VARCHAR(100),\n" +
                 "priority INT,\n" +
                 "status VARCHAR(20),\n" +
                 "tag VARCHAR(100),\n" +
@@ -1734,7 +1734,7 @@ public class MySQLOperation {
                 "issue_id INT NOT NULL,\n" +
                 "comment_id INT NOT NULL,\n" +
                 "version_id INT NOT NULL,\n" +
-                "text VARCHAR(250),\n" +
+                "text VARCHAR(2500),\n" +
                 "comment_timestamp TIMESTAMP,\n" +
                 "user VARCHAR(25),\n" +
                 "PRIMARY KEY (project_id, issue_id, comment_id, comment_timestamp),\n" +

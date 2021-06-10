@@ -109,17 +109,12 @@ public class issueEditController implements Initializable {
         } else {
             //connect to database
             if (Objects.equals(tag, issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && Objects.equals(url, issue_temp.getUrl()) && Objects.equals(assignee,issue_temp.getAssignee())) {
-
                 System.out.println("SAME,no change");//same,no change in data
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-
-
             } else {//exists some changes
 
                 if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {//url is not empty
                     if (Controller.isValidURL(issueImageURL.getText())) {//url is valid
-
-                        url = issueImageURL.getText();
                         updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
                         System.out.println("HAVE URL");
                         clean();

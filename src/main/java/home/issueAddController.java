@@ -23,18 +23,11 @@ import java.util.ResourceBundle;
 public class issueAddController implements Initializable {
 
 
-
     @FXML
     private ComboBox<String> issuePriority;
 
     @FXML
     private CheckComboBox<String> issueTag;
-
-//    @FXML
-//    private TextField issueTag;
-//
-//    @FXML
-//    private TextField issuePriority;
 
     @FXML
     private TextField issueTitle;
@@ -54,7 +47,7 @@ public class issueAddController implements Initializable {
     @FXML
     private JFXButton cancelBtn;
 
-    private ArrayList<String> list=new ArrayList<>();
+    private ArrayList<String> list = new ArrayList<>();
 
 
     @FXML
@@ -76,75 +69,60 @@ public class issueAddController implements Initializable {
     @FXML
     public void setSaveBtn(ActionEvent event) throws IOException {
         //String tag=issueTag.getText();
-        List list=issueTag.getCheckModel().getCheckedItems();
-        String tag="";
+        List list = issueTag.getCheckModel().getCheckedItems();
+        String tag = "";
         if (list.isEmpty()) {
-            tag="";
+            tag = "";
         } else {
             for (Object obj : list) {
                 tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
             }
         }
 
-        String priorityString=issuePriority.getValue();
-        int priority=0;
-        if(!priorityString.isEmpty()) priority=Integer.valueOf(priorityString);
+        String priorityString = issuePriority.getValue();
+        int priority = 0;
+        if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
 
-        String title=issueTitle.getText().trim();
-        String assignee=issueAssignedTo.getText().trim();
-        String issueDescription=issueDesc.getText();
-        String url="";
+        String title = issueTitle.getText().trim();
+        String assignee = issueAssignedTo.getText().trim();
+        String issueDescription = issueDesc.getText();
+        String url = null;
 
 
-
-        if(title.isEmpty()  ||issueDescription.isEmpty() || priorityString.isEmpty()){
+        if (title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please Fill All DATA");
             alert.showAndWait();
-        }
-        else if(priority>9||priority<1){
+        } else if (priority > 9 || priority < 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please enter a priority between 1-9");
             alert.showAndWait();
-        }
-        else{
+        } else {
             if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
                 if (Controller.isValidURL(issueImageURL.getText())) {
-                    url=issueImageURL.getText();
+                    url = issueImageURL.getText();
                     //System.out.println(url);
-                    MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+                    MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), Controller.getUsername(), tag, priority, title, assignee, issueDescription, url);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
                     alert.setContentText("Not a valid URL");
                     alert.showAndWait();
                 }
-            }
-            else{
-                System.out.println(tag);
-                System.out.println(priority);
-                System.out.println(assignee);
-                System.out.println(url);
-                MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(),Controller.getSelectedProjectId(),Controller.getUsername(),tag,priority,title,assignee,issueDescription,url);
+            } else {
+                MySQLOperation.createIssueJavaFX(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), Controller.getUsername(), tag, priority, title, assignee, issueDescription, url);
             }
 
             clean();
-            Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+            Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
             //currentStage.close();
             currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-            //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
-//            FXMLLoader loader = (FXMLLoader) (getClass().getResource("issue.fxml"));
-//            //FXMLLoader loader= new FXMLLoader(getClass().getResource("issue.fxml"));
-//            loader.load();
-//            issuesController controller= (issuesController) loader.getController();
-//
-//            controller.issueTableBackGroundTask();
         }
     }
 
-    private void clean(){
+    private void clean() {
         issueTitle.clear();
         issueAssignedTo.clear();
         issueDesc.clear();
@@ -166,14 +144,8 @@ public class issueAddController implements Initializable {
 
         issueTag.getItems().addAll(list);
 
-
-        issuePriority.getItems().addAll("1","2","3","4","5","6","7","8","9");
+        issuePriority.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9");
         issuePriority.setPromptText("Select priority");
 
-
-
-
     }
-
-
 }
