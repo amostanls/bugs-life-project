@@ -208,7 +208,7 @@ public class MySQLOperation {
                 updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
                 updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
                 updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
-                if (node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals(" ")) {
+                if (node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals(" ")  || node.get("projects").get(i).get("issues").get(j).get("tags").asText().equals("null")) {
                     updateIssue.setString(6, null);
                 } else {
                     updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).get("tags").asText());
@@ -216,7 +216,7 @@ public class MySQLOperation {
 
                 updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
                 updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
-                if (node.get("projects").get(i).get("issues").get(j).get("assignee").asText().equals("")) {
+                if (node.get("projects").get(i).get("issues").get(j).get("assignee").asText().equals("") || node.get("projects").get(i).get("issues").get(j).get("assignee").asText().equals("null")) {
                     updateIssue.setString(9, null);
                 } else {
                     updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
@@ -317,14 +317,14 @@ public class MySQLOperation {
             updateIssueHistory.setString(4, node.get("histories").get("issue_histories").get(i).get("title").asText());
             updateIssueHistory.setInt(5, node.get("histories").get("issue_histories").get(i).get("priority").asInt());
             updateIssueHistory.setString(6, node.get("histories").get("issue_histories").get(i).get("status").asText());
-            if (node.get("histories").get("issue_histories").get(i).get("tags").asText().equals(" ")) {
+            if (node.get("histories").get("issue_histories").get(i).get("tags").asText().equals(" ") || node.get("histories").get("issue_histories").get(i).get("tags").asText().equals("null")) {
                 updateIssueHistory.setString(7, null);
             } else {
                 updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).get("tags").asText());
             }
             updateIssueHistory.setString(8, node.get("histories").get("issue_histories").get(i).get("descriptionText").asText());
             updateIssueHistory.setString(9, node.get("histories").get("issue_histories").get(i).get("createdBy").asText());
-            if (node.get("histories").get("issue_histories").get(i).get("assignee").asText().equals("")) {
+            if (node.get("histories").get("issue_histories").get(i).get("assignee").asText().equals("") || node.get("histories").get("issue_histories").get(i).get("assignee").asText().equals("null")) {
                 updateIssueHistory.setString(10, null);
             } else {
                 updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());

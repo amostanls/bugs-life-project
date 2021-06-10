@@ -8,7 +8,7 @@
       "title" : "Can't display the table",
       "priority" : 4,
       "status" : "In Progress",
-      "tag" : [ "Frontend" ],
+      "tag" : [ "Frontend " ],
       "descriptionText" : "Hi, \n\n            I'm receiving the \"Can't display the data because Power BI can't determine the relationship between two or more fields.\" error message and I do not understand why. I have searched the net for help but can't find a post that answers my question.\n\n           It may well be a straight modelling restriction but best to check.\n\n\n   I have two datasources (Sheet 1 and Sheet 2). Both are Excel files.",
       "createdBy" : "jhoe",
       "assignee" : "btan",
@@ -61,18 +61,18 @@
       } ],
       "url" : null,
       "time" : "2019-08-07 23:44:00",
-      "tags" : "Frontend "
+      "tags" : "Frontend  "
     }, {
       "project_id" : 1,
       "issue_id" : 2,
       "title" : "Can't open file",
       "priority" : 3,
       "status" : "Open",
-      "tag" : [ "Backend" ],
+      "tag" : [ "Backend Frontend " ],
       "descriptionText" : "Windows 10 Photo will not open a jpg file. I get \"We can't open this file.\" error message.\n\nThey're family photo that I sure would like to salvage.  Thanks",
       "createdBy" : "btan",
       "assignee" : "jhoe",
-      "timestamp" : 1565279040000,
+      "timestamp" : 1623366527000,
       "comments" : [ {
         "comment_id" : 1,
         "text" : "I am having the same issue with a disc of photos from Christmas given to me by my sister. I have tried opening all of the photos with all of my available opening options and still get the same message as above poster. ",
@@ -120,8 +120,8 @@
         "user" : "ang"
       } ],
       "url" : null,
-      "time" : "2019-08-08 23:44:00",
-      "tags" : "Backend "
+      "time" : "2021-06-11 07:08:47",
+      "tags" : "Backend Frontend  "
     } ],
     "project_timestamp" : 1565192640000,
     "issuesNumber" : 2,
@@ -142,7 +142,7 @@
       "title" : "User is \"trapped\" on 404 page",
       "priority" : 8,
       "status" : "Closed",
-      "tag" : [ "Backend" ],
+      "tag" : [ "Backend " ],
       "descriptionText" : "When hitting the 404 page, the Nuxt layout isn't applied correctly.",
       "createdBy" : "ang",
       "assignee" : "jhoe",
@@ -180,14 +180,14 @@
       } ],
       "url" : null,
       "time" : "2019-10-08 12:00:00",
-      "tags" : "Backend "
+      "tags" : "Backend  "
     }, {
       "project_id" : 2,
       "issue_id" : 1,
       "title" : "Flash of unstyled content",
       "priority" : 7,
       "status" : "Open",
-      "tag" : [ "cmty:bug-report " ],
+      "tag" : [ "cmty:bug-report  " ],
       "descriptionText" : "What is expected ?\nExpected correct scrollspy active link highlighting and all links work.\n\nWhat is actually happening?\nPage jumps to top before smooth scroll, which leads to weird links highlighting. Also, sometimes some links doesn't highlight (like Server Rendered in demo video)\n\nAdditional comments?\nDemonstration - https://imgur.com/a/GGvITVB",
       "createdBy" : "btan",
       "assignee" : "ang",
@@ -240,7 +240,7 @@
       } ],
       "url" : null,
       "time" : "2021-06-09 14:48:36",
-      "tags" : "cmty:bug-report  "
+      "tags" : "cmty:bug-report   "
     } ],
     "project_timestamp" : 1565192640000,
     "issuesNumber" : 2,
@@ -261,7 +261,7 @@
       "title" : "Flash of unstyled content",
       "priority" : 1,
       "status" : "Open",
-      "tag" : [ "cmty:bug-report" ],
+      "tag" : [ "cmty:bug-report " ],
       "descriptionText" : "What is expected ?\nThere is no flash of unstyled content            \n\nWhat is actually happening?\nThere is a brief flash of unstyled content\n\nAdditional comments? \nDoesn't occur in Chrome",
       "createdBy" : "liew",
       "assignee" : "btan",
@@ -299,7 +299,7 @@
       } ],
       "url" : null,
       "time" : "2019-09-01 20:00:00",
-      "tags" : "cmty:bug-report "
+      "tags" : "cmty:bug-report  "
     } ],
     "project_timestamp" : 1565192640000,
     "issuesNumber" : 1,
@@ -320,7 +320,7 @@
       "title" : "title modified",
       "priority" : 3,
       "status" : "In Progress",
-      "tag" : [ "Frontend Backend Java " ],
+      "tag" : [ "Frontend Backend Java  " ],
       "descriptionText" : "this is for bugs testing",
       "createdBy" : "tay",
       "assignee" : "tay",
@@ -338,34 +338,34 @@
           "reaction" : "thumbsUp",
           "count" : 0
         } ],
-        "comment_timestamp" : 1623326955000,
+        "comment_timestamp" : 1623335456000,
         "user" : "tay"
       } ],
       "url" : null,
       "time" : "2021-06-10 22:30:56",
-      "tags" : "Frontend Backend Java  "
+      "tags" : "Frontend Backend Java   "
     }, {
       "project_id" : 4,
       "issue_id" : 3,
       "title" : "testing new issue",
       "priority" : 3,
       "status" : "Open",
-      "tag" : [ "" ],
+      "tag" : [ null ],
       "descriptionText" : "Checking feature",
       "createdBy" : "lok",
-      "assignee" : "",
+      "assignee" : null,
       "timestamp" : 1623331587000,
       "comments" : [ ],
       "url" : null,
       "time" : "2021-06-10 21:26:27",
-      "tags" : " "
+      "tags" : "null "
     }, {
       "project_id" : 4,
       "issue_id" : 2,
       "title" : "hi",
       "priority" : 2,
       "status" : "Resolved",
-      "tag" : [ "Backend " ],
+      "tag" : [ "Backend  " ],
       "descriptionText" : "tay",
       "createdBy" : "tay",
       "assignee" : "tay",
@@ -373,14 +373,14 @@
       "comments" : [ ],
       "url" : null,
       "time" : "2021-06-11 05:50:04",
-      "tags" : "Backend  "
+      "tags" : "Backend   "
     }, {
       "project_id" : 4,
       "issue_id" : 4,
       "title" : "new new new",
       "priority" : 2,
       "status" : "Open",
-      "tag" : [ "" ],
+      "tag" : [ null ],
       "descriptionText" : "whatever",
       "createdBy" : "tay",
       "assignee" : "tay",
@@ -398,7 +398,7 @@
           "reaction" : "thumbsUp",
           "count" : 0
         } ],
-        "comment_timestamp" : 1623332571000,
+        "comment_timestamp" : 1623335265000,
         "user" : "tay"
       }, {
         "comment_id" : 2,
@@ -413,12 +413,12 @@
           "reaction" : "thumbsUp",
           "count" : 1
         } ],
-        "comment_timestamp" : 1623332848000,
+        "comment_timestamp" : 1623335265000,
         "user" : "tay"
       } ],
       "url" : null,
       "time" : "2021-06-10 22:27:45",
-      "tags" : " "
+      "tags" : "null "
     } ],
     "project_timestamp" : 1623326684000,
     "issuesNumber" : 4,
@@ -504,6 +504,20 @@
       "originalTime" : 1623326667000
     } ],
     "issue_histories" : [ {
+      "project_id" : 1,
+      "issue_id" : 2,
+      "version_id" : 1,
+      "title" : "Can't open file",
+      "priority" : 3,
+      "status" : "Open",
+      "tag" : [ "Backend  " ],
+      "tags" : "Backend  ",
+      "descriptionText" : "Windows 10 Photo will not open a jpg file. I get \"We can't open this file.\" error message.\n\nThey're family photo that I sure would like to salvage.  Thanks",
+      "createdBy" : "btan",
+      "assignee" : "jhoe",
+      "issue_timestamp" : 1565279040000,
+      "url" : null
+    }, {
       "project_id" : 2,
       "issue_id" : 1,
       "version_id" : 1,
@@ -594,11 +608,11 @@
       "title" : "testing new issue",
       "priority" : 3,
       "status" : "Open",
-      "tag" : [ " " ],
-      "tags" : " ",
+      "tag" : [ null ],
+      "tags" : null,
       "descriptionText" : "Checking feature",
       "createdBy" : "lok",
-      "assignee" : "",
+      "assignee" : null,
       "issue_timestamp" : 1623330073000,
       "url" : null
     }, {
@@ -608,11 +622,11 @@
       "title" : "testing new issue",
       "priority" : 3,
       "status" : "Open",
-      "tag" : [ " " ],
-      "tags" : " ",
+      "tag" : [ null ],
+      "tags" : null,
       "descriptionText" : "Checking feature",
       "createdBy" : "lok",
-      "assignee" : "",
+      "assignee" : null,
       "issue_timestamp" : 1623331443000,
       "url" : null
     }, {
@@ -622,8 +636,8 @@
       "title" : "new new",
       "priority" : 2,
       "status" : "Open",
-      "tag" : [ " " ],
-      "tags" : " ",
+      "tag" : [ null ],
+      "tags" : null,
       "descriptionText" : "whatever",
       "createdBy" : "tay",
       "assignee" : "tay",
@@ -636,8 +650,8 @@
       "title" : "new new",
       "priority" : 2,
       "status" : "Open",
-      "tag" : [ " " ],
-      "tags" : " ",
+      "tag" : [ null ],
+      "tags" : null,
       "descriptionText" : "whatever",
       "createdBy" : "tay",
       "assignee" : "tay",
@@ -650,8 +664,8 @@
       "title" : "new new new",
       "priority" : 2,
       "status" : "Open",
-      "tag" : [ " " ],
-      "tags" : " ",
+      "tag" : [ null ],
+      "tags" : null,
       "descriptionText" : "whatever",
       "createdBy" : "tay",
       "assignee" : "tay",
@@ -664,8 +678,8 @@
       "title" : "new new new",
       "priority" : 2,
       "status" : "Open",
-      "tag" : [ " " ],
-      "tags" : " ",
+      "tag" : [ null ],
+      "tags" : null,
       "descriptionText" : "whatever",
       "createdBy" : "tay",
       "assignee" : "tay",
