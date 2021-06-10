@@ -18,6 +18,8 @@ import java.util.ResourceBundle;
 import static home.Controller.*;
 
 public class commentEditController implements Initializable {
+    private commentController cc;
+
     ArrayList<Comment> possible_comments = new ArrayList<>();
     ArrayList<String> comment_list = new ArrayList<>();
 
@@ -64,10 +66,13 @@ public class commentEditController implements Initializable {
 
             }
             clean();
+            Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+            currentStage.close();
+            cc.commentBackGroundTask();
             //((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-            Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+            //Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
             //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            //currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }
     }
 
@@ -116,7 +121,9 @@ public class commentEditController implements Initializable {
             }
         }
     }
-
+    public void setCommentController(commentController commentController) {
+        this.cc = commentController;
+    }
 
 }
 

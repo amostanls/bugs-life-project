@@ -15,6 +15,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class projectAddController implements Initializable {
+
+    private projectController pc;
+
     @FXML
     private TextField projectNameField;
 
@@ -37,9 +40,9 @@ public class projectAddController implements Initializable {
             //System.out.println(Controller.getSelectedProjectId()+" "+name);
             MySQLOperation.createProject(MySQLOperation.getConnection(),name);
             clean();
-            Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+            currentStage.close();
+            pc.projectTableBackGroundTask();
         }
     }
 
@@ -56,5 +59,9 @@ public class projectAddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+
+    public void setProjectController(projectController projectController) {
+        this.pc = projectController;
     }
 }

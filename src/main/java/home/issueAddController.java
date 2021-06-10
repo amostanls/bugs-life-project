@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class issueAddController implements Initializable {
 
-
+    private issuesController ic;
     @FXML
     private ComboBox<String> issuePriority;
 
@@ -81,7 +81,10 @@ public class issueAddController implements Initializable {
 
         String priorityString = issuePriority.getValue();
         int priority = 0;
-        if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
+        if(priorityString!=null){
+            if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
+        }
+
 
         String title = issueTitle.getText().trim();
         String assignee = issueAssignedTo.getText().trim();
@@ -117,8 +120,11 @@ public class issueAddController implements Initializable {
 
             clean();
             Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            currentStage.close();
+            ic.issueTableBackGroundTask();
+//            Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+//            //currentStage.close();
+//            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }
     }
 
@@ -147,5 +153,10 @@ public class issueAddController implements Initializable {
         issuePriority.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9");
         issuePriority.setPromptText("Select priority");
 
+    }
+
+
+    public void setIssueController(issuesController issueController) {
+        this.ic = issueController;
     }
 }

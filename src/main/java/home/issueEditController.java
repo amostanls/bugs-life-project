@@ -19,11 +19,7 @@ import static home.Controller.*;
 
 public class issueEditController implements Initializable {
 
-//    @FXML
-//    private TextField issueTag;
-//
-//    @FXML
-//    private TextField issuePriority;
+    private issuesController ic;
 
     @FXML
     private TextField issueTitle;
@@ -31,11 +27,9 @@ public class issueEditController implements Initializable {
     @FXML
     private TextArea issueDesc;
 
-//    @FXML
-//    private TextField issueStatus;
-
     @FXML
     private TextField issueImageURL;
+
     @FXML
     private CheckComboBox<String> issueTag;
 
@@ -118,7 +112,9 @@ public class issueEditController implements Initializable {
                         updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
                         System.out.println("HAVE URL");
                         clean();
-                        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+                        Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+                        currentStage.close();
+                        ic.issueTableBackGroundTask();
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setHeaderText(null);
@@ -131,9 +127,12 @@ public class issueEditController implements Initializable {
                     updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
                     System.out.println("NO URL");
                     clean();
-                    Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
+                    Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+                    currentStage.close();
+                    ic.issueTableBackGroundTask();
+                    //Stage currentStage=((Stage)(((Button)event.getSource()).getScene().getWindow()));
                     //currentStage.close();
-                    currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                    //currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
                     //((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
                 }
 
@@ -207,9 +206,6 @@ public class issueEditController implements Initializable {
             }
         }
 
-//        issueStatus.setText(issue_temp.getStatus());
-//        issueTag.setText(issue_temp.getTags() + "");
-//        issuePriority.setText(issue_temp.getPriority() + "");
 
         issueTitle.setText(issue_temp.getTitle() + "");
         if (issue_temp.getUrl() == null) {
@@ -223,6 +219,10 @@ public class issueEditController implements Initializable {
         issueAssignee.setText(issue_temp.getAssignee() + " ");
         issueImageURL.setText(issue_temp.getUrl());
 
+    }
+
+    public void setIssueController(issuesController issueController) {
+        this.ic = issueController;
     }
 
 
