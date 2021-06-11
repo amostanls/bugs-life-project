@@ -1068,6 +1068,8 @@ public class MySQLOperation {
             pstmt.setString(3, title);
             pstmt.setInt(4, priority);
             pstmt.setString(5, status);
+            System.out.println(tag1);
+            if(tag1==null) System.out.println("HHEE");
             pstmt.setString(6, tag1);
             pstmt.setString(7, descriptionText);
             pstmt.setString(8, username);

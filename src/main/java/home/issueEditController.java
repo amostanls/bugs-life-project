@@ -106,8 +106,6 @@ public class issueEditController implements Initializable {
                 System.out.println("SAME,no change");//same,no change in data
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
             } else {//exists some changes
-                if (tag.length() == 0) tag = null;
-                if (assignee.length() == 0) assignee = null;
                 if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {//url is not empty
                     if (Controller.isValidURL(issueImageURL.getText())) {//url is valid
                         updateIssue(getConnection(), getSelectedProjectId(), getSelectedIssueId(), title, priority, status, tag, issueDescription, assignee, url);
@@ -170,7 +168,10 @@ public class issueEditController implements Initializable {
         }
         String[] statusList = {"Open", "Closed", "In Progress", "Resolved", "Reopened"};
         String[] priorityList = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
-        List<String> tagsList = new ArrayList<String>(Arrays.asList(issue_temp.getTags().split(" ")));
+        List<String> tagsList = new ArrayList<String>();
+        if(issue_temp.getTags()!=null){
+            tagsList =Arrays.asList(issue_temp.getTags().split(" "));
+        }
 
         issueStatus.getItems().addAll(statusList);
         issuePriority.getItems().addAll(priorityList);
