@@ -1072,7 +1072,7 @@ public class MySQLOperation {
         }
     }
 
-    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag1, int priority, String title, String assignee, String descriptionText, String url) {
+    public static void createIssueJavaFX(Connection myConn, int project_id, String username, String tag, int priority, String title, String assignee, String descriptionText, String url) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -1091,7 +1091,7 @@ public class MySQLOperation {
             pstmt.setString(3, title);
             pstmt.setInt(4, priority);
             pstmt.setString(5, status);
-            pstmt.setString(6, tag1);
+            pstmt.setString(6, tag);
             pstmt.setString(7, descriptionText);
             pstmt.setString(8, username);
             pstmt.setString(9, assignee);
@@ -1256,7 +1256,8 @@ public class MySQLOperation {
                 String temp_title = myRs.getString("title");
                 int temp_priority = myRs.getInt("priority");
                 String temp_status = myRs.getString("status");
-                String[] temp_tag = {myRs.getString("tag")};
+                String[] temp_tag=null;
+                if(myRs.getString("tag")!=null) temp_tag = new String[]{myRs.getString("tag")};
                 String temp_descriptionText = myRs.getString("descriptionText");
                 String createdBy = myRs.getString("createdBy");
                 String temp_assignee = myRs.getString("assignee");

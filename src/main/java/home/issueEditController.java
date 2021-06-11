@@ -94,7 +94,7 @@ public class issueEditController implements Initializable {
         if (title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty() || status.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            alert.setContentText("Please Fill All DATA");
+            alert.setContentText("Please fill in priority, title, and issue description!");
             alert.showAndWait();
         } else if (priority > 9 || priority < 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
