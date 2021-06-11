@@ -77,6 +77,7 @@ public class issueEditController implements Initializable {
                 tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
             }
         }
+        tag=tag.trim();
 
         String status = issueStatus.getValue();
 

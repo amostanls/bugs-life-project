@@ -78,7 +78,7 @@ public class issueAddController implements Initializable {
                 tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
             }
         }
-
+        tag=tag.trim();
         String priorityString = issuePriority.getValue();
         int priority = 0;
         if(priorityString!=null){
