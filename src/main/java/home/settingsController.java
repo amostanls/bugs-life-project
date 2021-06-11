@@ -265,6 +265,18 @@ public class settingsController implements Initializable {
                 };
             }
         };
+        backGroundThread.setOnCancelled(workerStateEvent -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText(null);
+            alert.setContentText("File Import Canceled");
+            alert.showAndWait();
+        });
+        backGroundThread.setOnFailed(workerStateEvent -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText(null);
+            alert.setContentText("File Import Failed");
+            alert.showAndWait();
+        });
         backGroundThread.setOnSucceeded(workerStateEvent -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
