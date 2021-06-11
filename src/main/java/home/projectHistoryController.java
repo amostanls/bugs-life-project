@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 import static home.Controller.*;
 
 public class projectHistoryController implements Initializable {
-
+    private projectController pc;
     @FXML
     private TableView<Project_History> projectTable;
 
@@ -44,9 +44,9 @@ public class projectHistoryController implements Initializable {
             //update project history
             if(projectTable.getSelectionModel().getSelectedItem()!=null){
                 MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
-                Stage currentStage=((Stage)(((TableView)event.getSource()).getScene().getWindow()));
-                //currentStage.close();
-                currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+                currentStage.close();
+                pc.projectTableBackGroundTask();
             }
         }
     }
@@ -66,5 +66,9 @@ public class projectHistoryController implements Initializable {
         project_version.setCellValueFactory(new PropertyValueFactory<>("version_id"));
         project_timestamp.setCellValueFactory(new PropertyValueFactory<>("originalTime"));
         setProjectTable();
+    }
+
+    public void setProjectController(projectController projectController) {
+        this.pc = projectController;
     }
 }

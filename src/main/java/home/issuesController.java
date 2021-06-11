@@ -95,14 +95,18 @@ public class issuesController implements Initializable {
     @FXML
     void getAddView(MouseEvent event) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("issue_add.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("issue_add.fxml"));
+            Parent parent = loader.load();
+
+            issueAddController issueAdd = loader.getController();
+            issueAdd.setIssueController(this);
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
+            //stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(issuesController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,14 +115,18 @@ public class issuesController implements Initializable {
     @FXML
     void getEditView() {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("issue_edit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("issue_edit.fxml"));
+            Parent parent = loader.load();
+
+            issueEditController issueEdit = loader.getController();
+            issueEdit.setIssueController(this);
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
+            //stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -126,14 +134,19 @@ public class issuesController implements Initializable {
 
     void getChangeLogView() {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("issue_history.fxml"));
+            //Parent parent = FXMLLoader.load(getClass().getResource("issue_history.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("issue_history.fxml"));
+            Parent parent = loader.load();
+
+            issueHistoryController issueHistory = loader.getController();
+            issueHistory.setIssueController(this);
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
+            //stage.setOnCloseRequest(windowEvent -> issueTableBackGroundTask());
         } catch (IOException ex) {
             Logger.getLogger(projectController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -217,13 +230,13 @@ public class issuesController implements Initializable {
                     return true;
                 else if (FuzzySearch.tokenSetPartialRatio(issue.getStatus(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getStatus(), queryString) > 60) {
                     return true;
-                } else if (FuzzySearch.tokenSetPartialRatio(issue.getTags(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getTags(), queryString) > 60) {
+                } else if (issue.getTags() != null && (FuzzySearch.tokenSetPartialRatio(issue.getTags(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getTags(), queryString) > 60)) {
                     return true;
                 } else if (FuzzySearch.tokenSetPartialRatio(issue.getDescriptionText(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.getDescriptionText(), queryString) > 60) {
                     return true;
                 } else if (FuzzySearch.tokenSetPartialRatio(issue.getCreatedBy(), queryString) > 90 || FuzzySearch.tokenSortPartialRatio(issue.getCreatedBy(), queryString) > 90) {
                     return true;
-                } else if (FuzzySearch.tokenSetPartialRatio(issue.getAssignee(), queryString) > 90 || FuzzySearch.tokenSortPartialRatio(issue.getAssignee(), queryString) > 90) {
+                } else if (issue.getAssignee() != null && (FuzzySearch.tokenSetPartialRatio(issue.getAssignee(), queryString) > 90 || FuzzySearch.tokenSortPartialRatio(issue.getAssignee(), queryString) > 90)) {
                     return true;
                 } else if (FuzzySearch.tokenSetPartialRatio(issue.commentsAsString(), queryString) > 60 || FuzzySearch.tokenSortPartialRatio(issue.commentsAsString(), queryString) > 60) {
                     return true;
@@ -251,7 +264,7 @@ public class issuesController implements Initializable {
                 return new Task<>() {
                     @Override
                     protected ArrayList<Issue> call() throws Exception {
-                         return MySQLOperation.getIssueListByPriority(MySQLOperation.getConnection(),getSelectedProjectId());
+                        return MySQLOperation.getIssueListByPriority(MySQLOperation.getConnection(), getSelectedProjectId());
 //                        Controller.updateTable();
 //                        return null;
                     }
@@ -260,8 +273,8 @@ public class issuesController implements Initializable {
         };
         backGroundThread.setOnSucceeded(workerStateEvent -> {
             try {
-                List<Project> temp_project_list=getFinalProjectList();
-                temp_project_list.get(getSelectedProjectId()-1).setIssues(backGroundThread.getValue());
+                List<Project> temp_project_list = getFinalProjectList();
+                temp_project_list.get(getSelectedProjectId() - 1).setIssues(backGroundThread.getValue());
                 setIssueTable();
                 searchIssues();
             } catch (Exception e) {

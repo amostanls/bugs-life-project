@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import static home.Controller.*;
 
 public class commentHistoryController implements Initializable {
+    private commentController cc;
 
     @FXML
     private TableView<Comment_History> commentTable;
@@ -49,8 +50,8 @@ public class commentHistoryController implements Initializable {
                     MySQLOperation.updateComment(MySQLOperation.getConnection(), Controller.getCurrentUser(), getSelectedProjectId(), getSelectedIssueId(), comment.getComment_id(), comment.getText());
                     //((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();
                     Stage currentStage=((Stage)(((TableView)event.getSource()).getScene().getWindow()));
-                    //currentStage.close();
-                    currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                    currentStage.close();
+                    cc.commentBackGroundTask();
                 }
             }
 
@@ -82,6 +83,10 @@ public class commentHistoryController implements Initializable {
         commentTimestamp.setCellValueFactory(new PropertyValueFactory<>("comment_timestamp"));
         commentUser.setCellValueFactory(new PropertyValueFactory<>("user"));
         setCommentTable();
+    }
+
+    public void setCommentController(commentController commentController) {
+        this.cc = commentController;
     }
 }
 

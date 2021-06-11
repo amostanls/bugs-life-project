@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class issueAddController implements Initializable {
 
-
+    private issuesController ic;
     @FXML
     private ComboBox<String> issuePriority;
 
@@ -78,21 +78,24 @@ public class issueAddController implements Initializable {
                 tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
             }
         }
-
+        tag=tag.trim();
         String priorityString = issuePriority.getValue();
         int priority = 0;
-        if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
+        if(priorityString!=null){
+            if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
+        }
+
 
         String title = issueTitle.getText().trim();
-        String assignee = issueAssignedTo.getText().trim();
+        String assignee = issueAssignedTo.getText();
         String issueDescription = issueDesc.getText();
         String url = null;
 
 
-        if (title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty()) {
+        if (title.isEmpty() || issueDescription.isEmpty() || priorityString==null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            alert.setContentText("Please Fill All DATA");
+            alert.setContentText("Please fill in priority, title, and issue description");
             alert.showAndWait();
         } else if (priority > 9 || priority < 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -100,6 +103,7 @@ public class issueAddController implements Initializable {
             alert.setContentText("Please enter a priority between 1-9");
             alert.showAndWait();
         } else {
+
             if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
                 if (Controller.isValidURL(issueImageURL.getText())) {
                     url = issueImageURL.getText();
@@ -117,8 +121,11 @@ public class issueAddController implements Initializable {
 
             clean();
             Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
-            //currentStage.close();
-            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            currentStage.close();
+            ic.issueTableBackGroundTask();
+//            Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+//            //currentStage.close();
+//            currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }
     }
 
@@ -147,5 +154,10 @@ public class issueAddController implements Initializable {
         issuePriority.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9");
         issuePriority.setPromptText("Select priority");
 
+    }
+
+
+    public void setIssueController(issuesController issueController) {
+        this.ic = issueController;
     }
 }
