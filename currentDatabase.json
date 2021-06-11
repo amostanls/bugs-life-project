@@ -24,7 +24,7 @@
           "count" : 1
         }, {
           "reaction" : "thumbsUp",
-          "count" : 1
+          "count" : 0
         } ],
         "comment_timestamp" : 1565192640000,
         "user" : "liew"
@@ -43,25 +43,10 @@
         } ],
         "comment_timestamp" : 1565192640000,
         "user" : "ang"
-      }, {
-        "comment_id" : 3,
-        "text" : "this is good",
-        "react" : [ {
-          "reaction" : "angry",
-          "count" : 0
-        }, {
-          "reaction" : "happy",
-          "count" : 0
-        }, {
-          "reaction" : "thumbsUp",
-          "count" : 0
-        } ],
-        "comment_timestamp" : 1565192640000,
-        "user" : "amos"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-08-07 23:44:00",
-      "tags" : "Frontend "
+      "tags" : "Frontend"
     }, {
       "project_id" : 1,
       "issue_id" : 2,
@@ -78,10 +63,10 @@
         "text" : "I am having the same issue with a disc of photos from Christmas given to me by my sister. I have tried opening all of the photos with all of my available opening options and still get the same message as above poster. ",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 2
+          "count" : 1
         }, {
           "reaction" : "happy",
-          "count" : 4
+          "count" : 2
         }, {
           "reaction" : "thumbsUp",
           "count" : 0
@@ -119,9 +104,9 @@
         "comment_timestamp" : 1565279040000,
         "user" : "ang"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-08-08 23:44:00",
-      "tags" : "Backend "
+      "tags" : "Backend"
     } ],
     "project_timestamp" : 1565192640000,
     "issuesNumber" : 2,
@@ -158,7 +143,7 @@
           "count" : 2
         }, {
           "reaction" : "thumbsUp",
-          "count" : 1
+          "count" : 0
         } ],
         "comment_timestamp" : 1570507200000,
         "user" : "btan"
@@ -167,7 +152,7 @@
         "text" : "/cc @clarkdo",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 6
+          "count" : 5
         }, {
           "reaction" : "happy",
           "count" : 3
@@ -178,32 +163,32 @@
         "comment_timestamp" : 1570507200000,
         "user" : "ang"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-10-08 12:00:00",
-      "tags" : "Backend "
+      "tags" : "Backend"
     }, {
       "project_id" : 2,
       "issue_id" : 1,
       "title" : "Flash of unstyled content",
-      "priority" : 7,
+      "priority" : 6,
       "status" : "Open",
-      "tag" : [ "cmty:bug-report " ],
+      "tag" : [ "cmty:bug-report" ],
       "descriptionText" : "What is expected ?\nExpected correct scrollspy active link highlighting and all links work.\n\nWhat is actually happening?\nPage jumps to top before smooth scroll, which leads to weird links highlighting. Also, sometimes some links doesn't highlight (like Server Rendered in demo video)\n\nAdditional comments?\nDemonstration - https://imgur.com/a/GGvITVB",
       "createdBy" : "btan",
       "assignee" : "ang",
-      "timestamp" : 1623221316000,
+      "timestamp" : 1569920400000,
       "comments" : [ {
         "comment_id" : 1,
         "text" : "Here is what I am referring to: https://streamable.com/hkyg3 Apologies for not posting a video when creating the issue! ",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 4
+          "count" : 1
         }, {
           "reaction" : "happy",
-          "count" : 3
+          "count" : 2
         }, {
           "reaction" : "thumbsUp",
-          "count" : 3
+          "count" : 0
         } ],
         "comment_timestamp" : 1569920400000,
         "user" : "liew"
@@ -233,14 +218,14 @@
           "count" : 2
         }, {
           "reaction" : "thumbsUp",
-          "count" : 2
+          "count" : 0
         } ],
         "comment_timestamp" : 1569920400000,
         "user" : "jhoe"
       } ],
       "url" : null,
-      "time" : "2021-06-09 14:48:36",
-      "tags" : "cmty:bug-report  "
+      "time" : "2019-10-01 17:00:00",
+      "tags" : "cmty:bug-report"
     } ],
     "project_timestamp" : 1565192640000,
     "issuesNumber" : 2,
@@ -271,13 +256,13 @@
         "text" : "To: https://streamable.com/hkyg3 Apologies for not posting a video when creating the issue!",
         "react" : [ {
           "reaction" : "angry",
-          "count" : 4
+          "count" : 1
         }, {
           "reaction" : "happy",
-          "count" : 3
+          "count" : 2
         }, {
           "reaction" : "thumbsUp",
-          "count" : 7
+          "count" : 5
         } ],
         "comment_timestamp" : 1567339200000,
         "user" : "liew"
@@ -292,16 +277,45 @@
           "count" : 2
         }, {
           "reaction" : "thumbsUp",
-          "count" : 1
+          "count" : 0
         } ],
         "comment_timestamp" : 1567339200000,
         "user" : "ang"
       } ],
-      "url" : "null",
+      "url" : null,
       "time" : "2019-09-01 20:00:00",
-      "tags" : "cmty:bug-report "
+      "tags" : "cmty:bug-report"
     } ],
     "project_timestamp" : 1565192640000,
+    "issuesNumber" : 1,
+    "len_id" : 2,
+    "len_title" : 5,
+    "len_status" : 6,
+    "len_tag" : 3,
+    "len_priority" : 8,
+    "len_time" : 4,
+    "len_assignee" : 8,
+    "len_createdby" : 9
+  }, {
+    "project_id" : 4,
+    "name" : "new project",
+    "issues" : [ {
+      "project_id" : 4,
+      "issue_id" : 1,
+      "title" : "new issue",
+      "priority" : 4,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "s",
+      "createdBy" : "lok",
+      "assignee" : "",
+      "timestamp" : 1623403365000,
+      "comments" : [ ],
+      "url" : null,
+      "time" : "2021-06-11 17:22:45",
+      "tags" : null
+    } ],
+    "project_timestamp" : 1623403343000,
     "issuesNumber" : 1,
     "len_id" : 2,
     "len_title" : 5,
@@ -346,30 +360,6 @@
     "email" : null
   }, {
     "userid" : 5,
-    "username" : "amos",
-    "password" : "c5b56ba66ef19c981e81d072138edde4540cf28aecdeadd62d27fc10b205adb4",
-    "name" : null,
-    "admin" : true,
-    "url" : null,
-    "email" : "tanamos@live.com"
-  }, {
-    "userid" : 6,
-    "username" : "Zhang Xiang",
-    "password" : "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
-    "name" : null,
-    "admin" : false,
-    "url" : null,
-    "email" : "3393906183@qq.com"
-  }, {
-    "userid" : 7,
-    "username" : "tay",
-    "password" : "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-    "name" : null,
-    "admin" : true,
-    "url" : "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-    "email" : "tayqixiang@gmail.com"
-  }, {
-    "userid" : 8,
     "username" : "lok",
     "password" : "6ac82c4fb78c5cdfc8af9ff81f7f9f21ecb7a8cf1f7f1dfa5b204f8fc7e34b46",
     "name" : null,
@@ -379,43 +369,8 @@
   } ],
   "histories" : {
     "project_histories" : [ ],
-    "issue_histories" : [ {
-      "project_id" : 2,
-      "issue_id" : 1,
-      "version_id" : 1,
-      "title" : "Flash of unstyled content",
-      "priority" : 6,
-      "status" : "Open",
-      "tag" : [ "cmty:bug-report " ],
-      "tags" : "cmty:bug-report ",
-      "descriptionText" : "What is expected ?\nExpected correct scrollspy active link highlighting and all links work.\n\nWhat is actually happening?\nPage jumps to top before smooth scroll, which leads to weird links highlighting. Also, sometimes some links doesn't highlight (like Server Rendered in demo video)\n\nAdditional comments?\nDemonstration - https://imgur.com/a/GGvITVB",
-      "createdBy" : "btan",
-      "assignee" : "ang",
-      "issue_timestamp" : 1569920400000,
-      "url" : "null"
-    } ],
+    "issue_histories" : [ ],
     "comment_histories" : [ ]
   },
-  "comments_reactions" : [ {
-    "hash" : 502101,
-    "reaction" : "angry"
-  }, {
-    "hash" : 501101,
-    "reaction" : "thumbsup"
-  }, {
-    "hash" : 503101,
-    "reaction" : "angry"
-  }, {
-    "hash" : 502202,
-    "reaction" : "angry"
-  }, {
-    "hash" : 502201,
-    "reaction" : "thumbsup"
-  }, {
-    "hash" : 501201,
-    "reaction" : "happy"
-  }, {
-    "hash" : 502103,
-    "reaction" : "thumbsup"
-  } ]
+  "comments_reactions" : [ ]
 }
