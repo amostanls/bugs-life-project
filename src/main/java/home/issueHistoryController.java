@@ -66,7 +66,7 @@ public class issueHistoryController implements Initializable {
                 Issue_History issue = issueTable.getSelectionModel().getSelectedItem();
 
                 MySQLOperation.updateIssue(MySQLOperation.getConnection(), issue.getProject_id(), issue.getIssue_id(), issue.getTitle(), issue.getPriority(), issue.getStatus(), issue.getTag()[0], issue.getDescriptionText(),issue.getAssignee(),issue.getUrl());
-                Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+                Stage currentStage=((Stage)(((TableView)event.getSource()).getScene().getWindow()));
                 currentStage.close();
                 ic.issueTableBackGroundTask();
                 //((Stage) (((TableView) event.getSource()).getScene().getWindow())).close();

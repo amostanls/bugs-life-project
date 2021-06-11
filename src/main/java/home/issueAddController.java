@@ -78,7 +78,7 @@ public class issueAddController implements Initializable {
                 tag += obj.toString().replaceAll("\\s+", "") + " ";//removes all white spaces character
             }
         }
-
+        tag=tag.trim();
         String priorityString = issuePriority.getValue();
         int priority = 0;
         if(priorityString!=null){
@@ -87,10 +87,9 @@ public class issueAddController implements Initializable {
 
 
         String title = issueTitle.getText().trim();
-        String assignee = issueAssignedTo.getText().trim();
+        String assignee = issueAssignedTo.getText();
         String issueDescription = issueDesc.getText();
         String url = null;
-
 
         if (title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -103,6 +102,8 @@ public class issueAddController implements Initializable {
             alert.setContentText("Please enter a priority between 1-9");
             alert.showAndWait();
         } else {
+            if(assignee.trim().length()==0) assignee=null;
+            if(tag.trim().length()==0) tag=null;
             if (issueImageURL.getText() != null && issueImageURL.getText().length() != 0) {
                 if (Controller.isValidURL(issueImageURL.getText())) {
                     url = issueImageURL.getText();
