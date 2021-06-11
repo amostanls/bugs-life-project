@@ -88,7 +88,6 @@ public class Issue_History {
     }
 
     public String getTags() {
-        if(tag==null) return null;
         return tag[0];
     }
 

@@ -94,8 +94,8 @@ public class settingsController implements Initializable {
                 newPasswordField.clear();
                 confirmPasswordField.clear();
             } else {
-                MyRunnableEmail runEmail = new MyRunnableEmail(Controller.getCurrentUser().getEmail());
-                Thread emailThread = new Thread(runEmail);
+                MyRunnableEmail runEmail=new MyRunnableEmail(Controller.getCurrentUser().getEmail());
+                Thread emailThread=new Thread(runEmail);
                 emailThread.start();
 
 
@@ -148,7 +148,6 @@ public class settingsController implements Initializable {
         window.setOnCloseRequest(e -> alert.hide());
         Optional<ButtonType> result = alert.showAndWait();
         result.ifPresent(res -> {
-
             if (res.equals(localButton)) {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.getExtensionFilters().addAll(
@@ -158,9 +157,9 @@ public class settingsController implements Initializable {
 
                     File filename = fileChooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
                     //File filename = jfc.getSelectedFile();
-
+                    System.out.println(filename);
                     if (filename != null) {
-                        importBackgroundTask(filename, null, true);
+                        importBackgroundTask(filename);
                     }
                     System.out.println("File name " + filename.getName());
 
@@ -176,9 +175,13 @@ public class settingsController implements Initializable {
                 td.showAndWait();
                 TextField input = td.getEditor();
                 if (input.getText() != null && input.getText().toString().length() != 0) {
-                    String url = input.getText();
-                    importBackgroundTask(null, url, false);
-
+                    try {
+                        MySQLOperation.updateDatabaseFromUrl(MySQLOperation.getConnection(), input.getText());
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
             }
@@ -249,34 +252,19 @@ public class settingsController implements Initializable {
         initializeDatabaseBtn.setVisible(b);
     }
 
-    private void importBackgroundTask(File filename, String url, boolean isFromFile) {
+    private void importBackgroundTask(File filename) {
         backGroundThread = new Service<>() {
             @Override
             protected Task<Void> createTask() {
                 return new Task<>() {
                     @Override
                     protected Void call() throws Exception {
-                        if (isFromFile) {
-                            MySQLOperation.importJsonFileToDataBase(MySQLOperation.getConnection(), filename);
-                        } else MySQLOperation.updateDatabaseFromUrl(MySQLOperation.getConnection(), url);
-
+                        MySQLOperation.importJsonFileToDataBase(MySQLOperation.getConnection(), filename);
                         return null;
                     }
                 };
             }
         };
-        backGroundThread.setOnCancelled(workerStateEvent -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText(null);
-            alert.setContentText("File Import Canceled");
-            alert.showAndWait();
-        });
-        backGroundThread.setOnFailed(workerStateEvent -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText(null);
-            alert.setContentText("File Import Failed");
-            alert.showAndWait();
-        });
         backGroundThread.setOnSucceeded(workerStateEvent -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
