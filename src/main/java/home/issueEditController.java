@@ -79,6 +79,7 @@ public class issueEditController implements Initializable {
         }
         tag=tag.trim();
 
+        tag=tag.trim();
         String status = issueStatus.getValue();
 
         String priorityString = issuePriority.getValue();
@@ -86,7 +87,7 @@ public class issueEditController implements Initializable {
         if (!priorityString.isEmpty()) priority = Integer.valueOf(priorityString);
 
         String title = issueTitle.getText().trim();
-        String assignee = issueAssignee.getText().trim();
+        String assignee = issueAssignee.getText();
         String issueDescription = issueDesc.getText();
         String url = issueImageURL.getText();
 
@@ -94,7 +95,7 @@ public class issueEditController implements Initializable {
         if (title.isEmpty() || issueDescription.isEmpty() || priorityString.isEmpty() || status.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            alert.setContentText("Please Fill All DATA");
+            alert.setContentText("Please fill in priority, title, and issue description!");
             alert.showAndWait();
         } else if (priority > 9 || priority < 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -102,8 +103,12 @@ public class issueEditController implements Initializable {
             alert.setContentText("Please enter a priority between 1-9");
             alert.showAndWait();
         } else {
+
+            if(tag.trim().length()==0) tag=null;
+            if(assignee!=null &&assignee.trim().length()==0) assignee=null;
             //connect to database
-            if (Objects.equals(tag.trim(), issue_temp.getTags().trim()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && Objects.equals(url, issue_temp.getUrl()) && Objects.equals(assignee,issue_temp.getAssignee())) {
+
+            if (Objects.equals(tag, issue_temp.getTags()) && title.equals(issue_temp.getTitle()) && issueDescription.equals(issue_temp.getDescriptionText()) && status.equals(issue_temp.getStatus()) && priority == issue_temp.getPriority() && Objects.equals(url, issue_temp.getUrl()) && Objects.equals(assignee,issue_temp.getAssignee())) {
                 System.out.println("SAME,no change");//same,no change in data
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
             } else {//exists some changes
@@ -170,7 +175,11 @@ public class issueEditController implements Initializable {
         }
         String[] statusList = {"Open", "Closed", "In Progress", "Resolved", "Reopened"};
         String[] priorityList = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
-        List<String> tagsList = new ArrayList<String>(Arrays.asList(issue_temp.getTags().split(" ")));
+        List<String> tagsList = new ArrayList<String>();
+        if(issue_temp.getTags()!=null){
+            tagsList =Arrays.asList(issue_temp.getTags().split(" "));
+        }
+
 
         issueStatus.getItems().addAll(statusList);
         issuePriority.getItems().addAll(priorityList);
@@ -208,16 +217,16 @@ public class issueEditController implements Initializable {
         }
 
 
-        issueTitle.setText(issue_temp.getTitle() + "");
+        issueTitle.setText(issue_temp.getTitle());
         if (issue_temp.getUrl() == null) {
-            issueImageURL.setText("");
+            issueImageURL.setText(null);
         } else {
             issueImageURL.setText(issue_temp.getUrl());
         }
 
 
-        issueDesc.setText(issue_temp.getDescriptionText() + "");
-        issueAssignee.setText(issue_temp.getAssignee() + " ");
+        issueDesc.setText(issue_temp.getDescriptionText());
+        issueAssignee.setText(issue_temp.getAssignee());
         issueImageURL.setText(issue_temp.getUrl());
 
     }

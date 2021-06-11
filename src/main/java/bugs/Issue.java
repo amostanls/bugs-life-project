@@ -113,10 +113,17 @@ public class Issue implements Serializable, Comparable<Issue> {
 
     public String getTags() {
         String temp="";
-        for(String s:getTag()){
-            temp+=s+" ";
+        if(getTag()!=null){
+            for(String s:getTag()){
+                temp+=s+" ";
+            }
+            if(temp.trim().length()==0) return null;
+            else return temp.trim();
         }
-        return temp;
+        else{
+            return null;
+        }
+
     }
 
 //    public String getTagAsString() {
