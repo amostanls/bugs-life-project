@@ -1823,10 +1823,11 @@ public class MySQLOperation {
 
     public static void main(String[] args) throws SQLException, IOException {
         Connection myConn = getConnection();
-        updateIssue(myConn, 4, 1, "new issue" , 4, "Open", "", "issue 3", "", "");
-//        resetDatabase(myConn);
+//        exportJavaObjectAsJson(getDatabase(myConn), "newDatabase");
+//        updateIssue(myConn, 4, 1, "new issue" , 4, "Open", "", "issue 3", "", "");
+        resetDatabase(myConn);
 //        initializedDatabase();
-//        File jsonFile = new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newDatabase.json");
-//        importJsonFileToDataBase(myConn, jsonFile);
+        File jsonFile = new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newDatabase.json");
+        importJsonFileToDataBase(myConn, jsonFile);
     }
 }
