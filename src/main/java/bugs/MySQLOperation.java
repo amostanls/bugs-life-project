@@ -252,6 +252,11 @@ public class MySQLOperation {
             }
         }
 
+        updateProject.executeBatch();
+        updateIssue.executeBatch();
+        updateComment.executeBatch();
+        updateReact.executeBatch();
+
         //add user information
         for (int i = 0; i < node.get("users").size(); i++) {
             updateUser.setInt(1, node.get("users").get(i).get("userid").asInt());
