@@ -44,7 +44,7 @@ public class projectHistoryController implements Initializable {
             //update project history
             if(projectTable.getSelectionModel().getSelectedItem()!=null){
                 MySQLOperation.updateProject(MySQLOperation.getConnection(), Controller.getSelectedProjectId(), projectTable.getSelectionModel().getSelectedItem().getName());
-                Stage currentStage = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+                Stage currentStage=((Stage)(((TableView)event.getSource()).getScene().getWindow()));
                 currentStage.close();
                 pc.projectTableBackGroundTask();
             }
