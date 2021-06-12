@@ -208,7 +208,11 @@ public class MySQLOperation {
                 updateIssue.setString(3, node.get("projects").get(i).get("issues").get(j).get("title").asText());
                 updateIssue.setInt(4, node.get("projects").get(i).get("issues").get(j).get("priority").asInt());
                 updateIssue.setString(5, node.get("projects").get(i).get("issues").get(j).get("status").asText());
-                updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).withArray("tag").get(0).asText());
+                if (node.get("projects").get(i).get("issues").get(j).withArray("tag").get(0).asText() == null) {
+                    updateIssue.setString(6, "");
+                } else {
+                    updateIssue.setString(6, node.get("projects").get(i).get("issues").get(j).withArray("tag").get(0).asText());
+                }
                 updateIssue.setString(7, node.get("projects").get(i).get("issues").get(j).get("descriptionText").asText());
                 updateIssue.setString(8, node.get("projects").get(i).get("issues").get(j).get("createdBy").asText());
                 updateIssue.setString(9, node.get("projects").get(i).get("issues").get(j).get("assignee").asText());
@@ -219,7 +223,7 @@ public class MySQLOperation {
 
                 if (node.get("projects").get(i).get("issues").get(j).get("url").asText().equals("null")) {
                     updateIssue.setString(11, null);
-                }else {
+                } else {
                     updateIssue.setString(11, node.get("projects").get(i).get("issues").get(j).get("url").asText());
                 }
                 updateIssue.addBatch();
@@ -261,7 +265,7 @@ public class MySQLOperation {
             updateUser.setBoolean(4, node.get("users").get(i).get("admin").asBoolean());
             if (node.get("users").get(i).get("url").asText().equals("null")) {
                 updateUser.setString(5, null);
-            }else {
+            } else {
                 updateUser.setString(5, node.get("users").get(i).get("url").asText());
             }
             if (node.get("users").get(i).get("email").asText().equals("null")) {
@@ -305,7 +309,11 @@ public class MySQLOperation {
             updateIssueHistory.setString(4, node.get("histories").get("issue_histories").get(i).get("title").asText());
             updateIssueHistory.setInt(5, node.get("histories").get("issue_histories").get(i).get("priority").asInt());
             updateIssueHistory.setString(6, node.get("histories").get("issue_histories").get(i).get("status").asText());
-            updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).withArray("tag").get(0).asText());
+            if (node.get("histories").get("issue_histories").get(i).withArray("tag").get(0).asText() == null) {
+                updateIssueHistory.setString(7, "");
+            } else {
+                updateIssueHistory.setString(7, node.get("histories").get("issue_histories").get(i).withArray("tag").get(0).asText());
+            }
             updateIssueHistory.setString(8, node.get("histories").get("issue_histories").get(i).get("descriptionText").asText());
             updateIssueHistory.setString(9, node.get("histories").get("issue_histories").get(i).get("createdBy").asText());
             updateIssueHistory.setString(10, node.get("histories").get("issue_histories").get(i).get("assignee").asText());
@@ -313,7 +321,7 @@ public class MySQLOperation {
             updateIssueHistory.setTimestamp(11, newTS);
             if (node.get("histories").get("issue_histories").get(i).get("url").asText().equals("null")) {
                 updateIssueHistory.setString(12, null);
-            }else {
+            } else {
                 updateIssueHistory.setString(12, node.get("histories").get("issue_histories").get(i).get("url").asText());
             }
             updateIssueHistory.addBatch();
@@ -334,14 +342,14 @@ public class MySQLOperation {
         updateCommentHistory.executeBatch();
 
         for (int i = 0; i < node.get("comments_reactions").size(); i++) {
-            updateCommentsReactions.setInt(1,node.get("comments_reactions").get(i).get("hash").asInt());
-            updateCommentsReactions.setString(2,node.get("comments_reactions").get(i).get("reaction").asText());
+            updateCommentsReactions.setInt(1, node.get("comments_reactions").get(i).get("hash").asInt());
+            updateCommentsReactions.setString(2, node.get("comments_reactions").get(i).get("reaction").asText());
             updateCommentsReactions.addBatch();
         }
         updateCommentsReactions.executeBatch();
     }
 
-    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, IOException{
+    public static void updateDatabaseFromUrl(Connection myConn, String url) throws SQLException, IOException {
         URL jsonUrl = new URL(url);
         JsonNode node = Json.parseUrl(jsonUrl);
 
@@ -464,7 +472,7 @@ public class MySQLOperation {
     }
 
     public static int hash(int a, int b, int c, int d) {
-        return a*100000+b*1000+c*100+d;
+        return a * 100000 + b * 1000 + c * 100 + d;
     }
 
     public static void reacting(int user_id, int project_id, int issue_id, int comment_id, String reaction) throws Exception {
@@ -481,7 +489,7 @@ public class MySQLOperation {
         int hashval = hash(user_id, project_id, issue_id, comment_id);
         String INSERT_reaction = "INSERT INTO comments_reactions (hash, reactions) VALUE (?,?)";
         PreparedStatement update_reaction = myConn.prepareStatement(INSERT_reaction, Statement.RETURN_GENERATED_KEYS);
-        update_reaction.setInt(1,hashval);
+        update_reaction.setInt(1, hashval);
         update_reaction.setString(2, reaction);
         update_reaction.execute();
     }
@@ -497,7 +505,7 @@ public class MySQLOperation {
         updateCount.execute();
 
         //gonna drop value
-        int hashval = hash(user_id,project_id, issue_id, comment_id);
+        int hashval = hash(user_id, project_id, issue_id, comment_id);
         String del = "DELETE FROM comments_reactions WHERE hash = ?";
         PreparedStatement updateDel = myConn.prepareStatement(del, Statement.RETURN_GENERATED_KEYS);
         updateDel.setInt(1, hashval);
@@ -507,7 +515,7 @@ public class MySQLOperation {
     public static String getReaction(Connection myConn, int user_id, int project_id, int issue_id, int comment_id) {
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
-        int hashval = hash(user_id,project_id, issue_id, comment_id);
+        int hashval = hash(user_id, project_id, issue_id, comment_id);
         try {
             String SQL_GET_REACTION = "SELECT * FROM comments_reactions WHERE hash = ?";
             pstmt = myConn.prepareStatement(SQL_GET_REACTION);
@@ -515,7 +523,7 @@ public class MySQLOperation {
             myRs = pstmt.executeQuery();
 
             //get parameter for creating issue object
-            if (myRs.next()){
+            if (myRs.next()) {
                 return myRs.getString("reactions");
             }
 
@@ -974,7 +982,7 @@ public class MySQLOperation {
         return null;
     }
 
-    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin,String email) {
+    public static void registerUser(Connection myConn, String username, String password, boolean isAdmin, String email) {
         //Scanner sc = new Scanner(System.in);
         PreparedStatement pstmt = null;
         ResultSet myRs = null;
@@ -988,7 +996,7 @@ public class MySQLOperation {
             pstmt.setString(2, username);
             pstmt.setString(3, password);
             pstmt.setBoolean(4, isAdmin);
-            pstmt.setString(5,email);
+            pstmt.setString(5, email);
             pstmt.execute();
         } catch (Exception ex) {
             Logger.getLogger(MySQLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -1066,7 +1074,7 @@ public class MySQLOperation {
             pstmt.setInt(4, priority);
             pstmt.setString(5, status);
             System.out.println(tag1);
-            if(tag1==null) System.out.println("HHEE");
+            if (tag1 == null) System.out.println("HHEE");
             pstmt.setString(6, tag1);
             pstmt.setString(7, descriptionText);
             pstmt.setString(8, username);
@@ -1249,7 +1257,12 @@ public class MySQLOperation {
             pstmt.setString(3, newIssue.getTitle());
             pstmt.setInt(4, newIssue.getPriority());
             pstmt.setString(5, newIssue.getStatus());
-            pstmt.setString(6, newIssue.getTags());
+            if (newIssue.getTags() == null) {
+                pstmt.setString(6, "");
+            } else {
+                pstmt.setString(6, newIssue.getTags());
+            }
+
             pstmt.setString(7, newIssue.getDescriptionText());
             pstmt.setString(8, newIssue.getCreatedBy());
             pstmt.setString(9, newIssue.getAssignee());
@@ -1740,8 +1753,8 @@ public class MySQLOperation {
                 "CONSTRAINT pic_fk\n" +
                 "    FOREIGN KEY pic_fkx (project_id, issue_id, comment_id)\n" +
                 "    REFERENCES comments (project_id, issue_id, comment_id)\n" +
-                ");\n"+
-                "\n"+
+                ");\n" +
+                "\n" +
                 "CREATE TABLE comments_reactions (\n" +
                 "hash INT(11) NOT NULL,\n" +
                 "reactions VARCHAR(20)\n" +
@@ -1778,7 +1791,7 @@ public class MySQLOperation {
     public static boolean isRegisteredEmail(Connection myConn, String email) {
         Statement stmt = null;
         ResultSet myRs = null;
-        String SQL_CHECK_EMAIL = "SELECT email FROM users WHERE email = '"+email+"'";
+        String SQL_CHECK_EMAIL = "SELECT email FROM users WHERE email = '" + email + "'";
 
         try {
             stmt = myConn.createStatement();
@@ -1810,8 +1823,10 @@ public class MySQLOperation {
 
     public static void main(String[] args) throws SQLException, IOException {
         Connection myConn = getConnection();
-        resetDatabase(myConn);
-        File jsonFile = new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newDatabase.json");
-        importJsonFileToDataBase(myConn, jsonFile);
+        updateIssue(myConn, 4, 1, "new issue" , 4, "Open", "", "issue 3", "", "");
+//        resetDatabase(myConn);
+//        initializedDatabase();
+//        File jsonFile = new File("/Users/tanweilok/IdeaProjects/bugs-life-project/newDatabase.json");
+//        importJsonFileToDataBase(myConn, jsonFile);
     }
 }
