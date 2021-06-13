@@ -156,8 +156,7 @@ public class settingsController implements Initializable {
                 try {
 
                     File filename = fileChooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
-                    //File filename = jfc.getSelectedFile();
-                    System.out.println(filename);
+
                     if (filename != null) {
                         importBackgroundTask(filename);
                     }

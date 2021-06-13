@@ -31,10 +31,12 @@ In MySQLOperation class, comment the part that you don't want to use.
 
 ![image](https://user-images.githubusercontent.com/18496769/119681217-64474780-be31-11eb-9e92-6febd090798d.png)
 
-For online database, make sure you have a stable internet connection.
+For local database, make sure you have MySQL installed and database initialised. (Not recommended)
+
+For online database, make sure you have a stable internet connection. (Preferred)
 
 
-Link to database is: https://remotemysql.com/phpmyadmin/index.php?db=5peJ8pFLLQ&target=db_structure.php
+Link to online database is: https://remotemysql.com/phpmyadmin/index.php?db=5peJ8pFLLQ&target=db_structure.php
 
 Username : 5peJ8pFLLQ
 

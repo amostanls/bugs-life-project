@@ -79,6 +79,7 @@ public class issueAddController implements Initializable {
             }
         }
         tag=tag.trim();
+
         String priorityString = issuePriority.getValue();
         int priority = 0;
         if(priorityString!=null){
