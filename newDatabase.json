@@ -340,6 +340,80 @@
     "len_time" : 4,
     "len_assignee" : 8,
     "len_createdby" : 9
+  }, {
+    "project_id" : 5,
+    "name" : "demo project",
+    "issues" : [ {
+      "project_id" : 5,
+      "issue_id" : 2,
+      "title" : "example 2",
+      "priority" : 8,
+      "status" : "Open",
+      "tag" : [ "" ],
+      "descriptionText" : "i faced this issue",
+      "createdBy" : "amos",
+      "assignee" : "someone",
+      "timestamp" : 1623845619000,
+      "comments" : [ ],
+      "url" : null,
+      "time" : "2021-06-16 20:13:39",
+      "tags" : null
+    }, {
+      "project_id" : 5,
+      "issue_id" : 1,
+      "title" : "example",
+      "priority" : 4,
+      "status" : "Open",
+      "tag" : [ "Frontend" ],
+      "descriptionText" : "the settings does not work",
+      "createdBy" : "amos",
+      "assignee" : "amos",
+      "timestamp" : 1623845452000,
+      "comments" : [ {
+        "comment_id" : 1,
+        "text" : "i also face this error",
+        "react" : [ {
+          "reaction" : "angry",
+          "count" : 0
+        }, {
+          "reaction" : "happy",
+          "count" : 0
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
+        } ],
+        "comment_timestamp" : 1623845476000,
+        "user" : "amos"
+      }, {
+        "comment_id" : 2,
+        "text" : "hahahahahhaha",
+        "react" : [ {
+          "reaction" : "angry",
+          "count" : 0
+        }, {
+          "reaction" : "happy",
+          "count" : 0
+        }, {
+          "reaction" : "thumbsUp",
+          "count" : 0
+        } ],
+        "comment_timestamp" : 1623845496000,
+        "user" : "amos"
+      } ],
+      "url" : null,
+      "time" : "2021-06-16 20:10:52",
+      "tags" : "Frontend"
+    } ],
+    "project_timestamp" : 1623845272000,
+    "issuesNumber" : 2,
+    "len_id" : 2,
+    "len_title" : 5,
+    "len_status" : 6,
+    "len_tag" : 3,
+    "len_priority" : 8,
+    "len_time" : 4,
+    "len_assignee" : 8,
+    "len_createdby" : 9
   } ],
   "users" : [ {
     "userid" : 1,
@@ -381,9 +455,43 @@
     "admin" : true,
     "url" : null,
     "email" : "rotabite987@gmail.com"
+  }, {
+    "userid" : 6,
+    "username" : "amos",
+    "password" : "c5b56ba66ef19c981e81d072138edde4540cf28aecdeadd62d27fc10b205adb4",
+    "name" : null,
+    "admin" : true,
+    "url" : null,
+    "email" : "tanamos@live.com"
+  }, {
+    "userid" : 7,
+    "username" : "tay",
+    "password" : "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "name" : null,
+    "admin" : true,
+    "url" : null,
+    "email" : "s2005062@siswa.um.edu.my"
+  }, {
+    "userid" : 8,
+    "username" : "Zhang Xiang",
+    "password" : "ee79976c9380d5e337fc1c095ece8c8f22f91f306ceeb161fa51fecede2c4ba1",
+    "name" : null,
+    "admin" : false,
+    "url" : null,
+    "email" : "3393906183@qq.com"
   } ],
   "histories" : {
-    "project_histories" : [ ],
+    "project_histories" : [ {
+      "project_id" : 5,
+      "version_id" : 1,
+      "name" : "demo project",
+      "originalTime" : 1623845219000
+    }, {
+      "project_id" : 5,
+      "version_id" : 2,
+      "name" : "demo project editted",
+      "originalTime" : 1623845245000
+    } ],
     "issue_histories" : [ {
       "project_id" : 4,
       "issue_id" : 2,

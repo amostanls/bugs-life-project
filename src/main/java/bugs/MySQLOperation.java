@@ -297,7 +297,7 @@ public class MySQLOperation {
             updateProjectHistory.setString(3, node.get("histories").get("project_histories").get(i).get("name").asText());
 
             Timestamp newTimestamp = convertStringTimestampForImport(node.get("histories").get("project_histories").get(i).get("originalTime").asText());
-            updateProjectHistory.setTimestamp(3, newTimestamp);
+            updateProjectHistory.setTimestamp(4, newTimestamp);
             updateProjectHistory.addBatch();
         }
         updateProjectHistory.executeBatch();
